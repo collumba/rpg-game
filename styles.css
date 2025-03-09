@@ -714,25 +714,51 @@ body {
 }
 
 .battle-messages {
-  position: static;
-  transform: none;
-  width: 100%;
-  max-width: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 15px;
-  border-radius: 10px;
-  color: white;
-  text-align: center;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  margin: 20px 0;
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600px;
   height: 150px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 10px;
   overflow-y: auto;
-  grid-row: 2;
+  z-index: 1002;
+  border: 2px solid #444;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.battle-messages div {
+.battle-message {
+  color: white;
   margin: 5px 0;
-  animation: fadeIn 0.5s ease;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  animation: fadeIn 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.battle-message .message-icon {
+  margin-right: 8px;
+  font-size: 1.1em;
+}
+
+.battle-message.team {
+  background-color: rgba(0, 128, 255, 0.2);
+  border-left: 3px solid #0088ff;
+}
+
+.battle-message.boss {
+  background-color: rgba(255, 0, 0, 0.2);
+  border-left: 3px solid #ff0000;
+}
+
+.battle-message.system {
+  background-color: rgba(255, 215, 0, 0.1);
+  border-left: 3px solid #ffd700;
 }
 
 @keyframes fadeIn {
@@ -744,6 +770,25 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Estilização da scrollbar para navegadores webkit */
+.battle-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.battle-messages::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.battle-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.battle-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .turn-info {
@@ -798,4 +843,121 @@ body {
 
 .game-over button:hover {
   background: #45a049;
+}
+
+/* Animações de Ataque */
+@keyframes attackAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(20px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bossAttackAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-20px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes damageEffect {
+  0% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(2) saturate(2);
+    transform: scale(1.1);
+  }
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes skillEffect {
+  0% {
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  50% {
+    filter: brightness(1.5) hue-rotate(180deg);
+  }
+  100% {
+    filter: brightness(1) hue-rotate(0deg);
+  }
+}
+
+.attacking {
+  animation: attackAnimation 0.5s ease-in-out;
+}
+
+.boss-attacking {
+  animation: bossAttackAnimation 0.5s ease-in-out;
+}
+
+.taking-damage {
+  animation: damageEffect 0.5s ease-in-out;
+}
+
+.using-skill {
+  animation: skillEffect 0.8s ease-in-out;
+}
+
+/* Efeito de dano */
+.damage-number {
+  position: absolute;
+  font-weight: bold;
+  font-size: 2.5em;
+  animation: damageFloat 1.2s cubic-bezier(0.12, 0, 0.39, 0);
+  pointer-events: none;
+  z-index: 1000;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+    2px 2px 0 #000, 0 0 10px rgba(255, 255, 255, 0.5);
+  transform-origin: center;
+}
+
+/* Diferentes cores para diferentes tipos de dano */
+.damage-number.normal {
+  color: #ff4444;
+}
+
+.damage-number.skill {
+  color: #44aaff;
+  font-size: 3em;
+}
+
+.damage-number.boss {
+  color: #ff1a1a;
+  font-size: 3em;
+}
+
+@keyframes damageFloat {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(-20px) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+  }
 }
