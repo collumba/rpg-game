@@ -223,6 +223,7 @@ body {
 
 .stat-bar {
   height: 100%;
+  min-height: 14px;
   border-radius: 6px;
   transition: width 0.3s ease;
   position: relative;
@@ -240,10 +241,12 @@ body {
 
 .hp-bar {
   background: var(--hp-color);
+  box-shadow: 0 0 5px var(--hp-color);
 }
 
 .mana-bar {
   background: var(--mana-color);
+  box-shadow: 0 0 5px var(--mana-color);
 }
 
 .attack-bar {
@@ -739,12 +742,13 @@ body {
 
 .battle-character .stat-bar-container {
   height: 14px;
-  background: var(--bg-dark);
-  border: 1px solid var(--border-danger);
+  background: var(--bg-darker);
+  border: 1px solid var(--border-light);
 }
 
 .battle-character .stat-bar {
   height: 100%;
+  min-height: 14px;
   border-radius: 6px;
   transition: width 0.3s ease;
 }
@@ -768,10 +772,16 @@ body {
 /* Barras de status específicas */
 .battle-character .hp-bar {
   background: var(--hp-color);
+  box-shadow: 0 0 5px var(--hp-color);
+  width: 100%;
+  height: 14px;
 }
 
 .battle-character .mana-bar {
   background: var(--mana-color);
+  box-shadow: 0 0 5px var(--mana-color);
+  width: 100%;
+  height: 14px;
 }
 
 .battle-character .attack-bar {
@@ -1136,16 +1146,20 @@ body {
 
 .battle-character.boss .stat-bar-container {
   height: 16px;
-  background: var(--bg-dark);
-  border: 1px solid var(--border-danger);
+  background: var(--bg-darker);
+  border: 1px solid var(--border-light);
 }
 
 .battle-character.boss .hp-bar {
   background: var(--hp-color);
+  box-shadow: 0 0 5px var(--hp-color);
+  width: 100%;
 }
 
 .battle-character.boss .mana-bar {
   background: var(--mana-color);
+  box-shadow: 0 0 5px var(--mana-color);
+  width: 100%;
 }
 
 .battle-character.boss .attack-bar {
@@ -1332,4 +1346,11 @@ body {
 .attack-display:hover {
   transform: translateX(-50%) scale(1.1);
   box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+.battle-character.boss .stat-bar {
+  height: 100%;
+  min-height: 16px;
+  border-radius: 6px;
+  transition: width 0.3s ease;
 }
