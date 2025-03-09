@@ -15,8 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 8,
           mana: 4,
-          attack: 6,
-          defense: 7,
+          attack: 4,
         },
         abilities: {
           passive:
@@ -33,8 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 7,
           mana: 3,
-          attack: 9,
-          defense: 4,
+          attack: 5,
         },
         abilities: {
           passive:
@@ -50,8 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 10,
           mana: 5,
-          attack: 5,
-          defense: 9,
+          attack: 3,
         },
         abilities: {
           passive:
@@ -67,8 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 8,
           mana: 6,
-          attack: 6,
-          defense: 6,
+          attack: 3,
         },
         abilities: {
           passive:
@@ -85,8 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 4,
-          attack: 8,
-          defense: 4,
+          attack: 4,
         },
         abilities: {
           passive:
@@ -102,8 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 7,
           mana: 5,
-          attack: 7,
-          defense: 6,
+          attack: 4,
         },
         abilities: {
           passive:
@@ -121,8 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 5,
           mana: 4,
-          attack: 8,
-          defense: 3,
+          attack: 5,
         },
         abilities: {
           passive:
@@ -138,8 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 5,
-          attack: 7,
-          defense: 4,
+          attack: 4,
         },
         abilities: {
           passive:
@@ -156,8 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 4,
-          attack: 9,
-          defense: 4,
+          attack: 5,
         },
         abilities: {
           passive:
@@ -176,8 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 5,
           mana: 10,
-          attack: 9,
-          defense: 3,
+          attack: 6,
         },
         abilities: {
           passive:
@@ -193,8 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 8,
-          attack: 8,
-          defense: 3,
+          attack: 5,
         },
         abilities: {
           passive:
@@ -210,8 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 5,
           mana: 9,
-          attack: 7,
-          defense: 4,
+          attack: 4,
         },
         abilities: {
           passive:
@@ -228,8 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 7,
           mana: 7,
-          attack: 6,
-          defense: 5,
+          attack: 3,
         },
         abilities: {
           passive:
@@ -245,8 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 5,
           mana: 8,
-          attack: 5,
-          defense: 4,
+          attack: 3,
         },
         abilities: {
           passive:
@@ -264,8 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 9,
-          attack: 4,
-          defense: 5,
+          attack: 2,
         },
         abilities: {
           passive:
@@ -281,8 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stats: {
           hp: 6,
           mana: 8,
-          attack: 5,
-          defense: 5,
+          attack: 3,
         },
         abilities: {
           passive:
@@ -297,8 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxStats = {
     hp: 10,
     mana: 10,
-    attack: 9,
-    defense: 9,
+    attack: 6,
   };
 
   const statsDescriptions = {
@@ -306,8 +289,6 @@ document.addEventListener("DOMContentLoaded", () => {
     mana: "Pontos de Mana: Recurso necessário para usar habilidades ativas",
     attack:
       "Pontos de Ataque: Define o dano base causado pelos ataques e habilidades",
-    defense:
-      "Pontos de Defesa: Reduz o dano recebido e melhora a sobrevivência",
   };
 
   function createCharacterCard(character) {
@@ -318,7 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
       hp: (character.stats.hp / maxStats.hp) * 100,
       mana: (character.stats.mana / maxStats.mana) * 100,
       attack: (character.stats.attack / maxStats.attack) * 100,
-      defense: (character.stats.defense / maxStats.defense) * 100,
     };
 
     card.innerHTML = `
@@ -354,16 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="stat-bar-container">
             <div class="stat-bar attack-bar" style="width: ${statsPercentage.attack}%"></div>
             <div class="stat-value">${character.stats.attack}</div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon tooltip">
-            <span class="tooltip-text">${statsDescriptions.defense}</span>
-            🛡️
-          </div>
-          <div class="stat-bar-container">
-            <div class="stat-bar defense-bar" style="width: ${statsPercentage.defense}%"></div>
-            <div class="stat-value">${character.stats.defense}</div>
           </div>
         </div>
       </div>
@@ -502,15 +472,36 @@ document.addEventListener("DOMContentLoaded", () => {
     battleCharacter.className = "battle-character";
     battleCharacter.dataset.name = character.name;
 
+    const statsPercentage = {
+      hp: (character.stats.hp / maxStats.hp) * 100,
+      mana: (character.stats.mana / maxStats.mana) * 100,
+      attack: (character.stats.attack / maxStats.attack) * 100,
+    };
+
     battleCharacter.innerHTML = `
       <div class="character-emoji">${character.emoji}</div>
       <div class="character-name">${character.name}</div>
       <div class="character-stats">
         <div class="stat-row">
-          <div class="hp-bar" style="width: 100%">❤️ ${character.stats.hp}</div>
+          <div class="stat-icon">❤️</div>
+          <div class="stat-bar-container">
+            <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
+            <div class="stat-value">${character.stats.hp}</div>
+          </div>
         </div>
         <div class="stat-row">
-          <div class="mana-bar" style="width: 100%">⭐ ${character.stats.mana}</div>
+          <div class="stat-icon">⭐</div>
+          <div class="stat-bar-container">
+            <div class="mana-bar" style="width: ${statsPercentage.mana}%"></div>
+            <div class="stat-value">${character.stats.mana}</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-icon">⚔️</div>
+          <div class="stat-bar-container">
+            <div class="attack-bar" style="width: ${statsPercentage.attack}%"></div>
+            <div class="stat-value">${character.stats.attack}</div>
+          </div>
         </div>
       </div>
     `;
@@ -526,14 +517,7 @@ document.addEventListener("DOMContentLoaded", () => {
       description: "Um dragão milenar que domina os elementos.",
       stats: {
         hp: 20,
-        mana: 15,
-        attack: 12,
-        defense: 10,
-      },
-      abilities: {
-        passive: "Escamas de Adamantina: Reduz todo dano recebido em 20%",
-        active:
-          "Sopro do Dragão (4 Mana) - Causa dano massivo em área e aplica efeito baseado no elemento atual (Fogo: Queimadura, Gelo: Congelamento, Raio: Paralisia)",
+        attack: 5,
       },
       phase: 1,
     },
@@ -544,14 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Um poderoso feiticeiro que conquistou a imortalidade através de magia negra.",
       stats: {
         hp: 15,
-        mana: 20,
-        attack: 14,
-        defense: 8,
-      },
-      abilities: {
-        passive: "Phylacteria: Ao morrer, revive com 30% de HP uma vez",
-        active:
-          "Praga da Morte (5 Mana) - Causa dano a todos os heróis e drena sua mana",
+        attack: 6,
       },
       phase: 2,
     },
@@ -562,14 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Uma construção mágica gigante feita de pedra e cristais místicos.",
       stats: {
         hp: 25,
-        mana: 10,
-        attack: 8,
-        defense: 15,
-      },
-      abilities: {
-        passive: "Regeneração Cristalina: Recupera 2 HP por turno",
-        active:
-          "Terremoto (6 Mana) - Causa dano a todos os heróis e tem chance de atordoá-los",
+        attack: 4,
       },
       phase: 3,
     },
@@ -579,15 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
       description: "Uma besta lendária com múltiplas cabeças que se regeneram.",
       stats: {
         hp: 18,
-        mana: 12,
-        attack: 15,
-        defense: 9,
-      },
-      abilities: {
-        passive:
-          "Regeneração: Ao receber dano fatal, divide-se em duas cabeças menores",
-        active:
-          "Ataque Múltiplo (3 Mana) - Ataca três alvos diferentes com cada cabeça",
+        attack: 7,
       },
       phase: 4,
     },
@@ -597,14 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
       description: "O senhor supremo dos demônios, com poder incomparável.",
       stats: {
         hp: 30,
-        mana: 25,
-        attack: 18,
-        defense: 12,
-      },
-      abilities: {
-        passive: "Aura Demoníaca: Reduz a cura recebida pelos heróis em 50%",
-        active:
-          "Apocalipse (8 Mana) - Causa dano massivo a todos os heróis e aplica diversos efeitos negativos",
+        attack: 8,
       },
       phase: 5,
     },
@@ -612,8 +567,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentBossIndex = 0;
   let currentBoss = null;
+  let currentTurn = 1;
+  let currentCharacterIndex = 0;
+  let teamActionsCompleted = false;
 
-  // Modificar a função initializeBattle para trabalhar com chefes
+  // Função para inicializar a batalha
   function initializeBattle() {
     const playerTeamArea = document.querySelector(".player-team");
     const enemyTeamArea = document.querySelector(".enemy-team");
@@ -624,24 +582,99 @@ document.addEventListener("DOMContentLoaded", () => {
     enemyTeamArea.innerHTML = "";
 
     try {
+      // Reseta variáveis de controle de turno
+      currentCharacterIndex = 0;
+      teamActionsCompleted = false;
+      currentTurn = 1;
+
       // Inicializa o time do jogador
       selectedCharacters.forEach((character) => {
         const battleCharacter = createBattleCharacter(character);
+        battleCharacter.dataset.acted = "false";
         playerTeamArea.appendChild(battleCharacter);
+
+        // Se o personagem estava morto, mantém o estado visual de derrota
+        if (character.stats.hp <= 0) {
+          battleCharacter.classList.add("defeated");
+          battleCharacter.style.filter = "grayscale(100%) brightness(50%)";
+          battleCharacter.style.opacity = "0.7";
+          battleCharacter.style.position = "relative";
+
+          // Adiciona o ícone de morte
+          const deathMark = document.createElement("div");
+          deathMark.className = "death-mark";
+          deathMark.innerHTML = "☠️";
+          deathMark.style.position = "absolute";
+          deathMark.style.top = "50%";
+          deathMark.style.left = "50%";
+          deathMark.style.transform = "translate(-50%, -50%)";
+          deathMark.style.fontSize = "2em";
+          deathMark.style.zIndex = "10";
+          battleCharacter.appendChild(deathMark);
+        }
       });
 
-      // Inicializa o chefe atual
-      currentBoss = bosses[currentBossIndex];
+      // Ajusta o HP do chefe baseado no número de membros VIVOS do time
+      currentBoss = JSON.parse(JSON.stringify(bosses[currentBossIndex])); // Cria uma cópia profunda do chefe
+      const livingTeamSize = selectedCharacters.filter(
+        (char) => char.stats.hp > 0
+      ).length;
+      const baseHP = currentBoss.stats.hp;
+
+      // Fórmula de ajuste: HP base + (HP base * 0.75) por membro vivo adicional do time
+      currentBoss.stats.hp = Math.floor(
+        baseHP * (1 + (livingTeamSize - 1) * 0.75)
+      );
+
+      // Cria o elemento do chefe com o HP ajustado
       const bossCharacter = createBossCharacter(currentBoss);
       enemyTeamArea.appendChild(bossCharacter);
 
       // Atualiza informações do turno e fase
-      turnInfo.textContent = `Fase ${currentBoss.phase} - ${currentBoss.name} - Turno 1`;
+      updateTurnInfo();
 
       // Adiciona listeners para os botões de ação
       setupActionButtons();
+
+      // Destaca o personagem atual
+      highlightCurrentCharacter();
     } catch (error) {
       console.error("Erro ao inicializar batalha:", error);
+    }
+  }
+
+  function updateTurnInfo() {
+    const turnInfo = document.querySelector(".turn-info");
+    if (!teamActionsCompleted) {
+      const currentCharacter = selectedCharacters[currentCharacterIndex];
+      if (currentCharacter && currentCharacter.stats.hp > 0) {
+        turnInfo.textContent = `Fase ${currentBoss.phase} - ${currentBoss.name} - Turno ${currentTurn} - Vez de ${currentCharacter.name}`;
+      } else {
+        // Se por algum motivo não houver personagem válido, avança para o próximo
+        nextCharacterTurn();
+      }
+    } else {
+      turnInfo.textContent = `Fase ${currentBoss.phase} - ${currentBoss.name} - Turno ${currentTurn} - Vez do Chefe`;
+    }
+  }
+
+  function highlightCurrentCharacter() {
+    // Remove highlight de todos os personagens
+    document.querySelectorAll(".battle-character").forEach((char) => {
+      char.classList.remove("active");
+    });
+
+    if (!teamActionsCompleted) {
+      // Destaca o personagem atual
+      const characters = document.querySelectorAll(
+        ".player-team .battle-character"
+      );
+      characters[currentCharacterIndex]?.classList.add("active");
+    } else {
+      // Destaca o chefe quando for sua vez
+      document
+        .querySelector(".enemy-team .battle-character")
+        ?.classList.add("active");
     }
   }
 
@@ -653,54 +686,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const statsPercentage = {
       hp: (boss.stats.hp / 30) * 100, // 30 é o HP máximo dos chefes
-      mana: (boss.stats.mana / 25) * 100, // 25 é a mana máxima dos chefes
+      attack: (boss.stats.attack / 18) * 100, // 18 é o ataque máximo dos chefes
     };
 
     bossElement.innerHTML = `
       <div class="character-emoji boss-emoji">${boss.emoji}</div>
       <div class="character-name boss-name">${boss.name}</div>
       <div class="boss-description">${boss.description}</div>
-      <div class="character-stats">
+      <div class="character-stats boss-stats">
         <div class="stat-row">
-          <div class="hp-bar" style="width: ${statsPercentage.hp}%">❤️ ${boss.stats.hp}</div>
+          <div class="stat-icon">❤️</div>
+          <div class="stat-bar-container">
+            <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
+            <div class="stat-value">${boss.stats.hp}</div>
+          </div>
         </div>
         <div class="stat-row">
-          <div class="mana-bar" style="width: ${statsPercentage.mana}%">⭐ ${boss.stats.mana}</div>
+          <div class="stat-icon">⚔️</div>
+          <div class="stat-bar-container">
+            <div class="attack-bar" style="width: ${statsPercentage.attack}%"></div>
+            <div class="stat-value">${boss.stats.attack}</div>
+          </div>
         </div>
-      </div>
-      <div class="boss-abilities">
-        <div><strong>Passiva:</strong> ${boss.abilities.passive}</div>
-        <div><strong>Ativa:</strong> ${boss.abilities.active}</div>
       </div>
     `;
 
     return bossElement;
-  }
-
-  // Função para avançar para o próximo chefe
-  function nextBoss() {
-    currentBossIndex++;
-    if (currentBossIndex < bosses.length) {
-      initializeBattle();
-    } else {
-      // Jogador venceu todos os chefes
-      endGame(true);
-    }
-  }
-
-  // Função para finalizar o jogo
-  function endGame(victory) {
-    const gameScreen = document.querySelector(".game-screen");
-    const resultMessage = victory
-      ? "Parabéns! Você derrotou todos os chefes!"
-      : "Game Over! Seu time foi derrotado!";
-
-    gameScreen.innerHTML = `
-      <div class="game-over">
-        <h2>${resultMessage}</h2>
-        <button onclick="location.reload()">Jogar Novamente</button>
-      </div>
-    `;
   }
 
   // Função para configurar os botões de ação
@@ -716,24 +727,339 @@ document.addEventListener("DOMContentLoaded", () => {
         handleAction(actionType);
       });
     });
+
+    // Atualiza o estado inicial dos botões
+    updateActionButtonsState();
+  }
+
+  // Função para atualizar o estado dos botões de ação
+  function updateActionButtonsState() {
+    const actionButtons = document.querySelectorAll(".action-button");
+    actionButtons.forEach((button) => {
+      button.disabled = teamActionsCompleted;
+      button.style.opacity = teamActionsCompleted ? "0.5" : "1";
+    });
   }
 
   // Função para lidar com as ações do jogador
   function handleAction(action) {
+    if (teamActionsCompleted) return; // Impede ações durante o turno do chefe
+
+    const currentCharacter = selectedCharacters[currentCharacterIndex];
+
     switch (action) {
       case "attack":
-        // Implementar lógica de ataque
-        console.log("Ataque selecionado");
+        performAttack(currentCharacter);
         break;
       case "skill":
-        // Implementar lógica de habilidade
-        console.log("Habilidade selecionada");
+        performSkill(currentCharacter);
         break;
       case "pass":
-        // Implementar lógica de passar turno
-        console.log("Turno passado");
+        nextCharacterTurn();
         break;
     }
+  }
+
+  function performAttack(character) {
+    // Calcula o dano baseado no ataque do personagem
+    const damage = character.stats.attack;
+
+    // Subtrai o dano do HP do chefe
+    currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
+
+    // Atualiza a exibição do HP do chefe na barra
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    const hpBar = bossElement.querySelector(".stat-bar-container .hp-bar");
+    const hpValue = bossElement.querySelector(
+      ".stat-bar-container .stat-value"
+    );
+
+    const maxBossHp = bosses[currentBossIndex].stats.hp;
+    const percentage = (currentBoss.stats.hp / maxBossHp) * 100;
+    hpBar.style.width = `${Math.max(0, percentage)}%`;
+    hpValue.textContent = Math.max(0, currentBoss.stats.hp);
+
+    // Exibe mensagem de ataque
+    showBattleMessage(
+      `${character.name} atacou ${currentBoss.name} causando ${damage} de dano!`
+    );
+
+    // Verifica se o chefe foi derrotado
+    if (currentBoss.stats.hp <= 0) {
+      showBattleMessage(`${currentBoss.name} foi derrotado!`);
+      setTimeout(() => {
+        currentBossIndex++;
+        if (currentBossIndex < bosses.length) {
+          initializeBattle();
+        } else {
+          endGame(true);
+        }
+      }, 1500);
+      return;
+    }
+
+    // Passa para o próximo personagem
+    currentCharacterIndex++;
+
+    // Se todos os personagens agiram, inicia o turno do chefe
+    if (currentCharacterIndex >= selectedCharacters.length) {
+      teamActionsCompleted = true;
+      setTimeout(() => {
+        executeBossTurn();
+      }, 1000);
+    }
+
+    // Atualiza a interface
+    updateTurnInfo();
+    highlightCurrentCharacter();
+  }
+
+  function performSkill(character) {
+    if (character.stats.mana < 2) {
+      showBattleMessage(`${character.name} não tem mana suficiente!`);
+      return;
+    }
+
+    // Consome mana e causa dano aumentado
+    character.stats.mana -= 2;
+    const damage = Math.floor(character.stats.attack * 1.5);
+    currentBoss.stats.hp -= damage;
+
+    // Atualiza a exibição
+    updateBossHP();
+    updateCharacterMana(character);
+
+    showBattleMessage(
+      `${character.name} usou uma habilidade e causou ${damage} de dano ao ${currentBoss.name}!`
+    );
+
+    if (currentBoss.stats.hp <= 0) {
+      handleBossDefeat();
+      return;
+    }
+
+    nextCharacterTurn();
+  }
+
+  function findNextLiveCharacter(startIndex) {
+    for (let i = startIndex; i < selectedCharacters.length; i++) {
+      if (selectedCharacters[i].stats.hp > 0) {
+        return i;
+      }
+    }
+    return -1; // Retorna -1 se não encontrar nenhum personagem vivo
+  }
+
+  function nextCharacterTurn() {
+    currentCharacterIndex++;
+
+    // Procura o próximo personagem vivo
+    const nextLiveIndex = findNextLiveCharacter(currentCharacterIndex);
+
+    if (nextLiveIndex === -1) {
+      // Se não houver mais personagens vivos, inicia o turno do chefe
+      teamActionsCompleted = true;
+      // Atualiza o estado dos botões quando o turno do chefe começa
+      updateActionButtonsState();
+      setTimeout(executeBossTurn, 1000);
+    } else {
+      // Se encontrou um personagem vivo, atualiza o índice
+      currentCharacterIndex = nextLiveIndex;
+    }
+
+    updateTurnInfo();
+    highlightCurrentCharacter();
+  }
+
+  function startNewTurn() {
+    // Procura o primeiro personagem vivo para começar o turno
+    const firstLiveIndex = findNextLiveCharacter(0);
+
+    if (firstLiveIndex === -1) {
+      // Se não houver personagens vivos, fim de jogo
+      endGame(false);
+      return;
+    }
+
+    currentCharacterIndex = firstLiveIndex;
+    teamActionsCompleted = false;
+    currentTurn++;
+
+    // Atualiza o estado dos botões no início do novo turno
+    updateActionButtonsState();
+
+    // Atualiza visualmente todos os personagens
+    selectedCharacters.forEach((char) => {
+      if (char.stats.hp <= 0) {
+        updateCharacterVisuals(char);
+      }
+    });
+
+    updateTurnInfo();
+    highlightCurrentCharacter();
+  }
+
+  function showBattleMessage(message) {
+    const messageArea =
+      document.querySelector(".battle-messages") || createBattleMessageArea();
+    const messageElement = document.createElement("div");
+    messageElement.textContent = message;
+    messageArea.appendChild(messageElement);
+
+    // Remove mensagens antigas se houver muitas
+    while (messageArea.children.length > 3) {
+      messageArea.removeChild(messageArea.firstChild);
+    }
+  }
+
+  function createBattleMessageArea() {
+    const messageArea = document.createElement("div");
+    messageArea.className = "battle-messages";
+    document.querySelector(".game-screen").appendChild(messageArea);
+    return messageArea;
+  }
+
+  function updateBossHP() {
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    const hpBar = bossElement.querySelector(".hp-bar");
+    const hpValue = bossElement.querySelector(".stat-value");
+
+    // Usa o HP atual do chefe em vez do HP base da definição
+    const maxBossHp = currentBoss.stats.hp;
+    const percentage = (currentBoss.stats.hp / maxBossHp) * 100;
+    hpBar.style.width = `${Math.max(0, percentage)}%`;
+    hpValue.textContent = Math.max(0, currentBoss.stats.hp);
+  }
+
+  function updateCharacterHP(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const hpBar = charElement.querySelector(".hp-bar");
+    const hpValue = charElement.querySelector(".stat-value");
+    const percentage = (character.stats.hp / maxStats.hp) * 100;
+    hpBar.style.width = `${Math.max(0, percentage)}%`;
+    hpValue.textContent = character.stats.hp;
+  }
+
+  function updateCharacterMana(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const manaBar = charElement.querySelector(".mana-bar");
+    const manaValue = manaBar.parentElement.querySelector(".stat-value");
+    const percentage = (character.stats.mana / maxStats.mana) * 100;
+    manaBar.style.width = `${Math.max(0, percentage)}%`;
+    manaValue.textContent = character.stats.mana;
+  }
+
+  function handleCharacterDefeat(character, showMessage = true) {
+    if (showMessage) {
+      showBattleMessage(`${character.name} foi derrotado!`);
+    }
+
+    // Marca o personagem como derrotado visualmente
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    charElement.classList.add("defeated");
+    charElement.style.filter = "grayscale(100%) brightness(50%)";
+    charElement.style.opacity = "0.7";
+
+    // Adiciona um ícone de morte sobre o personagem
+    const deathMark = document.createElement("div");
+    deathMark.className = "death-mark";
+    deathMark.innerHTML = "☠️";
+    deathMark.style.position = "absolute";
+    deathMark.style.top = "50%";
+    deathMark.style.left = "50%";
+    deathMark.style.transform = "translate(-50%, -50%)";
+    deathMark.style.fontSize = "2em";
+    deathMark.style.zIndex = "10";
+    charElement.style.position = "relative";
+    charElement.appendChild(deathMark);
+
+    // Verifica se ainda há personagens vivos
+    const livingCharacters = selectedCharacters.filter(
+      (char) => char.stats.hp > 0
+    );
+
+    if (livingCharacters.length === 0) {
+      setTimeout(() => endGame(false), 1500);
+    } else {
+      setTimeout(startNewTurn, 1000);
+    }
+  }
+
+  function updateCharacterVisuals(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+
+    if (
+      character.stats.hp <= 0 &&
+      !charElement.classList.contains("defeated")
+    ) {
+      handleCharacterDefeat(character, false);
+    }
+  }
+
+  // Atualiza a função que lida com o dano do chefe
+  function executeBossTurn() {
+    // Atualiza o estado dos botões no início do turno do chefe
+    updateActionButtonsState();
+
+    // Filtra apenas personagens vivos
+    const liveCharacters = selectedCharacters.filter(
+      (char) => char.stats.hp > 0
+    );
+
+    if (liveCharacters.length === 0) {
+      endGame(false);
+      return;
+    }
+
+    // Chefe ataca um personagem vivo aleatório
+    const targetIndex = Math.floor(Math.random() * liveCharacters.length);
+    const target = liveCharacters[targetIndex];
+    const damage = currentBoss.stats.attack;
+
+    // Aplica o dano ao personagem
+    target.stats.hp = Math.max(0, target.stats.hp - damage);
+
+    // Atualiza o HP do personagem na interface
+    updateCharacterHP(target);
+    updateCharacterVisuals(target);
+
+    showBattleMessage(
+      `${currentBoss.name} atacou ${target.name} causando ${damage} de dano!`
+    );
+
+    // Verifica se o personagem foi derrotado
+    if (target.stats.hp <= 0) {
+      handleCharacterDefeat(target);
+      return;
+    }
+
+    // Inicia novo turno após 1 segundo
+    setTimeout(() => {
+      startNewTurn();
+    }, 1000);
+  }
+
+  // Função para finalizar o jogo
+  function endGame(victory) {
+    const gameScreen = document.querySelector(".game-screen");
+    const resultMessage = victory
+      ? "Parabéns! Você derrotou todos os chefes!"
+      : "Game Over! Seu time foi derrotado!";
+
+    gameScreen.innerHTML = `
+        <div class="game-over">
+            <h2>${resultMessage}</h2>
+            <button onclick="location.reload()">Jogar Novamente</button>
+        </div>
+    `;
   }
 
   // Inicializar a tela de seleção
