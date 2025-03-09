@@ -295,10 +295,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const card = document.createElement("div");
     card.className = "character-card";
 
+    // Adiciona maxStats ao personagem se não existir
+    if (!character.stats.maxHp) character.stats.maxHp = character.stats.hp;
+    if (!character.stats.maxMana)
+      character.stats.maxMana = character.stats.mana;
+    if (!character.stats.maxAttack)
+      character.stats.maxAttack = character.stats.attack;
+
     const statsPercentage = {
-      hp: (character.stats.hp / maxStats.hp) * 100,
-      mana: (character.stats.mana / maxStats.mana) * 100,
-      attack: (character.stats.attack / maxStats.attack) * 100,
+      hp: (character.stats.hp / character.stats.maxHp) * 100,
+      mana: (character.stats.mana / character.stats.maxMana) * 100,
+      attack: (character.stats.attack / character.stats.maxAttack) * 100,
     };
 
     card.innerHTML = `
@@ -313,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="stat-bar-container">
             <div class="stat-bar hp-bar" style="width: ${statsPercentage.hp}%"></div>
-            <div class="stat-value">${character.stats.hp}</div>
+            <div class="stat-value">${character.stats.hp}/${character.stats.maxHp}</div>
           </div>
         </div>
         <div class="stat-row">
@@ -323,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="stat-bar-container">
             <div class="stat-bar mana-bar" style="width: ${statsPercentage.mana}%"></div>
-            <div class="stat-value">${character.stats.mana}</div>
+            <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
           </div>
         </div>
         <div class="stat-row">
@@ -333,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="stat-bar-container">
             <div class="stat-bar attack-bar" style="width: ${statsPercentage.attack}%"></div>
-            <div class="stat-value">${character.stats.attack}</div>
+            <div class="stat-value">${character.stats.attack}/${character.stats.maxAttack}</div>
           </div>
         </div>
       </div>
@@ -472,10 +479,17 @@ document.addEventListener("DOMContentLoaded", () => {
     battleCharacter.className = "battle-character";
     battleCharacter.dataset.name = character.name;
 
+    // Garante que os valores máximos existam
+    if (!character.stats.maxHp) character.stats.maxHp = character.stats.hp;
+    if (!character.stats.maxMana)
+      character.stats.maxMana = character.stats.mana;
+    if (!character.stats.maxAttack)
+      character.stats.maxAttack = character.stats.attack;
+
     const statsPercentage = {
-      hp: (character.stats.hp / maxStats.hp) * 100,
-      mana: (character.stats.mana / maxStats.mana) * 100,
-      attack: (character.stats.attack / maxStats.attack) * 100,
+      hp: (character.stats.hp / character.stats.maxHp) * 100,
+      mana: (character.stats.mana / character.stats.maxMana) * 100,
+      attack: (character.stats.attack / character.stats.maxAttack) * 100,
     };
 
     battleCharacter.innerHTML = `
@@ -486,21 +500,21 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="stat-icon">❤️</div>
           <div class="stat-bar-container">
             <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
-            <div class="stat-value">${character.stats.hp}</div>
+            <div class="stat-value">${character.stats.hp}/${character.stats.maxHp}</div>
           </div>
         </div>
         <div class="stat-row">
           <div class="stat-icon">⭐</div>
           <div class="stat-bar-container">
             <div class="mana-bar" style="width: ${statsPercentage.mana}%"></div>
-            <div class="stat-value">${character.stats.mana}</div>
+            <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
           </div>
         </div>
         <div class="stat-row">
           <div class="stat-icon">⚔️</div>
           <div class="stat-bar-container">
             <div class="attack-bar" style="width: ${statsPercentage.attack}%"></div>
-            <div class="stat-value">${character.stats.attack}</div>
+            <div class="stat-value">${character.stats.attack}/${character.stats.maxAttack}</div>
           </div>
         </div>
       </div>
@@ -725,7 +739,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="stat-icon">❤️</div>
           <div class="stat-bar-container">
             <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
-            <div class="stat-value">${boss.stats.hp}</div>
+            <div class="stat-value">${boss.stats.hp}/${boss.stats.maxHp}</div>
           </div>
         </div>
         <div class="stat-row">
@@ -1087,7 +1101,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Usa maxHp para calcular a porcentagem correta
     const percentage = (currentBoss.stats.hp / currentBoss.stats.maxHp) * 100;
     hpBar.style.width = `${Math.max(0, percentage)}%`;
-    hpValue.textContent = Math.max(0, currentBoss.stats.hp);
+    hpValue.textContent = `${Math.max(0, currentBoss.stats.hp)}/${
+      currentBoss.stats.maxHp
+    }`;
   }
 
   function updateCharacterHP(character) {
@@ -1096,9 +1112,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const hpBar = charElement.querySelector(".hp-bar");
     const hpValue = charElement.querySelector(".stat-value");
-    const percentage = (character.stats.hp / maxStats.hp) * 100;
+    const percentage = (character.stats.hp / character.stats.maxHp) * 100;
     hpBar.style.width = `${Math.max(0, percentage)}%`;
-    hpValue.textContent = character.stats.hp;
+    hpValue.textContent = `${character.stats.hp}/${character.stats.maxHp}`;
   }
 
   function updateCharacterMana(character) {
@@ -1107,9 +1123,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const manaBar = charElement.querySelector(".mana-bar");
     const manaValue = manaBar.parentElement.querySelector(".stat-value");
-    const percentage = (character.stats.mana / maxStats.mana) * 100;
+    const percentage = (character.stats.mana / character.stats.maxMana) * 100;
     manaBar.style.width = `${Math.max(0, percentage)}%`;
-    manaValue.textContent = character.stats.mana;
+    manaValue.textContent = `${character.stats.mana}/${character.stats.maxMana}`;
   }
 
   function handleCharacterDefeat(character, showMessage = true) {
