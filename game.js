@@ -596,6 +596,11 @@ document.addEventListener("DOMContentLoaded", () => {
     enemyTeamArea.innerHTML = "";
 
     try {
+      // Cria a área de mensagens e mostra a mensagem inicial
+      const messageArea =
+        document.querySelector(".battle-messages") || createBattleMessageArea();
+      showBattleMessage("Início da batalha!", "system");
+
       // Reseta variáveis de controle de turno
       currentCharacterIndex = 0;
       teamActionsCompleted = false;
@@ -1086,10 +1091,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const messageArea = document.createElement("div");
     messageArea.className = "battle-messages";
     document.querySelector(".game-screen").appendChild(messageArea);
-
-    // Adiciona mensagem inicial
-    showBattleMessage("Início da batalha!", "system");
-
     return messageArea;
   }
 

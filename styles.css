@@ -14,7 +14,12 @@ body {
 .game-container {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #1a472a 0%, #2d5a3f 40%, #0d2318 100%);
+  background: linear-gradient(
+    180deg,
+    var(--primary-dark) 0%,
+    var(--primary-medium) 40%,
+    var(--primary-darker) 100%
+  );
   position: relative;
   display: flex;
   justify-content: center;
@@ -31,8 +36,8 @@ body {
   height: 30%;
   background: repeating-linear-gradient(
     80deg,
-    #0d2318 0px,
-    #0d2318 20px,
+    var(--primary-darker) 0px,
+    var(--primary-darker) 20px,
     transparent 20px,
     transparent 40px
   );
@@ -48,20 +53,20 @@ body {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px var(--shadow-normal);
   transition: transform 0.2s, box-shadow 0.2s;
   z-index: 1;
 }
 
 .start-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 12px var(--shadow-hover);
   background-color: var(--primary-hover);
 }
 
 .start-button:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px var(--shadow-active);
 }
 
 /* Character Selection Screen */
@@ -144,7 +149,7 @@ body {
 .character-card:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px var(--shadow-normal);
 }
 
 .character-card.selected {
@@ -158,14 +163,14 @@ body {
   margin: 0;
   color: var(--text-gold);
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px var(--shadow-text);
 }
 
 .character-emoji {
   font-size: 2.5em;
   margin: 0;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px var(--shadow-text);
 }
 
 .character-description {
@@ -181,7 +186,7 @@ body {
 .character-stats {
   font-size: 0.9em;
   color: var(--text-success);
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--bg-overlay);
   padding: 15px;
   border-radius: 10px;
   display: flex;
@@ -190,6 +195,7 @@ body {
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  border: 1px solid var(--border-light);
 }
 
 .stat-row {
@@ -228,8 +234,8 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.8em;
-  color: white;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  color: var(--text-primary);
+  text-shadow: 1px 1px 1px var(--shadow-text);
 }
 
 .hp-bar {
@@ -285,7 +291,7 @@ body {
     rgba(0, 0, 0, 0.98)
   );
   padding: 20px;
-  border-top: 2px solid #ffd700;
+  border-top: 2px solid var(--border-gold);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -321,7 +327,7 @@ body {
 
 .team-slot.filled {
   border-style: solid;
-  background: rgba(255, 215, 0, 0.15);
+  background: var(--bg-warning);
 }
 
 .team-slot .character-emoji {
@@ -373,7 +379,7 @@ body {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--shadow-normal);
   position: relative;
   z-index: 1001;
 }
@@ -381,11 +387,11 @@ body {
 .confirm-team:hover {
   background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px var(--shadow-hover);
 }
 
 .confirm-team:disabled {
-  background: #666;
+  background: var(--disabled-color);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -402,8 +408,8 @@ body {
 .tooltip .tooltip-text {
   visibility: hidden;
   width: 200px;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
+  background-color: var(--bg-darker);
+  color: var(--text-primary);
   text-align: center;
   border-radius: 6px;
   padding: 8px;
@@ -416,7 +422,7 @@ body {
   transition: opacity 0.3s;
   font-size: 14px;
   white-space: normal;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px var(--shadow-normal);
   pointer-events: none;
 }
 
@@ -428,7 +434,7 @@ body {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+  border-color: var(--bg-darker) transparent transparent transparent;
   pointer-events: none;
 }
 
@@ -512,13 +518,13 @@ body {
 .team-area:first-child {
   grid-row: 3;
   margin-bottom: 0;
-  background: rgba(255, 0, 0, 0.1);
+  background: var(--bg-danger);
 }
 
 .team-area:last-child {
   grid-row: 1;
   margin-top: 0;
-  background: rgba(0, 255, 0, 0.05);
+  background: var(--bg-success);
 }
 
 .battle-divider {
@@ -533,7 +539,7 @@ body {
   font-size: 3em;
   color: var(--text-gold);
   font-weight: bold;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 10px var(--shadow-glow);
   margin: 10px 0;
   position: relative;
   transform: rotate(180deg);
@@ -574,22 +580,22 @@ body {
 }
 
 .ability-item {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   padding: 8px 12px;
   border-radius: 6px;
   border-left: 3px solid;
 }
 
 .ability-item.passive {
-  border-color: #98fb98;
+  border-color: var(--text-success);
 }
 
 .ability-item.active {
-  border-color: #ff6b6b;
+  border-color: var(--danger-color);
 }
 
 .ability-item strong {
-  color: #ffd700;
+  color: var(--text-gold);
   margin-right: 8px;
 }
 
@@ -631,7 +637,7 @@ body {
   transition: all 0.3s ease;
   position: relative;
   overflow: visible !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px var(--shadow-card);
   border: 1px solid var(--border-light);
   cursor: pointer;
   z-index: 3;
@@ -640,7 +646,7 @@ body {
 /* Estilo para o personagem ativo */
 .battle-character.active {
   border: 2px solid var(--border-gold);
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px var(--shadow-glow);
   transform: scale(1.05);
   z-index: 4;
 }
@@ -653,7 +659,7 @@ body {
   transform: translateX(-50%);
   color: var(--text-gold);
   font-size: 24px;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 10px var(--shadow-glow);
   animation: bounceArrow 1s ease-in-out infinite;
 }
 
@@ -669,8 +675,8 @@ body {
 
 /* Ajuste para o boss quando ativo */
 .battle-character.boss.active {
-  border: 2px solid #ffd700;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 0 25px var(--shadow-glow);
 }
 
 .battle-character::before {
@@ -680,7 +686,7 @@ body {
   left: 0;
   right: 0;
   height: 80px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(to bottom, var(--bg-card), transparent);
   border-radius: 20px 20px 0 0;
   z-index: 0;
 }
@@ -699,7 +705,7 @@ body {
   margin-bottom: 3px;
   position: relative;
   z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px var(--shadow-text);
   width: 100%;
   white-space: normal;
   overflow: visible;
@@ -717,11 +723,11 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--bg-overlay);
   border-radius: 12px;
   position: relative;
   z-index: 1;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-light);
   margin-top: auto;
 }
 
@@ -737,8 +743,8 @@ body {
 
 .battle-character .stat-bar-container {
   height: 14px;
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-danger);
 }
 
 .battle-character .stat-bar {
@@ -757,8 +763,8 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.85em;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  color: var(--text-primary);
+  text-shadow: 1px 1px 2px var(--shadow-text);
   z-index: 2;
   font-weight: bold;
 }
@@ -785,15 +791,15 @@ body {
   width: 220px;
   min-height: 280px;
   padding: 12px;
-  background: rgba(255, 0, 0, 0.15);
+  background: var(--bg-danger);
   border: 2px solid var(--border-danger);
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+  box-shadow: 0 0 20px var(--shadow-danger);
   display: flex;
   flex-direction: column;
 }
 
 .battle-character.boss::before {
-  background: linear-gradient(to bottom, rgba(255, 0, 0, 0.2), transparent);
+  background: linear-gradient(to bottom, var(--bg-danger), transparent);
   height: 80px;
 }
 
@@ -830,7 +836,7 @@ body {
   padding: 0 10px;
   margin: 8px 0;
   line-height: 1.3;
-  color: #ffcccc;
+  color: var(--text-danger);
   text-align: center;
 }
 
@@ -880,8 +886,8 @@ body {
   padding: 10px;
   overflow-y: auto;
   z-index: 999;
-  border: 2px solid #444;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--border-dark);
+  box-shadow: 0 0 10px var(--shadow-normal);
   pointer-events: auto;
   transform: none;
 }
@@ -904,18 +910,18 @@ body {
 }
 
 .battle-message.team {
-  background-color: rgba(0, 128, 255, 0.2);
+  background-color: var(--bg-info);
   border-left: 3px solid var(--info-color);
 }
 
 .battle-message.boss {
-  background-color: rgba(255, 0, 0, 0.2);
+  background-color: var(--bg-danger);
   border-left: 3px solid var(--danger-color);
 }
 
 .battle-message.system {
-  background-color: rgba(255, 215, 0, 0.1);
-  border-left: 3px solid #ffd700;
+  background-color: var(--bg-warning);
+  border-left: 3px solid var(--border-gold);
 }
 
 @keyframes fadeIn {
@@ -935,17 +941,17 @@ body {
 }
 
 .battle-messages::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--bg-overlay);
   border-radius: 4px;
 }
 
 .battle-messages::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--border-light);
   border-radius: 4px;
 }
 
 .battle-messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--border-gold);
 }
 
 .turn-info {
@@ -1084,17 +1090,17 @@ body {
 }
 
 .battle-area::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--bg-overlay);
   border-radius: 4px;
 }
 
 .battle-area::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--border-light);
   border-radius: 4px;
 }
 
 .battle-area::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--border-gold);
 }
 
 @keyframes shine {
@@ -1113,15 +1119,15 @@ body {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
+  background: var(--bg-darker);
+  color: var(--text-primary);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.8em;
   white-space: nowrap;
   z-index: 10;
   pointer-events: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px var(--shadow-normal);
 }
 
 .battle-character.boss .stat-row {
@@ -1133,24 +1139,24 @@ body {
 
 .battle-character.boss .stat-bar-container {
   height: 16px;
-  background: #111111;
-  border: 1px solid rgba(255, 0, 0, 0.4);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-danger);
 }
 
 .battle-character.boss .hp-bar {
-  background: #ff0000;
+  background: var(--hp-color);
 }
 
 .battle-character.boss .mana-bar {
-  background: #0000ff;
+  background: var(--mana-color);
 }
 
 .battle-character.boss .attack-bar {
-  background: #ffa500;
+  background: var(--attack-color);
 }
 
 .battle-character.boss .defense-bar {
-  background: #00cc00;
+  background: var(--defense-color);
 }
 
 .battle-character.boss .stat-bar::after {
@@ -1173,7 +1179,7 @@ body {
   padding: 0 10px;
   margin: 8px 0;
   line-height: 1.3;
-  color: #ffcccc;
+  color: var(--text-danger);
   text-align: center;
 }
 
@@ -1216,9 +1222,13 @@ body {
   /* Cores principais */
   --primary-color: #4a8505;
   --primary-hover: #5aa006;
+  --primary-dark: #1a472a;
+  --primary-medium: #2d5a3f;
+  --primary-darker: #0d2318;
   --secondary-color: #ffd700;
   --danger-color: #ff4444;
   --info-color: #44aaff;
+  --disabled-color: #666666;
 
   /* Cores de status */
   --hp-color: #ff3333;
@@ -1231,11 +1241,16 @@ body {
   --bg-darker: rgba(0, 0, 0, 0.95);
   --bg-overlay: rgba(0, 0, 0, 0.8);
   --bg-card: rgba(255, 255, 255, 0.1);
+  --bg-success: rgba(0, 255, 0, 0.05);
+  --bg-danger: rgba(255, 0, 0, 0.15);
+  --bg-info: rgba(0, 128, 255, 0.2);
+  --bg-warning: rgba(255, 215, 0, 0.1);
 
   /* Cores de borda */
   --border-light: rgba(255, 255, 255, 0.3);
   --border-gold: var(--secondary-color);
   --border-danger: rgba(255, 0, 0, 0.4);
+  --border-dark: #444444;
 
   /* Cores de texto */
   --text-primary: #ffffff;
@@ -1243,4 +1258,14 @@ body {
   --text-gold: var(--secondary-color);
   --text-success: #98fb98;
   --text-info: #87ceeb;
+  --text-danger: #ffcccc;
+
+  /* Sombras */
+  --shadow-normal: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.4);
+  --shadow-active: rgba(0, 0, 0, 0.2);
+  --shadow-card: rgba(0, 0, 0, 0.2);
+  --shadow-text: rgba(0, 0, 0, 0.5);
+  --shadow-glow: rgba(255, 215, 0, 0.3);
+  --shadow-danger: rgba(255, 0, 0, 0.2);
 }
