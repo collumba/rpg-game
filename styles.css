@@ -43,8 +43,8 @@ body {
   padding: 20px 40px;
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
-  background-color: #4a8505;
+  color: var(--text-primary);
+  background-color: var(--primary-color);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -56,7 +56,7 @@ body {
 .start-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-  background-color: #5aa006;
+  background-color: var(--primary-hover);
 }
 
 .start-button:active {
@@ -72,8 +72,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
+  background: var(--bg-darker);
+  color: var(--text-primary);
   padding: 20px;
   padding-bottom: 200px;
   overflow-y: auto;
@@ -88,7 +88,7 @@ body {
   text-align: center;
   font-size: 2em;
   margin-bottom: 20px;
-  color: #ffd700;
+  color: var(--text-gold);
 }
 
 .class-category,
@@ -110,7 +110,7 @@ body {
 }
 
 .character-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   border-radius: 15px;
   padding: 20px;
   cursor: pointer;
@@ -148,7 +148,7 @@ body {
 }
 
 .character-card.selected {
-  border: 3px solid #ffd700;
+  border: 3px solid var(--border-gold);
   background: rgba(255, 215, 0, 0.15);
   transform: scale(1.02);
 }
@@ -156,7 +156,7 @@ body {
 .character-name {
   font-size: 1.4em;
   margin: 0;
-  color: #ffd700;
+  color: var(--text-gold);
   text-align: center;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
@@ -170,7 +170,7 @@ body {
 
 .character-description {
   font-size: 0.9em;
-  color: #ccc;
+  color: var(--text-secondary);
   margin: 0;
   text-align: center;
   border-bottom: 1px solid rgba(255, 215, 0, 0.3);
@@ -180,7 +180,7 @@ body {
 
 .character-stats {
   font-size: 0.9em;
-  color: #98fb98;
+  color: var(--text-success);
   background: rgba(0, 0, 0, 0.3);
   padding: 15px;
   border-radius: 10px;
@@ -201,24 +201,25 @@ body {
 .stat-icon {
   width: 24px;
   text-align: center;
-  color: #ffd700;
+  color: var(--text-gold);
   font-size: 1.1em;
 }
 
 .stat-bar-container {
   flex-grow: 1;
   height: 14px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--bg-dark);
   border-radius: 7px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-light);
 }
 
 .stat-bar {
   height: 100%;
   border-radius: 6px;
   transition: width 0.3s ease;
+  position: relative;
 }
 
 .stat-value {
@@ -232,24 +233,28 @@ body {
 }
 
 .hp-bar {
-  background: linear-gradient(to right, #ff4444, #ff6b6b);
+  background: var(--hp-color);
 }
 
 .mana-bar {
-  background: linear-gradient(to right, #4444ff, #6b6bff);
+  background: var(--mana-color);
 }
 
 .attack-bar {
-  background: linear-gradient(to right, #ff8800, #ffaa00);
+  background: var(--attack-color);
 }
 
 .defense-bar {
-  background: linear-gradient(to right, #44ff44, #6bff6b);
+  background: var(--defense-color);
+}
+
+.stat-bar::after {
+  display: none;
 }
 
 .character-abilities {
   font-size: 0.85em;
-  color: #87ceeb;
+  color: var(--text-info);
   background: rgba(0, 0, 0, 0.3);
   padding: 12px;
   border-radius: 10px;
@@ -258,7 +263,7 @@ body {
 }
 
 .character-abilities strong {
-  color: #ffd700;
+  color: var(--text-gold);
   display: block;
   margin-bottom: 4px;
 }
@@ -303,12 +308,12 @@ body {
 .team-slot {
   width: 80px;
   height: 80px;
-  border: 2px dashed #ffd700;
+  border: 2px dashed var(--border-gold);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   position: relative;
   transition: all 0.3s ease;
   z-index: 1002;
@@ -330,7 +335,7 @@ body {
   right: -8px;
   width: 20px;
   height: 20px;
-  background: #ff4444;
+  background: var(--danger-color);
   border: none;
   border-radius: 50%;
   color: white;
@@ -353,13 +358,13 @@ body {
   bottom: 5px;
   right: 5px;
   font-size: 12px;
-  color: #ffd700;
+  color: var(--text-gold);
 }
 
 .confirm-team {
   padding: 12px 30px;
-  background: #4a8505;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-primary);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -374,7 +379,7 @@ body {
 }
 
 .confirm-team:hover {
-  background: #5aa006;
+  background: var(--primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
@@ -440,8 +445,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  color: white;
+  background: var(--bg-darker);
+  color: var(--text-primary);
   padding: 20px;
   overflow-y: auto;
   padding-bottom: 100px;
@@ -459,19 +464,19 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid #ffd700;
+  background: var(--bg-overlay);
+  border-bottom: 2px solid var(--border-gold);
 }
 
 .game-header h2 {
-  color: #ffd700;
+  color: var(--text-gold);
   font-size: 1.8em;
   margin: 0;
 }
 
 .turn-info {
   font-size: 1.2em;
-  color: #98fb98;
+  color: var(--text-success);
 }
 
 .battle-area {
@@ -495,7 +500,7 @@ body {
   flex-wrap: wrap;
   gap: 15px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   border-radius: 15px;
   min-height: 160px;
   justify-content: center;
@@ -526,7 +531,7 @@ body {
 
 .versus-text {
   font-size: 3em;
-  color: #ffd700;
+  color: var(--text-gold);
   font-weight: bold;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   margin: 10px 0;
@@ -540,8 +545,8 @@ body {
   left: 0;
   width: 100%;
   padding: 15px;
-  background: rgba(0, 0, 0, 0.9);
-  border-top: 2px solid #ffd700;
+  background: var(--bg-darker);
+  border-top: 2px solid var(--border-gold);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -591,8 +596,8 @@ body {
 .action-button {
   padding: 12px 30px;
   font-size: 1.1em;
-  color: white;
-  background: #4a8505;
+  color: var(--text-primary);
+  background: var(--primary-color);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -601,7 +606,7 @@ body {
 }
 
 .action-button:hover {
-  background: #5aa006;
+  background: var(--primary-hover);
   transform: translateY(-2px);
 }
 
@@ -618,7 +623,7 @@ body {
   margin: 8px;
   padding: 12px;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -626,16 +631,15 @@ body {
   transition: all 0.3s ease;
   position: relative;
   overflow: visible !important;
-  backdrop-filter: blur(5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-light);
   cursor: pointer;
   z-index: 3;
 }
 
 /* Estilo para o personagem ativo */
 .battle-character.active {
-  border: 2px solid #ffd700;
+  border: 2px solid var(--border-gold);
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
   transform: scale(1.05);
   z-index: 4;
@@ -647,7 +651,7 @@ body {
   top: -25px;
   left: 50%;
   transform: translateX(-50%);
-  color: #ffd700;
+  color: var(--text-gold);
   font-size: 24px;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   animation: bounceArrow 1s ease-in-out infinite;
@@ -733,6 +737,8 @@ body {
 
 .battle-character .stat-bar-container {
   height: 14px;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .battle-character .stat-bar {
@@ -742,19 +748,7 @@ body {
 }
 
 .battle-character .stat-bar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  animation: shine 2s linear infinite;
+  display: none;
 }
 
 .battle-character .stat-value {
@@ -771,23 +765,19 @@ body {
 
 /* Barras de status específicas */
 .battle-character .hp-bar {
-  background: linear-gradient(90deg, #ff3333, #ff6666);
-  box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+  background: var(--hp-color);
 }
 
 .battle-character .mana-bar {
-  background: linear-gradient(90deg, #3333ff, #6666ff);
-  box-shadow: 0 0 10px rgba(51, 51, 255, 0.3);
+  background: var(--mana-color);
 }
 
 .battle-character .attack-bar {
-  background: linear-gradient(90deg, #ff8800, #ffaa33);
-  box-shadow: 0 0 10px rgba(255, 136, 0, 0.3);
+  background: var(--attack-color);
 }
 
 .battle-character .defense-bar {
-  background: linear-gradient(90deg, #33cc33, #66ff66);
-  box-shadow: 0 0 10px rgba(51, 204, 51, 0.3);
+  background: var(--defense-color);
 }
 
 /* Ajustes específicos para o chefe */
@@ -796,7 +786,7 @@ body {
   min-height: 280px;
   padding: 12px;
   background: rgba(255, 0, 0, 0.15);
-  border: 2px solid rgba(255, 0, 0, 0.3);
+  border: 2px solid var(--border-danger);
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -815,7 +805,7 @@ body {
 }
 
 .battle-character.boss .character-name {
-  color: #ff4444;
+  color: var(--danger-color);
   text-align: center;
   font-weight: bold;
 }
@@ -850,24 +840,24 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: white;
-  background: rgba(0, 0, 0, 0.9);
+  color: var(--text-primary);
+  background: var(--bg-darker);
   padding: 40px;
   border-radius: 20px;
-  border: 2px solid #ffd700;
+  border: 2px solid var(--border-gold);
 }
 
 .game-over h2 {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #ffd700;
+  color: var(--text-gold);
 }
 
 .game-over button {
   padding: 15px 30px;
   font-size: 1.2em;
-  background: #4a8505;
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-primary);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -875,7 +865,7 @@ body {
 }
 
 .game-over button:hover {
-  background: #5aa006;
+  background: var(--primary-hover);
   transform: translateY(-2px);
 }
 
@@ -885,7 +875,7 @@ body {
   top: 80px;
   bottom: 100px;
   width: 300px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--bg-overlay);
   border-radius: 8px;
   padding: 10px;
   overflow-y: auto;
@@ -897,7 +887,7 @@ body {
 }
 
 .battle-message {
-  color: white;
+  color: var(--text-primary);
   margin: 5px 0;
   padding: 5px 8px;
   border-radius: 4px;
@@ -915,12 +905,12 @@ body {
 
 .battle-message.team {
   background-color: rgba(0, 128, 255, 0.2);
-  border-left: 3px solid #0088ff;
+  border-left: 3px solid var(--info-color);
 }
 
 .battle-message.boss {
   background-color: rgba(255, 0, 0, 0.2);
-  border-left: 3px solid #ff0000;
+  border-left: 3px solid var(--danger-color);
 }
 
 .battle-message.system {
@@ -963,8 +953,8 @@ body {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: var(--bg-overlay);
+  color: var(--text-primary);
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 1.2em;
@@ -1060,16 +1050,16 @@ body {
 
 /* Diferentes cores para diferentes tipos de dano */
 .damage-number.normal {
-  color: #ff4444;
+  color: var(--danger-color);
 }
 
 .damage-number.skill {
-  color: #44aaff;
+  color: var(--info-color);
   font-size: 3em;
 }
 
 .damage-number.boss {
-  color: #ff1a1a;
+  color: var(--hp-color);
   font-size: 3em;
 }
 
@@ -1143,12 +1133,28 @@ body {
 
 .battle-character.boss .stat-bar-container {
   height: 16px;
-  flex-grow: 1;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-  border: 1px solid rgba(255, 0, 0, 0.2);
+  background: #111111;
+  border: 1px solid rgba(255, 0, 0, 0.4);
+}
+
+.battle-character.boss .hp-bar {
+  background: #ff0000;
+}
+
+.battle-character.boss .mana-bar {
+  background: #0000ff;
+}
+
+.battle-character.boss .attack-bar {
+  background: #ffa500;
+}
+
+.battle-character.boss .defense-bar {
+  background: #00cc00;
+}
+
+.battle-character.boss .stat-bar::after {
+  display: none;
 }
 
 .boss-emoji {
@@ -1160,10 +1166,6 @@ body {
   font-size: 1.1em !important;
   min-height: 2.2em;
   margin-bottom: 8px;
-  color: #ff4444;
-  text-align: center;
-  font-weight: bold;
-  line-height: 1.3;
 }
 
 .boss-description {
@@ -1202,9 +1204,43 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  color: white;
+  background: var(--bg-darker);
+  color: var(--text-primary);
   padding: 20px;
   overflow-y: auto;
   padding-bottom: 100px;
+}
+
+/* Definição da paleta de cores global */
+:root {
+  /* Cores principais */
+  --primary-color: #4a8505;
+  --primary-hover: #5aa006;
+  --secondary-color: #ffd700;
+  --danger-color: #ff4444;
+  --info-color: #44aaff;
+
+  /* Cores de status */
+  --hp-color: #ff3333;
+  --mana-color: #3366ff;
+  --attack-color: #ff8c00;
+  --defense-color: #33cc33;
+
+  /* Cores de fundo */
+  --bg-dark: #111111;
+  --bg-darker: rgba(0, 0, 0, 0.95);
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+  --bg-card: rgba(255, 255, 255, 0.1);
+
+  /* Cores de borda */
+  --border-light: rgba(255, 255, 255, 0.3);
+  --border-gold: var(--secondary-color);
+  --border-danger: rgba(255, 0, 0, 0.4);
+
+  /* Cores de texto */
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-gold: var(--secondary-color);
+  --text-success: #98fb98;
+  --text-info: #87ceeb;
 }
