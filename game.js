@@ -477,17 +477,266 @@ document.addEventListener("DOMContentLoaded", () => {
     characterSelection.classList.add("active");
   });
 
-  confirmTeam.addEventListener("click", () => {
-    if (selectedCharacters.length === 0) {
-      alert("Selecione pelo menos um personagem para seu time!");
-      return;
-    }
+  // Função para iniciar o jogo após confirmar o time
+  function startGame() {
+    const characterSelectionScreen = document.querySelector(
+      ".character-selection"
+    );
+    const gameScreen = document.querySelector(".game-screen");
 
-    console.log("Time confirmado:", selectedCharacters);
-    // Aqui você pode adicionar a lógica para iniciar o jogo com o time selecionado
-  });
+    if (selectedCharacters.length > 0) {
+      characterSelectionScreen.style.display = "none";
+      gameScreen.classList.add("active");
+      initializeBattle();
+    } else {
+      alert("Selecione pelo menos um personagem para seu time!");
+    }
+  }
+
+  // Evento de clique no botão de confirmar time
+  confirmTeam.addEventListener("click", startGame);
+
+  // Função para criar elemento de personagem na batalha
+  function createBattleCharacter(character) {
+    const battleCharacter = document.createElement("div");
+    battleCharacter.className = "battle-character";
+    battleCharacter.dataset.name = character.name;
+
+    battleCharacter.innerHTML = `
+      <div class="character-emoji">${character.emoji}</div>
+      <div class="character-name">${character.name}</div>
+      <div class="character-stats">
+        <div class="stat-row">
+          <div class="hp-bar" style="width: 100%">❤️ ${character.stats.hp}</div>
+        </div>
+        <div class="stat-row">
+          <div class="mana-bar" style="width: 100%">⭐ ${character.stats.mana}</div>
+        </div>
+      </div>
+    `;
+
+    return battleCharacter;
+  }
+
+  // Definição dos chefes
+  const bosses = [
+    {
+      name: "Dragão Ancião",
+      emoji: "🐲",
+      description: "Um dragão milenar que domina os elementos.",
+      stats: {
+        hp: 20,
+        mana: 15,
+        attack: 12,
+        defense: 10,
+      },
+      abilities: {
+        passive: "Escamas de Adamantina: Reduz todo dano recebido em 20%",
+        active:
+          "Sopro do Dragão (4 Mana) - Causa dano massivo em área e aplica efeito baseado no elemento atual (Fogo: Queimadura, Gelo: Congelamento, Raio: Paralisia)",
+      },
+      phase: 1,
+    },
+    {
+      name: "Lich",
+      emoji: "💀",
+      description:
+        "Um poderoso feiticeiro que conquistou a imortalidade através de magia negra.",
+      stats: {
+        hp: 15,
+        mana: 20,
+        attack: 14,
+        defense: 8,
+      },
+      abilities: {
+        passive: "Phylacteria: Ao morrer, revive com 30% de HP uma vez",
+        active:
+          "Praga da Morte (5 Mana) - Causa dano a todos os heróis e drena sua mana",
+      },
+      phase: 2,
+    },
+    {
+      name: "Golem Ancestral",
+      emoji: "🗿",
+      description:
+        "Uma construção mágica gigante feita de pedra e cristais místicos.",
+      stats: {
+        hp: 25,
+        mana: 10,
+        attack: 8,
+        defense: 15,
+      },
+      abilities: {
+        passive: "Regeneração Cristalina: Recupera 2 HP por turno",
+        active:
+          "Terremoto (6 Mana) - Causa dano a todos os heróis e tem chance de atordoá-los",
+      },
+      phase: 3,
+    },
+    {
+      name: "Hidra",
+      emoji: "🐉",
+      description: "Uma besta lendária com múltiplas cabeças que se regeneram.",
+      stats: {
+        hp: 18,
+        mana: 12,
+        attack: 15,
+        defense: 9,
+      },
+      abilities: {
+        passive:
+          "Regeneração: Ao receber dano fatal, divide-se em duas cabeças menores",
+        active:
+          "Ataque Múltiplo (3 Mana) - Ataca três alvos diferentes com cada cabeça",
+      },
+      phase: 4,
+    },
+    {
+      name: "Rei Demônio",
+      emoji: "👿",
+      description: "O senhor supremo dos demônios, com poder incomparável.",
+      stats: {
+        hp: 30,
+        mana: 25,
+        attack: 18,
+        defense: 12,
+      },
+      abilities: {
+        passive: "Aura Demoníaca: Reduz a cura recebida pelos heróis em 50%",
+        active:
+          "Apocalipse (8 Mana) - Causa dano massivo a todos os heróis e aplica diversos efeitos negativos",
+      },
+      phase: 5,
+    },
+  ];
+
+  let currentBossIndex = 0;
+  let currentBoss = null;
+
+  // Modificar a função initializeBattle para trabalhar com chefes
+  function initializeBattle() {
+    const playerTeamArea = document.querySelector(".player-team");
+    const enemyTeamArea = document.querySelector(".enemy-team");
+    const turnInfo = document.querySelector(".turn-info");
+
+    // Limpa as áreas de time
+    playerTeamArea.innerHTML = "";
+    enemyTeamArea.innerHTML = "";
+
+    try {
+      // Inicializa o time do jogador
+      selectedCharacters.forEach((character) => {
+        const battleCharacter = createBattleCharacter(character);
+        playerTeamArea.appendChild(battleCharacter);
+      });
+
+      // Inicializa o chefe atual
+      currentBoss = bosses[currentBossIndex];
+      const bossCharacter = createBossCharacter(currentBoss);
+      enemyTeamArea.appendChild(bossCharacter);
+
+      // Atualiza informações do turno e fase
+      turnInfo.textContent = `Fase ${currentBoss.phase} - ${currentBoss.name} - Turno 1`;
+
+      // Adiciona listeners para os botões de ação
+      setupActionButtons();
+    } catch (error) {
+      console.error("Erro ao inicializar batalha:", error);
+    }
+  }
+
+  // Função para criar elemento do chefe na batalha
+  function createBossCharacter(boss) {
+    const bossElement = document.createElement("div");
+    bossElement.className = "battle-character boss";
+    bossElement.dataset.name = boss.name;
+
+    const statsPercentage = {
+      hp: (boss.stats.hp / 30) * 100, // 30 é o HP máximo dos chefes
+      mana: (boss.stats.mana / 25) * 100, // 25 é a mana máxima dos chefes
+    };
+
+    bossElement.innerHTML = `
+      <div class="character-emoji boss-emoji">${boss.emoji}</div>
+      <div class="character-name boss-name">${boss.name}</div>
+      <div class="boss-description">${boss.description}</div>
+      <div class="character-stats">
+        <div class="stat-row">
+          <div class="hp-bar" style="width: ${statsPercentage.hp}%">❤️ ${boss.stats.hp}</div>
+        </div>
+        <div class="stat-row">
+          <div class="mana-bar" style="width: ${statsPercentage.mana}%">⭐ ${boss.stats.mana}</div>
+        </div>
+      </div>
+      <div class="boss-abilities">
+        <div><strong>Passiva:</strong> ${boss.abilities.passive}</div>
+        <div><strong>Ativa:</strong> ${boss.abilities.active}</div>
+      </div>
+    `;
+
+    return bossElement;
+  }
+
+  // Função para avançar para o próximo chefe
+  function nextBoss() {
+    currentBossIndex++;
+    if (currentBossIndex < bosses.length) {
+      initializeBattle();
+    } else {
+      // Jogador venceu todos os chefes
+      endGame(true);
+    }
+  }
+
+  // Função para finalizar o jogo
+  function endGame(victory) {
+    const gameScreen = document.querySelector(".game-screen");
+    const resultMessage = victory
+      ? "Parabéns! Você derrotou todos os chefes!"
+      : "Game Over! Seu time foi derrotado!";
+
+    gameScreen.innerHTML = `
+      <div class="game-over">
+        <h2>${resultMessage}</h2>
+        <button onclick="location.reload()">Jogar Novamente</button>
+      </div>
+    `;
+  }
+
+  // Função para configurar os botões de ação
+  function setupActionButtons() {
+    const actionButtons = document.querySelectorAll(".action-button");
+
+    actionButtons.forEach((button) => {
+      const action = button.id.replace("Button", "").toLowerCase();
+      button.dataset.action = action;
+
+      button.addEventListener("click", (e) => {
+        const actionType = e.target.dataset.action;
+        handleAction(actionType);
+      });
+    });
+  }
+
+  // Função para lidar com as ações do jogador
+  function handleAction(action) {
+    switch (action) {
+      case "attack":
+        // Implementar lógica de ataque
+        console.log("Ataque selecionado");
+        break;
+      case "skill":
+        // Implementar lógica de habilidade
+        console.log("Habilidade selecionada");
+        break;
+      case "pass":
+        // Implementar lógica de passar turno
+        console.log("Turno passado");
+        break;
+    }
+  }
 
   // Inicializar a tela de seleção
-  initializeTeamSlots(); // Inicializar os slots primeiro
+  initializeTeamSlots();
   initializeCharacterCards();
 });
