@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stat-row">
           <div class="stat-icon tooltip">
             <span class="tooltip-text">${statsDescriptions.mana}</span>
-            ⭐
+            🧪
           </div>
           <div class="stat-bar-container">
             <div class="stat-bar mana-bar" style="width: ${statsPercentage.mana}%"></div>
@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="stat-bar-container">
             <div class="stat-bar attack-bar" style="width: ${statsPercentage.attack}%"></div>
-            <div class="stat-value">${character.stats.attack}/${character.stats.maxAttack}</div>
+            <div class="stat-value">${character.stats.attack}</div>
           </div>
         </div>
       </div>
@@ -493,6 +493,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     battleCharacter.innerHTML = `
+      <div class="attack-display">
+        <div class="stat-icon">⚔️</div>
+        <span>${character.stats.attack}</span>
+      </div>
       <div class="character-emoji">${character.emoji}</div>
       <div class="character-name">${character.name}</div>
       <div class="character-stats">
@@ -504,17 +508,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
         <div class="stat-row">
-          <div class="stat-icon">⭐</div>
+          <div class="stat-icon">🧪</div>
           <div class="stat-bar-container">
             <div class="mana-bar" style="width: ${statsPercentage.mana}%"></div>
             <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon">⚔️</div>
-          <div class="stat-bar-container">
-            <div class="attack-bar" style="width: ${statsPercentage.attack}%"></div>
-            <div class="stat-value">${character.stats.attack}/${character.stats.maxAttack}</div>
           </div>
         </div>
       </div>
@@ -736,6 +733,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     bossElement.innerHTML = `
+      <div class="attack-display boss-attack">
+        <div class="stat-icon">⚔️</div>
+        <span>${boss.stats.attack}</span>
+      </div>
       <div class="character-emoji boss-emoji">${boss.emoji}</div>
       <div class="character-name boss-name">${boss.name}</div>
       <div class="boss-description">${boss.description}</div>
@@ -745,13 +746,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="stat-bar-container">
             <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
             <div class="stat-value">${boss.stats.hp}/${boss.stats.maxHp}</div>
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon">⚔️</div>
-          <div class="stat-bar-container">
-            <div class="attack-bar" style="width: ${statsPercentage.attack}%"></div>
-            <div class="stat-value">${boss.stats.attack}</div>
           </div>
         </div>
       </div>
