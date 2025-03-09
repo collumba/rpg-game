@@ -475,13 +475,16 @@ body {
 
 .battle-area {
   display: grid;
-  grid-template-rows: auto 150px auto;
-  gap: 20px;
+  grid-template-rows: auto 100px auto;
+  gap: 15px;
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   margin-bottom: 100px;
   height: calc(100vh - 180px);
   overflow-y: auto;
+  margin-right: 340px;
+  width: calc(100% - 360px);
+  margin-left: 20px;
 }
 
 .team-area {
@@ -492,7 +495,7 @@ body {
   padding: 20px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
-  min-height: 180px;
+  min-height: 160px;
   justify-content: center;
   align-items: center;
 }
@@ -536,16 +539,49 @@ body {
   background: rgba(0, 0, 0, 0.9);
   border-top: 2px solid #ffd700;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   z-index: 1001;
-  height: 80px;
+  height: auto;
+  min-height: 80px;
+  padding: 15px 30px;
 }
 
 .action-buttons {
   display: flex;
   gap: 15px;
   padding: 10px;
+}
+
+.abilities-display {
+  flex-grow: 1;
+  margin-right: 20px;
+  color: white;
+  font-size: 0.9em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 600px;
+}
+
+.ability-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid;
+}
+
+.ability-item.passive {
+  border-color: #98fb98;
+}
+
+.ability-item.active {
+  border-color: #ff6b6b;
+}
+
+.ability-item strong {
+  color: #ffd700;
+  margin-right: 8px;
 }
 
 .action-button {
@@ -573,102 +609,196 @@ body {
 
 /* Estilos para os personagens na batalha */
 .battle-character {
-  width: 150px;
-  height: 180px;
-  margin: 10px;
+  width: 160px;
+  height: 240px;
+  margin: 8px;
+  padding: 12px;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: help;
 }
 
-.battle-character:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.battle-character.selected {
-  border: 2px solid #ffd700;
-  background: rgba(255, 215, 0, 0.1);
+.battle-character::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 20px 20px 0 0;
+  z-index: 0;
 }
 
 .battle-character .character-emoji {
   font-size: 2em;
+  margin: 3px 0;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .battle-character .character-name {
   font-size: 0.9em;
-  text-align: center;
+  min-height: 2em;
+  margin-bottom: 3px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  white-space: normal;
+  overflow: visible;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
+  padding: 0 5px;
 }
 
 .battle-character .character-stats {
+  padding: 8px;
+  gap: 6px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
 }
 
-/* Estilos para os chefes */
+.battle-character .stat-row {
+  height: 20px;
+}
+
+.battle-character .stat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 0.9em;
+}
+
+.battle-character .stat-bar-container {
+  height: 14px;
+}
+
+.battle-character .stat-bar {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.battle-character .stat-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  animation: shine 2s linear infinite;
+}
+
+.battle-character .stat-value {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85em;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  font-weight: bold;
+}
+
+/* Barras de status específicas */
+.battle-character .hp-bar {
+  background: linear-gradient(90deg, #ff3333, #ff6666);
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+}
+
+.battle-character .mana-bar {
+  background: linear-gradient(90deg, #3333ff, #6666ff);
+  box-shadow: 0 0 10px rgba(51, 51, 255, 0.3);
+}
+
+.battle-character .attack-bar {
+  background: linear-gradient(90deg, #ff8800, #ffaa33);
+  box-shadow: 0 0 10px rgba(255, 136, 0, 0.3);
+}
+
+.battle-character .defense-bar {
+  background: linear-gradient(90deg, #33cc33, #66ff66);
+  box-shadow: 0 0 10px rgba(51, 204, 51, 0.3);
+}
+
+/* Ajustes específicos para o chefe */
 .battle-character.boss {
-  width: 300px;
+  width: 220px;
   min-height: 280px;
-  margin: 20px auto;
-  transform-origin: center;
-  animation: bossFloat 3s ease-in-out infinite;
+  padding: 12px;
   background: rgba(255, 0, 0, 0.15);
   border: 2px solid rgba(255, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.battle-character.boss::before {
+  background: linear-gradient(to bottom, rgba(255, 0, 0, 0.2), transparent);
+  height: 80px;
+}
+
+.battle-character.boss .character-stats {
+  padding: 10px;
+  gap: 8px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.battle-character.boss .character-name {
+  color: #ff4444;
+  text-align: center;
+  font-weight: bold;
+}
+
+.battle-character.boss .character-emoji {
+  margin: 5px 0 10px 0;
 }
 
 .boss-emoji {
-  font-size: 3em !important;
-  margin-bottom: 10px;
+  font-size: 2.5em !important;
+  margin: 5px 0 !important;
 }
 
 .boss-name {
-  color: #ff4444;
-  font-size: 1.2em !important;
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  font-size: 1.1em !important;
+  min-height: 2.2em;
+  margin-bottom: 8px;
 }
 
 .boss-description {
   font-size: 0.9em;
-  color: #ffcccc;
-  margin: 5px 0;
-  text-align: center;
   padding: 0 10px;
-}
-
-.boss .stat-bar-container {
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 0, 0, 0.3);
-}
-
-.boss .stat-icon {
-  font-size: 1.2em;
-  width: 30px;
-}
-
-.boss .hp-bar {
-  background: linear-gradient(to right, #ff0000, #ff4444);
-}
-
-.boss .mana-bar {
-  background: linear-gradient(to right, #4400ff, #6644ff);
-}
-
-@keyframes bossFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  margin: 8px 0;
+  line-height: 1.3;
 }
 
 .game-over {
@@ -706,28 +836,21 @@ body {
   transform: translateY(-2px);
 }
 
-.battle-character.active {
-  border: 2px solid #ffd700;
-  box-shadow: 0 0 10px #ffd700;
-  transform: scale(1.05);
-  transition: all 0.3s ease;
-}
-
 .battle-messages {
   position: fixed;
+  right: 20px;
+  top: 80px;
   bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  max-width: 600px;
-  height: 150px;
+  width: 300px;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 8px;
   padding: 10px;
   overflow-y: auto;
-  z-index: 1002;
+  z-index: 999;
   border: 2px solid #444;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  transform: none;
 }
 
 .battle-message {
@@ -739,6 +862,7 @@ body {
   animation: fadeIn 0.3s ease-in-out;
   display: flex;
   align-items: center;
+  word-break: break-word;
 }
 
 .battle-message .message-icon {
@@ -802,47 +926,6 @@ body {
   border-radius: 5px;
   font-size: 1.2em;
   z-index: 1000;
-}
-
-.battle-character {
-  transition: all 0.3s ease;
-}
-
-.battle-character.defeated {
-  opacity: 0.5;
-  filter: grayscale(100%);
-}
-
-.game-over {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.9);
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  color: white;
-  z-index: 1000;
-}
-
-.game-over h2 {
-  color: #ffd700;
-  margin-bottom: 20px;
-}
-
-.game-over button {
-  background: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.1em;
-}
-
-.game-over button:hover {
-  background: #45a049;
 }
 
 /* Animações de Ataque */
@@ -960,4 +1043,176 @@ body {
     transform: translateY(-100px) scale(0.8);
     opacity: 0;
   }
+}
+
+/* Estilização da scrollbar para a área de batalha */
+.battle-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.battle-area::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.battle-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.battle-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Tooltip para mostrar valores exatos */
+.stat-row:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.battle-character.boss .stat-row {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.battle-character.boss .stat-bar-container {
+  height: 16px;
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.boss-emoji {
+  font-size: 2.5em !important;
+  margin: 5px 0 10px 0 !important;
+}
+
+.boss-name {
+  font-size: 1.1em !important;
+  min-height: 2.2em;
+  margin-bottom: 8px;
+  color: #ff4444;
+  text-align: center;
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+.boss-description {
+  font-size: 0.9em;
+  padding: 0 10px;
+  margin: 8px 0;
+  line-height: 1.3;
+  color: #ffcccc;
+  text-align: center;
+}
+
+/* Tooltip de habilidades */
+.battle-character .abilities-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  width: 280px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+  font-size: 0.9em;
+  z-index: 1000;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.battle-character:hover .abilities-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.abilities-tooltip .ability {
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid;
+}
+
+.abilities-tooltip .ability:last-child {
+  margin-bottom: 0;
+}
+
+.abilities-tooltip .ability.passive {
+  border-color: #98fb98;
+}
+
+.abilities-tooltip .ability.active {
+  border-color: #ff6b6b;
+}
+
+.abilities-tooltip .ability-name {
+  color: #ffd700;
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 1em;
+}
+
+.abilities-tooltip .ability-description {
+  color: #ccc;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* Seta do tooltip */
+.abilities-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.95) transparent transparent transparent;
+}
+
+/* Título do tooltip */
+.abilities-tooltip::before {
+  content: "Habilidades";
+  display: block;
+  color: #ffd700;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
 }

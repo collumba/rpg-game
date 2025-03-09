@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     magic: [
       {
         name: "Mago",
-        emoji: "🔥❄️⚡",
+        emoji: "🔥❄️ ",
         description:
           "Mestre dos elementos, ataques devastadores de longo alcance.",
         stats: {
@@ -617,6 +617,22 @@ document.addEventListener("DOMContentLoaded", () => {
       // Inicializa o novo chefe
       initializeNewBoss();
 
+      // Cria a área de ações se ainda não existir
+      let actionArea = document.querySelector(".action-area");
+      if (!actionArea) {
+        actionArea = document.createElement("div");
+        actionArea.className = "action-area";
+        actionArea.innerHTML = `
+          <div class="abilities-display"></div>
+          <div class="action-buttons">
+            <button id="attackButton" class="action-button">Atacar</button>
+            <button id="skillButton" class="action-button">Usar Habilidade</button>
+            <button id="passButton" class="action-button">Passar</button>
+          </div>
+        `;
+        document.querySelector(".game-screen").appendChild(actionArea);
+      }
+
       // Atualiza informações do turno e fase
       updateTurnInfo();
 
@@ -727,8 +743,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Função para configurar os botões de ação
   function setupActionButtons() {
-    const actionButtons = document.querySelectorAll(".action-button");
+    const actionArea = document.querySelector(".action-area");
 
+    // Criar área de habilidades
+    const abilitiesDisplay = document.createElement("div");
+    abilitiesDisplay.className = "abilities-display";
+    actionArea.insertBefore(abilitiesDisplay, actionArea.firstChild);
+
+    const actionButtons = document.querySelectorAll(".action-button");
     actionButtons.forEach((button) => {
       const action = button.id.replace("Button", "").toLowerCase();
       button.dataset.action = action;
@@ -739,8 +761,27 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Atualiza o estado inicial dos botões
     updateActionButtonsState();
+    updateAbilitiesDisplay();
+  }
+
+  function updateAbilitiesDisplay() {
+    const abilitiesDisplay = document.querySelector(".abilities-display");
+    const currentCharacter = selectedCharacters[currentCharacterIndex];
+
+    if (!currentCharacter || teamActionsCompleted) {
+      abilitiesDisplay.innerHTML = "";
+      return;
+    }
+
+    abilitiesDisplay.innerHTML = `
+      <div class="ability-item passive">
+        <strong>Passiva:</strong> ${currentCharacter.abilities.passive}
+      </div>
+      <div class="ability-item active">
+        <strong>Ativa:</strong> ${currentCharacter.abilities.active}
+      </div>
+    `;
   }
 
   // Função para atualizar o estado dos botões de ação
@@ -944,11 +985,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Se não encontrou próximo personagem vivo que não agiu, inicia turno do chefe
       teamActionsCompleted = true;
       updateActionButtonsState();
+      updateAbilitiesDisplay();
       setTimeout(executeBossTurn, 1000);
     } else {
       currentCharacterIndex = nextIndex;
       updateTurnInfo();
       highlightCurrentCharacter();
+      updateAbilitiesDisplay();
     }
   }
 
@@ -976,6 +1019,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Atualiza o estado dos botões no início do novo turno
     updateActionButtonsState();
+    updateAbilitiesDisplay();
 
     // Atualiza visualmente todos os personagens
     selectedCharacters.forEach((char) => {
