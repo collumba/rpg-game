@@ -12,16 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Guerreiro",
         emoji: "🛡️⚔️",
         description: "Equilibrado, com alta defesa e bom ataque físico.",
-        stats: {
-          hp: 8,
-          mana: 4,
-          attack: 4,
-        },
+        stats: { hp: 8, mana: 4, attack: 4 },
         abilities: {
           passive:
-            "Veterano de Guerra: A cada 3 turnos, seu próximo ataque básico causa dano adicional igual a 50% de sua defesa",
+            "Guardião Resoluto: Tem chance de negar o ataque do chefe (20%).",
           active:
-            "Golpe Giratório (2 Mana) - CD: 3 turnos | Ataca todos os inimigos causando 80% do dano de ataque e os atordoa por 1 turno",
+            "Escudo Protetor: Cria um escudo que protege um aliado de um ataque (2 Mana).",
         },
       },
       {
@@ -29,48 +25,36 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🔥🪓",
         description:
           "Ataque brutal, baixa defesa, sacrifica vida por dano extra.",
-        stats: {
-          hp: 7,
-          mana: 3,
-          attack: 5,
-        },
+        stats: { hp: 7, mana: 3, attack: 5 },
         abilities: {
           passive:
-            "Frenesi: Cada ponto de vida perdido aumenta seu ataque em 10%. Em 2 ou menos de vida, ganha +50% de velocidade de ataque",
+            "Fúria Incontrolável: Ganha pontos de ataque ao ser atacado (10% de chance).",
           active:
-            "Fúria Mortal (2 Mana) - CD: 4 turnos | Sacrifica 2 pontos de vida e causa dano igual a 200% do ataque + vida sacrificada",
+            "Sede de Sangue: Troca vida por bônus de dano na próxima rodada (+50% dano, -2 HP, 1 Mana).",
         },
       },
       {
         name: "Cavaleiro",
         emoji: "🏇⚔️",
         description: "Tanque com armadura pesada, proteção para aliados.",
-        stats: {
-          hp: 10,
-          mana: 5,
-          attack: 3,
-        },
+        stats: { hp: 10, mana: 5, attack: 3 },
         abilities: {
           passive:
-            "Protetor: No início de cada turno, o aliado com menor vida recebe um escudo igual a 30% da defesa do Cavaleiro",
+            "Sacrifício Honrado: Tem chance de tomar o ataque do chefe no lugar de um aliado (25%).",
           active:
-            "Muralha de Aço (3 Mana) - CD: 4 turnos | Por 2 turnos, aumenta sua defesa em 50% e força inimigos a atacá-lo",
+            "Defesa Compartilhada: Divide o ataque do chefe entre ele e o próximo aliado atingido (3 Mana).",
         },
       },
       {
         name: "Paladino",
         emoji: "✨⚔️",
         description: "Guerreiro sagrado, combina dano com cura e buffs.",
-        stats: {
-          hp: 8,
-          mana: 6,
-          attack: 3,
-        },
+        stats: { hp: 8, mana: 6, attack: 3 },
         abilities: {
           passive:
-            "Luz Divina: Ao final de cada turno, cura 1 ponto de vida do aliado mais ferido",
+            "Bênção Divina: Tem chance de curar um aliado ao receber dano (15% de chance, +2 HP).",
           active:
-            "Justiça Divina (3 Mana) - CD: 3 turnos | Causa dano sagrado (120% do ataque) e cura 2 pontos de vida dos aliados",
+            "Milagre da Luz: Revive um aliado morto com 50% da vida (5 Mana).",
         },
       },
       {
@@ -78,32 +62,24 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🏹🗡️",
         description:
           "Rápido, furtivo, especialista em golpes críticos e evasão.",
-        stats: {
-          hp: 6,
-          mana: 4,
-          attack: 4,
-        },
+        stats: { hp: 6, mana: 4, attack: 4 },
         abilities: {
           passive:
-            "Oportunista: 40% de chance de realizar um ataque adicional quando um aliado causa dano a um inimigo",
+            "Golpe Sorrateiro: Tem chance de atacar em conjunto com um aliado (20%).",
           active:
-            "Ataque Surpresa (2 Mana) - CD: 3 turnos | Fica invisível por 1 turno e seu próximo ataque causa dano crítico garantido (200% dano)",
+            "Veneno Debilitante: Diminui o ataque do chefe por uma rodada (2 Mana).",
         },
       },
       {
         name: "Monge",
         emoji: "🥋✊",
         description: "Lutador sem armas ou com bastões, resistência elevada.",
-        stats: {
-          hp: 7,
-          mana: 5,
-          attack: 4,
-        },
+        stats: { hp: 7, mana: 5, attack: 4 },
         abilities: {
           passive:
-            "Chi Interior: Recupera 1 ponto de mana no início de cada turno. Ataques básicos tem 30% de chance de atordoar por 1 turno",
+            "Mente Tranquila: Tem chance de negar um ataque do chefe (15%).",
           active:
-            "Punho do Dragão (3 Mana) - CD: 3 turnos | Causa dano igual a 150% do ataque + 20% da mana atual e atordoa por 1 turno",
+            "Equilíbrio Vital: Troca pontos de vida com um aliado (3 Mana).",
         },
       },
     ],
@@ -112,32 +88,24 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Arqueiro",
         emoji: "🏹",
         description: "Especialista em combate à distância com alta precisão.",
-        stats: {
-          hp: 5,
-          mana: 4,
-          attack: 5,
-        },
+        stats: { hp: 5, mana: 4, attack: 5 },
         abilities: {
           passive:
-            "Mira Precisa: 25% de chance de crítico em ataques básicos. Cada ataque consecutivo no mesmo alvo aumenta o dano em 10%",
+            "Disparo Sincronizado: Tem chance de atacar em conjunto com um aliado (15%).",
           active:
-            "Chuva de Flechas (3 Mana) - CD: 3 turnos | Atira 5 flechas aleatórias, cada uma causando 60% do dano de ataque",
+            "Tiro Preciso: Duplica o dano de um aliado na próxima rodada (3 Mana).",
         },
       },
       {
         name: "Caçador",
         emoji: "🐺🏹",
         description: "Domina bestas e armadilhas, bom em combate na natureza.",
-        stats: {
-          hp: 6,
-          mana: 5,
-          attack: 4,
-        },
+        stats: { hp: 6, mana: 5, attack: 4 },
         abilities: {
           passive:
-            "Companheiro Animal: Começa com um Lobo invocado (50% dos stats do Caçador) que ataca junto com ele",
+            "Instinto Selvagem: Tem chance de ganhar pontos de ataque ao ser atacado (10%).",
           active:
-            "Armadilha Explosiva (3 Mana) - CD: 4 turnos | Planta uma armadilha que explode após 1 turno, causando 150% de dano e reduzindo a velocidade",
+            "Armadilha Espiritual: Impede que o chefe ataque na próxima rodada (4 Mana).",
         },
       },
       {
@@ -145,16 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🔫",
         description:
           "Mistura de arqueiro e guerreiro com armas de fogo rudimentares.",
-        stats: {
-          hp: 6,
-          mana: 4,
-          attack: 5,
-        },
+        stats: { hp: 6, mana: 4, attack: 5 },
         abilities: {
           passive:
-            "Pólvora Instável: Ataques básicos tem 20% de chance de explodir, causando 50% de dano adicional em área",
+            "Tática Estratégica: Tem chance de aumentar o ataque de um aliado quando atacado (15%).",
           active:
-            "Tiro Certeiro (3 Mana) - CD: 4 turnos | Disparo preciso que ignora 75% da defesa do alvo e causa dano igual a 180% do ataque",
+            "Disparo Coordenado: Ataque em conjunto com um aliado (2 Mana).",
         },
       },
     ],
@@ -164,81 +128,24 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🔥❄️ ",
         description:
           "Mestre dos elementos, ataques devastadores de longo alcance.",
-        stats: {
-          hp: 5,
-          mana: 10,
-          attack: 6,
-        },
+        stats: { hp: 5, mana: 10, attack: 6 },
         abilities: {
           passive:
-            "Domínio Elemental: A cada turno, ganha um elemento aleatório (Fogo: +30% dano, Gelo: 30% chance de congelar, Raio: Atinge 2 alvos)",
+            "Potencial Arcano: Tem chance de aumentar o ataque de um aliado quando atacado (15%).",
           active:
-            "Convergência Arcana (5 Mana) - CD: 5 turnos | Combina todos os elementos, causando 200% de dano mágico e aplicando todos os efeitos elementais",
-        },
-      },
-      {
-        name: "Feiticeiro",
-        emoji: "🩸🔮",
-        description: "Usa magia caótica, sacrificando vida ou alma.",
-        stats: {
-          hp: 6,
-          mana: 8,
-          attack: 5,
-        },
-        abilities: {
-          passive:
-            "Pacto Sombrio: Pode gastar vida ao invés de mana (1 HP = 2 Mana). Dano causado recupera 1 ponto de vida",
-          active:
-            "Explosão Vital (5 Mana ou 3 HP) - CD: 4 turnos | Sacrifica recursos para causar dano massivo (200% do custo) a todos os inimigos",
+            "Explosão Mágica: Duplica o dano de um aliado por uma rodada (5 Mana).",
         },
       },
       {
         name: "Necromante",
         emoji: "☠️🖤",
         description: "Controla mortos-vivos e magias sombrias.",
-        stats: {
-          hp: 5,
-          mana: 9,
-          attack: 4,
-        },
+        stats: { hp: 5, mana: 9, attack: 4 },
         abilities: {
           passive:
-            "Exército das Sombras: A cada 2 turnos invoca um esqueleto (30% dos stats). Máximo de 3 esqueletos",
+            "Ritual Sombrio: Tem chance de curar um aliado quando recebe dano (10%).",
           active:
-            "Drenar Essência (4 Mana) - CD: 4 turnos | Causa dano igual a 120% do ataque e cura todos os aliados e servos em 2 pontos de vida",
-        },
-      },
-      {
-        name: "Druida",
-        emoji: "🍃🐻",
-        description:
-          "Se transforma em animais, invoca a natureza e cura aliados.",
-        stats: {
-          hp: 7,
-          mana: 7,
-          attack: 3,
-        },
-        abilities: {
-          passive:
-            "Adaptação Natural: A cada 2 turnos, pode mudar de forma (Urso: +3 HP/Defesa, Águia: +3 Ataque/Velocidade, Lobo: +2 em tudo)",
-          active:
-            "Fúria da Natureza (4 Mana) - CD: 4 turnos | Invoca vinhas que prendem inimigos por 2 turnos e causam dano contínuo (40% ataque por turno)",
-        },
-      },
-      {
-        name: "Bardo",
-        emoji: "🎸🎶",
-        description: "Encanta aliados e confunde inimigos com música e magia.",
-        stats: {
-          hp: 5,
-          mana: 8,
-          attack: 3,
-        },
-        abilities: {
-          passive:
-            "Melodia Inspiradora: No início de cada turno, concede um bônus aleatório aos aliados (+2 em Ataque, Defesa ou Velocidade)",
-          active:
-            "Sinfonia do Caos (4 Mana) - CD: 4 turnos | Inimigos atacam alvos aleatórios por 2 turnos e aliados ganham todos os bônus de Melodia",
+            "Chamado dos Mortos: Revive um aliado morto com 25% da vida (4 Mana).",
         },
       },
     ],
@@ -247,32 +154,24 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Clérigo",
         emoji: "⛪⚕️",
         description: "Cura e protege aliados com magia sagrada.",
-        stats: {
-          hp: 6,
-          mana: 9,
-          attack: 2,
-        },
+        stats: { hp: 6, mana: 9, attack: 2 },
         abilities: {
           passive:
-            "Benção Divina: Curas tem 30% de chance de serem duplicadas. A cada 3 turnos, remove um efeito negativo aleatório dos aliados",
+            "Mãos Abençoadas: Tem chance de curar um aliado ao ser atacado (20%).",
           active:
-            "Milagre (5 Mana) - CD: 5 turnos | Cura 3 pontos de vida de todos os aliados e concede um escudo de 2 pontos por 2 turnos",
+            "Luz Restauradora: Cura um aliado em troca de mana (+5 HP, 3 Mana).",
         },
       },
       {
         name: "Xamã",
         emoji: "🌪️🌀",
         description: "Usa espíritos e magia ancestral para fortalecer aliados.",
-        stats: {
-          hp: 6,
-          mana: 8,
-          attack: 3,
-        },
+        stats: { hp: 6, mana: 8, attack: 3 },
         abilities: {
           passive:
-            "Comunhão Espiritual: A cada turno, um espírito fortalece um aliado aleatório (+2 em uma estatística por 1 turno)",
+            "Espírito Guerreiro: Tem chance de aumentar o ataque de um aliado ao ser atacado (15%).",
           active:
-            "Ritual Ancestral (4 Mana) - CD: 4 turnos | Invoca 4 totens que duram 3 turnos (Cura, Dano, Defesa, Velocidade), cada um fornecendo +2 no atributo",
+            "Proteção Ancestral: Cria um escudo de proteção para um aliado (absorve um ataque, 3 Mana).",
         },
       },
     ],
