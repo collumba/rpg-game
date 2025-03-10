@@ -373,6 +373,21 @@ body {
   color: var(--text-gold);
 }
 
+.team-slot .character-profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 0 8px var(--shadow-glow);
+  margin: 0;
+  transition: transform 0.2s ease;
+}
+
+.team-slot:hover .character-profile-image {
+  transform: scale(1.1);
+}
+
 .confirm-team {
   padding: 12px 30px;
   background: var(--primary-color);

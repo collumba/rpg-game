@@ -310,7 +310,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (selectedCharacters[index]) {
         const char = selectedCharacters[index];
         slot.innerHTML = `
-          <div class="character-emoji">${char.emoji}</div>
+          <img src="assets/characters/${
+            char.name
+          }.png" class="character-profile-image" alt="${char.name}">
           <button class="remove-character" onclick="event.stopPropagation()">×</button>
           <span class="slot-number">${index + 1}</span>
         `;
