@@ -506,27 +506,6 @@ body {
   color: var(--text-success);
 }
 
-.battle-area {
-  display: grid;
-  grid-template-rows: auto 100px auto;
-  gap: 15px;
-  flex: 1;
-  padding: 15px;
-  margin-bottom: 100px;
-  height: calc(100vh - 180px);
-  overflow-y: auto;
-  margin-right: 340px;
-  width: calc(100% - 360px);
-  margin-left: 20px;
-  background-image: url("assets/scenery/battleground.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 20px;
-  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-  position: relative;
-}
-
 /* Adiciona uma camada de sobreposição escura para melhor contraste */
 .battle-area::before {
   content: "";
@@ -544,22 +523,25 @@ body {
 .team-area {
   position: relative;
   z-index: 2;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(1px);
 }
 
 .team-area:first-child {
+  display: flex;
   grid-row: 3;
-  margin-bottom: 0;
-  background: rgba(255, 0, 0, 0.1);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(1px);
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
 }
 
 .team-area:last-child {
   grid-row: 1;
-  margin-top: 0;
-  background: rgba(0, 255, 0, 0.1);
-  backdrop-filter: blur(2px);
+  display: flex;
+  backdrop-filter: blur(1px);
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
 }
 
 .battle-divider {
@@ -659,9 +641,14 @@ body {
 
 /* Estilos para os personagens na batalha */
 .battle-character {
+  height: fit-content;
   position: relative;
   width: 200px;
-  background: var(--bg-card);
+  background: linear-gradient(
+    to bottom,
+    var(--bg-darker) 0%,
+    var(--bg-card) 100%
+  );
   border-radius: 15px;
   padding: 15px;
   display: flex;
@@ -672,6 +659,24 @@ body {
   transition: all 0.3s ease;
   overflow: visible;
   margin-bottom: 25px;
+  border: 1px solid var(--border-light);
+}
+
+/* Ajustes específicos para o chefe */
+.battle-character.boss {
+  width: 220px;
+  min-height: 280px;
+  padding: 12px;
+  background: linear-gradient(
+    to bottom,
+    var(--primary-darker) 0%,
+    var(--bg-danger) 100%
+  );
+  border: 2px solid var(--border-danger);
+  box-shadow: 0 0 20px var(--shadow-danger);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
 }
 
 /* Estilo para o personagem ativo */
@@ -680,46 +685,40 @@ body {
   box-shadow: 0 0 20px var(--shadow-glow);
   transform: scale(1.05);
   z-index: 4;
-}
-
-.battle-character.active::after {
-  content: "➤";
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--text-gold);
-  font-size: 24px;
-  text-shadow: 0 0 10px var(--shadow-glow);
-  animation: bounceArrow 1s ease-in-out infinite;
-}
-
-@keyframes bounceArrow {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(-5px);
-  }
+  background: linear-gradient(
+    to bottom,
+    var(--primary-dark) 0%,
+    var(--bg-card) 100%
+  );
 }
 
 /* Ajuste para o boss quando ativo */
 .battle-character.boss.active {
   border: 2px solid var(--border-gold);
   box-shadow: 0 0 25px var(--shadow-glow);
+  background: linear-gradient(
+    to bottom,
+    var(--primary-darker) 0%,
+    var(--bg-danger) 100%
+  );
 }
 
-.battle-character::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, var(--bg-card), transparent);
-  border-radius: 20px 20px 0 0;
-  z-index: 0;
+.battle-character .character-stats {
+  padding: 8px;
+  gap: 6px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-darker);
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--border-light);
+}
+
+.battle-character.boss .character-stats {
+  background: var(--primary-darker);
+  border-color: var(--border-danger);
 }
 
 .battle-character .character-emoji {
@@ -747,20 +746,6 @@ body {
   -webkit-box-orient: vertical;
   line-height: 1.2;
   padding: 0 5px;
-}
-
-.battle-character .character-stats {
-  padding: 8px;
-  gap: 6px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-overlay);
-  border-radius: 12px;
-  position: relative;
-  z-index: 1;
-  border: 1px solid var(--border-light);
-  margin-top: auto;
 }
 
 .battle-character .stat-row {
@@ -817,41 +802,6 @@ body {
 
 .battle-character .defense-bar {
   background: var(--defense-color);
-}
-
-/* Ajustes específicos para o chefe */
-.battle-character.boss {
-  width: 220px;
-  min-height: 280px;
-  padding: 12px;
-  background: var(--bg-danger);
-  border: 2px solid var(--border-danger);
-  box-shadow: 0 0 20px var(--shadow-danger);
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
-}
-
-.battle-character.boss::before {
-  background: linear-gradient(to bottom, var(--bg-danger), transparent);
-  height: 80px;
-}
-
-.battle-character.boss .character-stats {
-  padding: 10px;
-  gap: 8px;
-  margin-top: auto;
-  flex-shrink: 0;
-}
-
-.battle-character.boss .character-name {
-  color: var(--danger-color);
-  text-align: center;
-  font-weight: bold;
-}
-
-.battle-character.boss .character-emoji {
-  margin: 5px 0 10px 0;
 }
 
 .boss-emoji {
@@ -1259,6 +1209,10 @@ body {
   padding: 20px;
   overflow-y: auto;
   padding-bottom: 100px;
+  background-image: url(assets/scenery/battleground.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Definição da paleta de cores global */
