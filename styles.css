@@ -167,10 +167,13 @@ body {
 }
 
 .character-emoji {
-  font-size: 2.5em;
+  font-size: 1.8em;
   margin: 0;
   text-align: center;
   text-shadow: 0 2px 4px var(--shadow-text);
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .character-description {
@@ -205,10 +208,10 @@ body {
 }
 
 .stat-icon {
-  width: 24px;
+  width: 20px;
   text-align: center;
   color: var(--text-gold);
-  font-size: 1.1em;
+  font-size: 0.9em;
 }
 
 .stat-bar-container {
@@ -691,11 +694,12 @@ body {
 }
 
 .battle-character .character-emoji {
-  font-size: 2em;
-  margin: 3px 0;
-  position: relative;
-  z-index: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  font-size: 1.4em;
+  margin: 0;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
 }
 
 .battle-character .character-name {
@@ -732,12 +736,6 @@ body {
 
 .battle-character .stat-row {
   height: 20px;
-}
-
-.battle-character .stat-icon {
-  width: 25px;
-  height: 25px;
-  font-size: 0.9em;
 }
 
 .battle-character .stat-bar-container {
@@ -828,8 +826,11 @@ body {
 }
 
 .boss-emoji {
-  font-size: 2.5em !important;
-  margin: 5px 0 !important;
+  font-size: 1.8em !important;
+  margin: 0 !important;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .boss-name {
@@ -1175,8 +1176,11 @@ body {
 }
 
 .boss-emoji {
-  font-size: 2.5em !important;
-  margin: 5px 0 10px 0 !important;
+  font-size: 1.8em !important;
+  margin: 0 !important;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .boss-name {
@@ -1283,54 +1287,54 @@ body {
 
 .attack-display {
   position: absolute;
-  bottom: -20px;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-dark);
-  border-radius: 12px;
-  width: 60px;
-  height: 36px;
+  border-radius: 10px;
+  width: 50px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  box-shadow: 0 2px 8px var(--shadow-normal);
-  border: 2px solid var(--border-gold);
+  box-shadow: 0 2px 6px var(--shadow-normal);
+  border: 1.5px solid var(--border-gold);
   z-index: 5;
-  padding: 0 6px;
+  padding: 0 4px;
 }
 
 .attack-display .stat-icon {
-  font-size: 1em;
+  font-size: 0.9em;
   color: var(--text-gold);
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .attack-display span {
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: bold;
   color: var(--text-gold);
-  text-shadow: 2px 2px 4px var(--shadow-dark);
+  text-shadow: 1px 1px 2px var(--shadow-dark);
 }
 
 .attack-display.boss-attack {
-  width: 70px;
-  height: 42px;
+  width: 60px;
+  height: 36px;
   background: var(--primary-darker);
-  border: 2px solid var(--border-danger);
-  bottom: -25px;
-  box-shadow: 0 2px 8px var(--shadow-danger);
+  border: 1.5px solid var(--border-danger);
+  bottom: -20px;
+  box-shadow: 0 2px 6px var(--shadow-danger);
 }
 
 .attack-display.boss-attack .stat-icon {
-  font-size: 1.2em;
+  font-size: 1em;
   color: var(--danger-color);
 }
 
 .attack-display.boss-attack span {
-  font-size: 1.4em;
+  font-size: 1.2em;
   color: var(--danger-color);
-  text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+  text-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
 }
 
 /* Ajuste o espaçamento inferior dos cards para acomodar o attack-display */
@@ -1358,27 +1362,29 @@ body {
 /* Estilos para os efeitos ativos */
 .active-effects {
   display: flex;
-  gap: 8px;
-  margin: 4px 0;
-  justify-content: center;
+  gap: 4px;
+  margin: 2px 0;
+  justify-content: flex-start;
   flex-wrap: wrap;
   max-width: 100%;
-  position: relative;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
 }
 
 .effect-icon {
   background: var(--bg-card);
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9em;
+  font-size: 0.8em;
   position: relative;
   border: 1px solid var(--border-light);
-  box-shadow: 0 0 5px var(--shadow-glow);
-  animation: effectPulse 2s infinite;
+  box-shadow: 0 0 3px var(--shadow-glow);
 }
 
 .effect-icon .tooltip-text {
@@ -1483,4 +1489,35 @@ body {
   100% {
     box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
   }
+}
+
+.character-profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border-gold);
+  box-shadow: 0 0 10px var(--shadow-glow);
+  margin: 10px auto;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+.battle-character .character-profile-image {
+  width: 80px;
+  height: 80px;
+  margin: 5px auto;
+}
+
+.battle-character.boss .character-profile-image {
+  width: 100px;
+  height: 100px;
+  border-color: var(--border-danger);
+  box-shadow: 0 0 15px var(--shadow-danger);
+}
+
+.character-card.selected .character-profile-image {
+  box-shadow: 0 0 20px var(--shadow-glow);
+  transform: scale(1.05);
 }

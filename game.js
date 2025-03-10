@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       },
       {
-        name: "Ladrão",
+        name: "Ladino",
         emoji: "🏹🗡️",
         description:
           "Rápido, furtivo, especialista em golpes críticos e evasão.",
@@ -227,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     card.innerHTML = `
+      <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image">
       <div class="character-emoji">${character.emoji}</div>
       <div class="character-name">${character.name}</div>
       <div class="character-description">${character.description}</div>
@@ -415,23 +416,35 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stat-icon">⚔️</div>
         <span>${character.stats.attack}</span>
       </div>
+      <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image">
       <div class="character-emoji">${character.emoji}</div>
       <div class="character-name">${character.name}</div>
+      <div class="character-description">${character.description}</div>
       <div class="character-stats">
         <div class="stat-row">
-          <div class="stat-icon">❤️</div>
+          <div class="stat-icon tooltip">
+            <span class="tooltip-text">${statsDescriptions.hp}</span>
+            ❤️
+          </div>
           <div class="stat-bar-container">
-            <div class="hp-bar" style="width: ${statsPercentage.hp}%"></div>
+            <div class="stat-bar hp-bar" style="width: ${statsPercentage.hp}%"></div>
             <div class="stat-value">${character.stats.hp}/${character.stats.maxHp}</div>
           </div>
         </div>
         <div class="stat-row">
-          <div class="stat-icon">🧪</div>
+          <div class="stat-icon tooltip">
+            <span class="tooltip-text">${statsDescriptions.mana}</span>
+            🧪
+          </div>
           <div class="stat-bar-container">
-            <div class="mana-bar" style="width: ${statsPercentage.mana}%"></div>
+            <div class="stat-bar mana-bar" style="width: ${statsPercentage.mana}%"></div>
             <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
           </div>
         </div>
+      </div>
+      <div class="character-abilities">
+        <div><strong>Passiva:</strong> ${character.abilities.passive}</div>
+        <div><strong>Ativa:</strong> ${character.abilities.active}</div>
       </div>
     `;
 
