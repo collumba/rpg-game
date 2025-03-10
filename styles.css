@@ -1354,3 +1354,88 @@ body {
   border-radius: 6px;
   transition: width 0.3s ease;
 }
+
+/* Estilos para os efeitos ativos */
+.active-effects {
+  display: flex;
+  gap: 8px;
+  margin: 4px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  position: relative;
+}
+
+.effect-icon {
+  background: var(--bg-card);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  position: relative;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 0 5px var(--shadow-glow);
+  animation: effectPulse 2s infinite;
+}
+
+.effect-icon .tooltip-text {
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-darker);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  box-shadow: 0 2px 4px var(--shadow-normal);
+  border: 1px solid var(--border-light);
+  pointer-events: none;
+  width: auto;
+  min-width: 120px;
+}
+
+.effect-icon .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--bg-darker) transparent transparent transparent;
+}
+
+.effect-icon:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.boss-effects .effect-icon {
+  background: var(--bg-danger);
+  border-color: var(--border-danger);
+}
+
+@keyframes effectPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
