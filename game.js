@@ -716,11 +716,57 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Função para atualizar o estado dos botões de ação
+  function getSkillManaCost(characterName) {
+    switch (characterName) {
+      case "Guerreiro":
+        return 2;
+      case "Berserker":
+        return 1;
+      case "Cavaleiro":
+        return 3;
+      case "Paladino":
+        return 5;
+      case "Ladrão":
+        return 2;
+      case "Monge":
+        return 3;
+      case "Arqueiro":
+        return 3;
+      case "Caçador":
+        return 4;
+      case "Mosqueteiro":
+        return 2;
+      case "Mago":
+        return 5;
+      case "Necromante":
+        return 4;
+      case "Clérigo":
+        return 3;
+      case "Xamã":
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
   function updateActionButtonsState() {
     const actionButtons = document.querySelectorAll(".action-button");
+    const currentCharacter = selectedCharacters[currentCharacterIndex];
+
     actionButtons.forEach((button) => {
       button.disabled = teamActionsCompleted;
       button.style.opacity = teamActionsCompleted ? "0.5" : "1";
+
+      // Verifica especificamente o botão de habilidade
+      if (button.id === "skillButton" && !teamActionsCompleted) {
+        const manaCost = getSkillManaCost(currentCharacter.name);
+        const hasEnoughMana = currentCharacter.stats.mana >= manaCost;
+        button.disabled = !hasEnoughMana;
+        button.style.opacity = hasEnoughMana ? "1" : "0.5";
+
+        // Adiciona tooltip para mostrar o custo de mana
+        button.title = `Custo: ${manaCost} Mana`;
+      }
     });
   }
 
