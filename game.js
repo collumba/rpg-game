@@ -1053,7 +1053,111 @@ document.addEventListener("DOMContentLoaded", () => {
     emojiElement.insertAdjacentElement("afterend", effectsDisplay);
   }
 
-  // Modifica a função performSkill para usar as habilidades específicas
+  function setupTargetSelection(character, callback) {
+    const playerTeamArea = document.querySelector(".player-team");
+    let validTargets = [];
+
+    // Remove seleção anterior se existir
+    clearTargetSelection();
+
+    // Determina alvos válidos baseado na habilidade do personagem
+    switch (character.name) {
+      case "Guerreiro":
+      case "Xamã":
+        validTargets = selectedCharacters.filter((char) => char.stats.hp > 0);
+        showBattleMessage("Selecione um aliado para proteger", "system");
+        break;
+      case "Monge":
+        validTargets = selectedCharacters.filter(
+          (char) => char.stats.hp > 0 && char !== character
+        );
+        showBattleMessage("Selecione um aliado para trocar HP", "system");
+        break;
+      case "Arqueiro":
+      case "Mago":
+        validTargets = selectedCharacters.filter(
+          (char) => char.stats.hp > 0 && char !== character
+        );
+        showBattleMessage("Selecione um aliado para aumentar o dano", "system");
+        break;
+      case "Mosqueteiro":
+        validTargets = selectedCharacters.filter(
+          (char) => char.stats.hp > 0 && char !== character
+        );
+        showBattleMessage(
+          "Selecione um aliado para atacar em conjunto",
+          "system"
+        );
+        break;
+      case "Clérigo":
+        validTargets = selectedCharacters.filter(
+          (char) => char.stats.hp > 0 && char.stats.hp < char.stats.maxHp
+        );
+        showBattleMessage("Selecione um aliado para curar", "system");
+        break;
+      case "Paladino":
+      case "Necromante":
+        validTargets = selectedCharacters.filter((char) => char.stats.hp <= 0);
+        showBattleMessage("Selecione um aliado para reviver", "system");
+        break;
+      default:
+        // Para habilidades que não precisam de alvo
+        callback(null);
+        return;
+    }
+
+    if (validTargets.length === 0) {
+      showBattleMessage("Não há alvos válidos para esta habilidade!", "system");
+      return false;
+    }
+
+    // Adiciona classe e evento de clique para alvos válidos
+    validTargets.forEach((target) => {
+      const targetElement = document.querySelector(
+        `.battle-character[data-name="${target.name}"]`
+      );
+      targetElement.classList.add("valid-target");
+
+      const clickHandler = () => {
+        clearTargetSelection();
+        callback(target);
+      };
+
+      targetElement.addEventListener("click", clickHandler);
+      targetElement.dataset.targetHandler = true;
+    });
+
+    // Adiciona botão de cancelar
+    const cancelButton = document.createElement("button");
+    cancelButton.className = "cancel-target-button";
+    cancelButton.textContent = "Cancelar Seleção";
+    cancelButton.onclick = () => {
+      clearTargetSelection();
+      showBattleMessage("Seleção de alvo cancelada", "system");
+    };
+    playerTeamArea.appendChild(cancelButton);
+
+    return true;
+  }
+
+  function clearTargetSelection() {
+    // Remove classes e eventos de alvos válidos
+    document.querySelectorAll(".valid-target").forEach((element) => {
+      element.classList.remove("valid-target");
+      if (element.dataset.targetHandler) {
+        element.removeEventListener("click", element.onclick);
+        delete element.dataset.targetHandler;
+      }
+    });
+
+    // Remove botão de cancelar
+    const cancelButton = document.querySelector(".cancel-target-button");
+    if (cancelButton) {
+      cancelButton.remove();
+    }
+  }
+
+  // Modifica a função performSkill para usar a seleção de alvo
   function performSkill(character) {
     if (character.stats.hp <= 0 || teamActionsCompleted) return;
 
@@ -1070,63 +1174,78 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Inicia a animação de habilidade
-    characterElement.classList.add("using-skill");
+    // Verifica se tem mana suficiente
+    const manaCost = getSkillManaCost(character.name);
+    if (character.stats.mana < manaCost) {
+      showBattleMessage(`${character.name} não tem mana suficiente!`, "team");
+      return;
+    }
 
-    // Executa a habilidade ativa específica do personagem
-    const skillExecuted = executeActiveAbility(character);
+    // Inicia a seleção de alvo
+    const targetingStarted = setupTargetSelection(
+      character,
+      (selectedTarget) => {
+        if (
+          selectedTarget === null &&
+          character.name !== "Berserker" &&
+          character.name !== "Ladrão" &&
+          character.name !== "Caçador"
+        ) {
+          return; // Cancela a habilidade se não houver alvo selecionado
+        }
 
-    if (skillExecuted) {
-      // Marca a habilidade como usada neste turno
-      characterElement.dataset.usedSkill = "true";
+        // Inicia a animação de habilidade
+        characterElement.classList.add("using-skill");
 
-      // Remove a classe de animação após um tempo
-      setTimeout(() => {
-        characterElement.classList.remove("using-skill");
-      }, 500);
+        // Executa a habilidade com o alvo selecionado
+        const skillExecuted = executeActiveAbility(character, selectedTarget);
 
-      // Verifica se o chefe foi derrotado
-      if (currentBoss.stats.hp <= 0) {
-        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
-        setTimeout(() => {
-          transitionToNextPhase();
-        }, 1500);
-        return;
+        if (skillExecuted) {
+          characterElement.dataset.usedSkill = "true";
+          setTimeout(() => {
+            characterElement.classList.remove("using-skill");
+          }, 500);
+
+          if (currentBoss.stats.hp <= 0) {
+            showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
+            setTimeout(() => {
+              transitionToNextPhase();
+            }, 1500);
+          }
+        } else {
+          characterElement.classList.remove("using-skill");
+        }
       }
-    } else {
-      // Remove a classe de animação imediatamente se a habilidade não foi executada
+    );
+
+    // Se não foi possível iniciar a seleção de alvo (não há alvos válidos)
+    if (targetingStarted === false) {
       characterElement.classList.remove("using-skill");
     }
   }
 
-  // Modifica a função executeActiveAbility para atualizar os efeitos
-  function executeActiveAbility(character) {
+  // Modifica a função executeActiveAbility para aceitar o alvo selecionado
+  function executeActiveAbility(character, target) {
     if (character.stats.hp <= 0) return false;
 
-    let manaCost = 0;
+    let manaCost = getSkillManaCost(character.name);
     let executed = false;
 
     switch (character.name) {
       case "Guerreiro":
-        manaCost = 2;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter((ally) => ally.stats.hp > 0);
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            target.activeEffects = target.activeEffects || {};
-            target.activeEffects.shield = 1;
-            character.stats.mana -= manaCost;
-            showBattleMessage(
-              `${character.name} protegeu ${target.name} com Escudo Protetor!`,
-              "team"
-            );
-            executed = true;
-          }
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.shield = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} protegeu ${target.name} com Escudo Protetor!`,
+            "team"
+          );
+          executed = true;
         }
         break;
 
       case "Berserker":
-        manaCost = 1;
         if (character.stats.mana >= manaCost && character.stats.hp > 2) {
           character.stats.hp -= 2;
           character.stats.mana -= manaCost;
@@ -1142,7 +1261,6 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "Cavaleiro":
-        manaCost = 3;
         if (character.stats.mana >= manaCost) {
           character.stats.mana -= manaCost;
           character.activeEffects = character.activeEffects || {};
@@ -1156,29 +1274,24 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "Paladino":
-        manaCost = 5;
-        if (character.stats.mana >= manaCost) {
-          const deadAllies = selectedCharacters.filter(
-            (ally) => ally.stats.hp <= 0
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp <= 0
+        ) {
+          target.stats.hp = Math.floor(target.stats.maxHp * 0.5);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target);
+          updateCharacterVisuals(target);
+          showBattleMessage(
+            `${character.name} reviveu ${target.name} com Milagre da Luz!`,
+            "team"
           );
-          if (deadAllies.length > 0) {
-            const target =
-              deadAllies[Math.floor(Math.random() * deadAllies.length)];
-            target.stats.hp = Math.floor(target.stats.maxHp * 0.5);
-            character.stats.mana -= manaCost;
-            updateCharacterHP(target);
-            updateCharacterVisuals(target);
-            showBattleMessage(
-              `${character.name} reviveu ${target.name} com Milagre da Luz!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Ladrão":
-        manaCost = 2;
         if (character.stats.mana >= manaCost) {
           character.stats.mana -= manaCost;
           currentBoss.activeEffects = currentBoss.activeEffects || {};
@@ -1192,50 +1305,35 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "Monge":
-        manaCost = 3;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter(
-            (ally) => ally.stats.hp > 0 && ally !== character
+        if (character.stats.mana >= manaCost && target) {
+          const tempHP = character.stats.hp;
+          character.stats.hp = target.stats.hp;
+          target.stats.hp = tempHP;
+          character.stats.mana -= manaCost;
+          updateCharacterHP(character);
+          updateCharacterHP(target);
+          showBattleMessage(
+            `${character.name} trocou HP com ${target.name} usando Equilíbrio Vital!`,
+            "team"
           );
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            const tempHP = character.stats.hp;
-            character.stats.hp = target.stats.hp;
-            target.stats.hp = tempHP;
-            character.stats.mana -= manaCost;
-            updateCharacterHP(character);
-            updateCharacterHP(target);
-            showBattleMessage(
-              `${character.name} trocou HP com ${target.name} usando Equilíbrio Vital!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Arqueiro":
-        manaCost = 3;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter(
-            (ally) => ally.stats.hp > 0 && ally !== character
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.doubleDamage = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} dobrou o dano de ${target.name} com Tiro Preciso!`,
+            "team"
           );
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            target.activeEffects = target.activeEffects || {};
-            target.activeEffects.doubleDamage = 1;
-            character.stats.mana -= manaCost;
-            showBattleMessage(
-              `${character.name} dobrou o dano de ${target.name} com Tiro Preciso!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Caçador":
-        manaCost = 4;
         if (character.stats.mana >= manaCost) {
           character.stats.mana -= manaCost;
           currentBoss.activeEffects = currentBoss.activeEffects || {};
@@ -1249,130 +1347,92 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "Mosqueteiro":
-        manaCost = 2;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter(
-            (ally) => ally.stats.hp > 0 && ally !== character
+        if (character.stats.mana >= manaCost && target) {
+          const combinedDamage = character.stats.attack + target.stats.attack;
+          currentBoss.stats.hp = Math.max(
+            0,
+            currentBoss.stats.hp - combinedDamage
           );
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            const combinedDamage = character.stats.attack + target.stats.attack;
-            currentBoss.stats.hp = Math.max(
-              0,
-              currentBoss.stats.hp - combinedDamage
-            );
-            character.stats.mana -= manaCost;
-            updateBossHP();
-            showBattleMessage(
-              `${character.name} e ${target.name} causaram ${combinedDamage} de dano com Disparo Coordenado!`,
-              "team"
-            );
-            executed = true;
-          }
+          character.stats.mana -= manaCost;
+          updateBossHP();
+          showBattleMessage(
+            `${character.name} e ${target.name} causaram ${combinedDamage} de dano com Disparo Coordenado!`,
+            "team"
+          );
+          executed = true;
         }
         break;
 
       case "Mago":
-        manaCost = 5;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter(
-            (ally) => ally.stats.hp > 0 && ally !== character
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.doubleDamage = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} dobrou o dano de ${target.name} com Explosão Mágica!`,
+            "team"
           );
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            target.activeEffects = target.activeEffects || {};
-            target.activeEffects.doubleDamage = 1;
-            character.stats.mana -= manaCost;
-            showBattleMessage(
-              `${character.name} dobrou o dano de ${target.name} com Explosão Mágica!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Necromante":
-        manaCost = 4;
-        if (character.stats.mana >= manaCost) {
-          const deadAllies = selectedCharacters.filter(
-            (ally) => ally.stats.hp <= 0
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp <= 0
+        ) {
+          target.stats.hp = Math.floor(target.stats.maxHp * 0.25);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target);
+          updateCharacterVisuals(target);
+          showBattleMessage(
+            `${character.name} reviveu ${target.name} com Chamado dos Mortos!`,
+            "team"
           );
-          if (deadAllies.length > 0) {
-            const target =
-              deadAllies[Math.floor(Math.random() * deadAllies.length)];
-            target.stats.hp = Math.floor(target.stats.maxHp * 0.25);
-            character.stats.mana -= manaCost;
-            updateCharacterHP(target);
-            updateCharacterVisuals(target);
-            showBattleMessage(
-              `${character.name} reviveu ${target.name} com Chamado dos Mortos!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Clérigo":
-        manaCost = 3;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter(
-            (ally) => ally.stats.hp > 0 && ally.stats.hp < ally.stats.maxHp
+        if (character.stats.mana >= manaCost && target) {
+          target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target);
+          showBattleMessage(
+            `${character.name} curou ${target.name} com Luz Restauradora!`,
+            "team"
           );
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
-            character.stats.mana -= manaCost;
-            updateCharacterHP(target);
-            showBattleMessage(
-              `${character.name} curou ${target.name} com Luz Restauradora!`,
-              "team"
-            );
-            executed = true;
-          }
+          executed = true;
         }
         break;
 
       case "Xamã":
-        manaCost = 3;
-        if (character.stats.mana >= manaCost) {
-          const allies = selectedCharacters.filter((ally) => ally.stats.hp > 0);
-          if (allies.length > 0) {
-            const target = allies[Math.floor(Math.random() * allies.length)];
-            target.activeEffects = target.activeEffects || {};
-            target.activeEffects.shield = 1;
-            character.stats.mana -= manaCost;
-            showBattleMessage(
-              `${character.name} protegeu ${target.name} com Proteção Ancestral!`,
-              "team"
-            );
-            executed = true;
-          }
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.shield = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} protegeu ${target.name} com Proteção Ancestral!`,
+            "team"
+          );
+          executed = true;
         }
         break;
     }
 
     if (executed) {
       updateCharacterMana(character);
-      // Atualiza a exibição dos efeitos para o personagem que usou a habilidade
       updateEffectsDisplay(character);
-      // Atualiza a exibição dos efeitos para o alvo, se aplicável
-      const target = selectedCharacters.find(
-        (c) => c.activeEffects && Object.keys(c.activeEffects).length > 0
-      );
       if (target) {
         updateEffectsDisplay(target);
       }
-      // Atualiza a exibição dos efeitos do chefe, se aplicável
       if (
         currentBoss.activeEffects &&
         Object.keys(currentBoss.activeEffects).length > 0
       ) {
         updateBossEffectsDisplay();
       }
-    } else if (character.stats.mana < manaCost) {
-      showBattleMessage(`${character.name} não tem mana suficiente!`, "team");
     }
 
     return executed;
