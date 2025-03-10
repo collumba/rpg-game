@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Adiciona constantes para os ícones dos efeitos
   const EFFECT_ICONS = {
-    shield: "��️",
+    shield: "🛡️",
     damageBoost: "💢",
     doubleDamage: "⚡",
     weakened: "💫",
@@ -1007,6 +1007,40 @@ document.addEventListener("DOMContentLoaded", () => {
     emojiElement.insertAdjacentElement("afterend", effectsDisplay);
   }
 
+  // Modifica a função performSkill para usar as habilidades específicas
+  function performSkill(character) {
+    if (character.stats.hp <= 0 || teamActionsCompleted) return;
+
+    const characterElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+
+    // Inicia a animação de habilidade
+    characterElement.classList.add("using-skill");
+
+    // Executa a habilidade ativa específica do personagem
+    const skillExecuted = executeActiveAbility(character);
+
+    if (skillExecuted) {
+      // Remove a classe de animação após um tempo
+      setTimeout(() => {
+        characterElement.classList.remove("using-skill");
+      }, 500);
+
+      // Verifica se o chefe foi derrotado
+      if (currentBoss.stats.hp <= 0) {
+        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
+        setTimeout(() => {
+          transitionToNextPhase();
+        }, 1500);
+        return;
+      }
+    } else {
+      // Remove a classe de animação imediatamente se a habilidade não foi executada
+      characterElement.classList.remove("using-skill");
+    }
+  }
+
   // Modifica a função executeActiveAbility para atualizar os efeitos
   function executeActiveAbility(character) {
     if (character.stats.hp <= 0) return false;
@@ -1324,243 +1358,6 @@ document.addEventListener("DOMContentLoaded", () => {
     emojiElement.insertAdjacentElement("afterend", effectsDisplay);
   }
 
-  // Modifica a função performSkill para usar as habilidades específicas
-  function performSkill(character) {
-    if (character.stats.hp <= 0 || teamActionsCompleted) return;
-
-    const characterElement = document.querySelector(
-      `.battle-character[data-name="${character.name}"]`
-    );
-
-    // Inicia a animação de habilidade
-    characterElement.classList.add("using-skill");
-
-    // Executa a habilidade ativa específica do personagem
-    const skillExecuted = executeActiveAbility(character);
-
-    if (skillExecuted) {
-      // Marca o personagem como tendo agido
-      characterElement.dataset.acted = "true";
-
-      // Remove a classe de animação após um tempo
-      setTimeout(() => {
-        characterElement.classList.remove("using-skill");
-      }, 500);
-
-      // Verifica se o chefe foi derrotado
-      if (currentBoss.stats.hp <= 0) {
-        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
-        setTimeout(() => {
-          transitionToNextPhase();
-        }, 1500);
-        return;
-      }
-
-      nextCharacterTurn();
-    } else {
-      // Remove a classe de animação imediatamente se a habilidade não foi executada
-      characterElement.classList.remove("using-skill");
-    }
-  }
-
-  // Modifica a função executeBossTurn para atualizar os efeitos
-  function executeBossTurn() {
-    updateActionButtonsState();
-
-    // Verifica se o chefe está atordoado
-    if (currentBoss.activeEffects && currentBoss.activeEffects.stunned) {
-      showBattleMessage(
-        `${currentBoss.name} está atordoado e não pode atacar!`,
-        "boss"
-      );
-      delete currentBoss.activeEffects.stunned;
-      updateBossEffectsDisplay();
-      setTimeout(() => {
-        startNewTurn();
-      }, 1000);
-      return;
-    }
-
-    const liveCharacters = selectedCharacters.filter(
-      (char) => char.stats.hp > 0
-    );
-
-    if (liveCharacters.length === 0) {
-      endGame(false);
-      return;
-    }
-
-    const bossElement = document.querySelector(".enemy-team .battle-character");
-    const targetIndex = Math.floor(Math.random() * liveCharacters.length);
-    const target = liveCharacters[targetIndex];
-    let damage = currentBoss.stats.attack;
-
-    // Aplica redução de dano se o chefe estiver enfraquecido
-    if (currentBoss.activeEffects && currentBoss.activeEffects.weakened) {
-      damage = Math.floor(damage * 0.7);
-      delete currentBoss.activeEffects.weakened;
-    }
-
-    // Inicia a animação de ataque do chefe
-    bossElement.classList.add("boss-attacking");
-
-    setTimeout(() => {
-      let damagePrevented = false;
-
-      // Verifica habilidades passivas que podem prevenir dano
-      for (const character of liveCharacters) {
-        if (executePassiveAbility(character, "onBossAttack")) {
-          damagePrevented = true;
-          break;
-        }
-      }
-
-      if (!damagePrevented) {
-        // Verifica se o alvo tem escudo
-        if (target.activeEffects && target.activeEffects.shield) {
-          delete target.activeEffects.shield;
-          showBattleMessage(
-            `O escudo protegeu ${target.name} do ataque!`,
-            "team"
-          );
-        } else {
-          // Verifica se o dano será dividido com o Cavaleiro
-          const cavaleiro = selectedCharacters.find(
-            (char) =>
-              char.name === "Cavaleiro" &&
-              char.stats.hp > 0 &&
-              char.activeEffects &&
-              char.activeEffects.damageSplit
-          );
-
-          if (cavaleiro) {
-            const splitDamage = Math.floor(damage / 2);
-            target.stats.hp = Math.max(0, target.stats.hp - splitDamage);
-            cavaleiro.stats.hp = Math.max(0, cavaleiro.stats.hp - splitDamage);
-            updateCharacterHP(target);
-            updateCharacterHP(cavaleiro);
-            updateCharacterVisuals(target);
-            updateCharacterVisuals(cavaleiro);
-            showBattleMessage(
-              `${currentBoss.name} atacou ${target.name} e ${cavaleiro.name}, causando ${splitDamage} de dano a cada um!`,
-              "boss"
-            );
-            delete cavaleiro.activeEffects.damageSplit;
-          } else {
-            target.stats.hp = Math.max(0, target.stats.hp - damage);
-            updateCharacterHP(target);
-            updateCharacterVisuals(target);
-            showBattleMessage(
-              `${currentBoss.name} atacou ${target.name} causando ${damage} de dano!`,
-              "boss"
-            );
-          }
-
-          // Mostra o efeito visual no alvo
-          const targetElement = document.querySelector(
-            `.battle-character[data-name="${target.name}"]`
-          );
-          targetElement.classList.add("taking-damage");
-          showDamageNumber(target, damage, "boss");
-
-          // Ativa habilidades passivas que respondem a dano
-          for (const character of liveCharacters) {
-            executePassiveAbility(character, "onTakeDamage");
-          }
-
-          // Remove as classes de animação
-          setTimeout(() => {
-            bossElement.classList.remove("boss-attacking");
-            targetElement.classList.remove("taking-damage");
-          }, 500);
-
-          // Verifica se o personagem foi derrotado
-          if (target.stats.hp <= 0) {
-            handleCharacterDefeat(target);
-          }
-        }
-      }
-
-      // Inicia novo turno após as animações
-      setTimeout(() => {
-        startNewTurn();
-      }, 1000);
-    }, 250);
-  }
-
-  // Modifica a função performAttack para atualizar os efeitos
-  function performAttack(character) {
-    if (character.stats.hp <= 0 || teamActionsCompleted) return;
-
-    const characterElement = document.querySelector(
-      `.battle-character[data-name="${character.name}"]`
-    );
-    const bossElement = document.querySelector(".enemy-team .battle-character");
-
-    // Marca o personagem como tendo agido
-    characterElement.dataset.acted = "true";
-
-    // Inicia a animação de ataque
-    characterElement.classList.add("attacking");
-
-    setTimeout(() => {
-      let damage = character.stats.attack;
-
-      if (character.activeEffects && character.activeEffects.damageBoost) {
-        damage = Math.floor(damage * character.activeEffects.damageBoost);
-        delete character.activeEffects.damageBoost;
-        updateEffectsDisplay(character);
-      }
-
-      if (character.activeEffects && character.activeEffects.doubleDamage) {
-        damage *= 2;
-        delete character.activeEffects.doubleDamage;
-        updateEffectsDisplay(character);
-      }
-
-      // Aplica o dano ao chefe
-      const newHP = Math.max(0, currentBoss.stats.hp - damage);
-      currentBoss.stats.hp = newHP;
-
-      // Mostra o efeito visual
-      bossElement.classList.add("taking-damage");
-      showDamageNumber(currentBoss, damage, "normal");
-
-      // Atualiza a barra de HP
-      updateBossHP();
-
-      // Remove as classes de animação
-      setTimeout(() => {
-        characterElement.classList.remove("attacking");
-        bossElement.classList.remove("taking-damage");
-      }, 500);
-
-      // Exibe mensagem de ataque
-      showBattleMessage(
-        `${character.name} atacou ${currentBoss.name} causando ${damage} de dano!`,
-        "team"
-      );
-
-      // Ativa habilidades passivas que respondem a ataques
-      for (const ally of selectedCharacters) {
-        if (ally !== character && ally.stats.hp > 0) {
-          executePassiveAbility(ally, "onAllyAttack");
-        }
-      }
-
-      // Verifica se o chefe foi derrotado
-      if (currentBoss.stats.hp <= 0) {
-        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
-        setTimeout(() => {
-          transitionToNextPhase();
-        }, 1500);
-        return;
-      }
-
-      nextCharacterTurn();
-    }, 250);
-  }
-
   function findNextLiveCharacter(startIndex) {
     for (let i = startIndex; i < selectedCharacters.length; i++) {
       if (selectedCharacters[i].stats.hp > 0) {
@@ -1841,6 +1638,194 @@ document.addEventListener("DOMContentLoaded", () => {
             <button onclick="location.reload()">Jogar Novamente</button>
         </div>
     `;
+  }
+
+  // Função para executar o turno do chefe
+  function executeBossTurn() {
+    if (!currentBoss || currentBoss.stats.hp <= 0) return;
+
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    bossElement.classList.add("attacking");
+
+    setTimeout(() => {
+      // Verifica se o chefe está atordoado
+      if (currentBoss.activeEffects && currentBoss.activeEffects.stunned) {
+        delete currentBoss.activeEffects.stunned;
+        updateBossEffectsDisplay();
+        showBattleMessage(
+          `${currentBoss.name} está atordoado e não pode atacar!`,
+          "boss"
+        );
+        startNewTurn();
+        return;
+      }
+
+      // Seleciona um alvo aleatório vivo
+      const possibleTargets = selectedCharacters.filter(
+        (char) => char.stats.hp > 0
+      );
+      if (possibleTargets.length === 0) {
+        endGame(false);
+        return;
+      }
+
+      const target =
+        possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+      let damage = currentBoss.stats.attack;
+
+      // Aplica redução de dano se o chefe estiver enfraquecido
+      if (currentBoss.activeEffects && currentBoss.activeEffects.weakened) {
+        damage = Math.floor(damage * 0.7); // Reduz o dano em 30%
+        delete currentBoss.activeEffects.weakened;
+        updateBossEffectsDisplay();
+      }
+
+      // Verifica se algum personagem vai proteger o alvo
+      let protector = null;
+      for (const char of selectedCharacters) {
+        if (char !== target && char.stats.hp > 0) {
+          if (executePassiveAbility(char, "onAllyTargeted")) {
+            protector = char;
+            break;
+          }
+        }
+      }
+
+      // Determina quem vai receber o dano
+      const finalTarget = protector || target;
+      const targetElement = document.querySelector(
+        `.battle-character[data-name="${finalTarget.name}"]`
+      );
+
+      // Verifica se o alvo tem escudo
+      if (finalTarget.activeEffects && finalTarget.activeEffects.shield) {
+        delete finalTarget.activeEffects.shield;
+        updateEffectsDisplay(finalTarget);
+        showBattleMessage(
+          `${finalTarget.name} bloqueou o ataque com um escudo!`,
+          "team"
+        );
+      } else {
+        // Verifica se algum personagem vai negar o ataque
+        let attackNegated = false;
+        for (const char of selectedCharacters) {
+          if (char.stats.hp > 0) {
+            if (executePassiveAbility(char, "onBossAttack")) {
+              attackNegated = true;
+              break;
+            }
+          }
+        }
+
+        if (!attackNegated) {
+          // Aplica o dano
+          targetElement.classList.add("taking-damage");
+          finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
+          showDamageNumber(finalTarget, damage, "boss");
+          updateCharacterHP(finalTarget);
+
+          // Exibe mensagem de ataque
+          showBattleMessage(
+            `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
+            "boss"
+          );
+
+          // Ativa habilidades passivas que respondem a dano
+          for (const char of selectedCharacters) {
+            if (char.stats.hp > 0) {
+              executePassiveAbility(char, "onTakeDamage");
+            }
+          }
+
+          // Verifica se o personagem foi derrotado
+          if (finalTarget.stats.hp <= 0) {
+            handleCharacterDefeat(finalTarget);
+          }
+        }
+      }
+
+      // Remove as classes de animação
+      setTimeout(() => {
+        bossElement.classList.remove("attacking");
+        targetElement?.classList.remove("taking-damage");
+      }, 500);
+
+      // Inicia um novo turno
+      setTimeout(() => {
+        startNewTurn();
+      }, 1000);
+    }, 500);
+  }
+
+  // Função para executar ataque do personagem
+  function performAttack(character) {
+    if (character.stats.hp <= 0 || teamActionsCompleted) return;
+
+    const characterElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+
+    // Inicia a animação de ataque
+    characterElement.classList.add("attacking");
+
+    setTimeout(() => {
+      let damage = character.stats.attack;
+
+      // Aplica bônus de dano se houver
+      if (character.activeEffects && character.activeEffects.damageBoost) {
+        damage = Math.floor(damage * character.activeEffects.damageBoost);
+        delete character.activeEffects.damageBoost;
+        updateEffectsDisplay(character);
+      }
+
+      if (character.activeEffects && character.activeEffects.doubleDamage) {
+        damage *= 2;
+        delete character.activeEffects.doubleDamage;
+        updateEffectsDisplay(character);
+      }
+
+      // Aplica o dano ao chefe
+      currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
+
+      // Mostra o efeito visual
+      bossElement.classList.add("taking-damage");
+      showDamageNumber(currentBoss, damage, "normal");
+
+      // Atualiza a barra de HP
+      updateBossHP();
+
+      // Remove as classes de animação
+      setTimeout(() => {
+        characterElement.classList.remove("attacking");
+        bossElement.classList.remove("taking-damage");
+      }, 500);
+
+      // Exibe mensagem de ataque
+      showBattleMessage(
+        `${character.name} atacou ${currentBoss.name} causando ${damage} de dano!`,
+        "team"
+      );
+
+      // Ativa habilidades passivas que respondem a ataques
+      for (const ally of selectedCharacters) {
+        if (ally !== character && ally.stats.hp > 0) {
+          executePassiveAbility(ally, "onAllyAttack");
+        }
+      }
+
+      // Verifica se o chefe foi derrotado
+      if (currentBoss.stats.hp <= 0) {
+        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
+        setTimeout(() => {
+          transitionToNextPhase();
+        }, 1500);
+        return;
+      }
+
+      // Passa para o próximo personagem
+      nextCharacterTurn();
+    }, 250);
   }
 
   // Inicializar a tela de seleção
