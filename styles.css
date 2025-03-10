@@ -518,34 +518,48 @@ body {
   margin-right: 340px;
   width: calc(100% - 360px);
   margin-left: 20px;
-  overflow: visible !important;
+  background-image: url("assets/scenery/battleground.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
+/* Adiciona uma camada de sobreposição escura para melhor contraste */
+.battle-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+/* Garante que o conteúdo fique acima do background */
 .team-area {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 20px;
-  background: var(--bg-card);
-  border-radius: 15px;
-  min-height: 160px;
-  justify-content: center;
-  align-items: center;
   position: relative;
   z-index: 2;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
 }
 
 .team-area:first-child {
   grid-row: 3;
   margin-bottom: 0;
-  background: var(--bg-danger);
+  background: rgba(255, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
 }
 
 .team-area:last-child {
   grid-row: 1;
   margin-top: 0;
-  background: var(--bg-success);
+  background: rgba(0, 255, 0, 0.1);
+  backdrop-filter: blur(2px);
 }
 
 .battle-divider {
