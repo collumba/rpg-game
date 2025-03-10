@@ -1508,6 +1508,8 @@ body {
   width: 80px;
   height: 80px;
   margin: 5px auto;
+  cursor: help;
+  position: relative;
 }
 
 .battle-character.boss .character-profile-image {
@@ -1520,4 +1522,70 @@ body {
 .character-card.selected .character-profile-image {
   box-shadow: 0 0 20px var(--shadow-glow);
   transform: scale(1.05);
+}
+
+.battle-character .character-abilities {
+  display: none;
+}
+
+.battle-character .character-profile-image::after {
+  content: attr(data-abilities);
+  visibility: hidden;
+  width: 280px;
+  background-color: var(--bg-darker);
+  color: var(--text-primary);
+  text-align: left;
+  border-radius: 6px;
+  padding: 15px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-size: 0.9em;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 8px var(--shadow-normal);
+  pointer-events: none;
+  border: 1px solid var(--border-gold);
+}
+
+.battle-character .character-profile-image::before {
+  content: "";
+  visibility: hidden;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--border-gold) transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  z-index: 1001;
+}
+
+.battle-character .character-profile-image:hover::after,
+.battle-character .character-profile-image:hover::before {
+  visibility: visible;
+  opacity: 1;
+}
+
+.battle-character .character-profile-image strong {
+  color: var(--text-gold);
+  display: inline-block;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+/* Ajuste para o tooltip do chefe */
+.battle-character.boss .character-profile-image::after {
+  border-color: var(--border-danger);
+  box-shadow: 0 4px 8px var(--shadow-danger);
+}
+
+.battle-character.boss .character-profile-image::before {
+  border-top-color: var(--border-danger);
 }

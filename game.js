@@ -209,6 +209,16 @@ document.addEventListener("DOMContentLoaded", () => {
     damageSplit: "Divide o próximo dano com um aliado",
   };
 
+  // Função para escapar texto para uso em atributos HTML
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function createCharacterCard(character) {
     const card = document.createElement("div");
     card.className = "character-card";
@@ -411,15 +421,21 @@ document.addEventListener("DOMContentLoaded", () => {
       attack: (character.stats.attack / character.stats.maxAttack) * 100,
     };
 
+    // Cria o texto das habilidades para o tooltip
+    const abilitiesText = escapeHtml(`
+      <strong>Passiva:</strong> ${character.abilities.passive}
+      <br><br>
+      <strong>Ativa:</strong> ${character.abilities.active}
+    `);
+
     battleCharacter.innerHTML = `
       <div class="attack-display">
         <div class="stat-icon">⚔️</div>
         <span>${character.stats.attack}</span>
       </div>
-      <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image">
+      <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image" data-abilities='${abilitiesText}'>
       <div class="character-emoji">${character.emoji}</div>
       <div class="character-name">${character.name}</div>
-      <div class="character-description">${character.description}</div>
       <div class="character-stats">
         <div class="stat-row">
           <div class="stat-icon tooltip">
@@ -441,10 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
           </div>
         </div>
-      </div>
-      <div class="character-abilities">
-        <div><strong>Passiva:</strong> ${character.abilities.passive}</div>
-        <div><strong>Ativa:</strong> ${character.abilities.active}</div>
       </div>
     `;
 
