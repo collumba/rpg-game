@@ -1015,6 +1015,15 @@ document.addEventListener("DOMContentLoaded", () => {
       `.battle-character[data-name="${character.name}"]`
     );
 
+    // Verifica se a habilidade já foi usada neste turno
+    if (characterElement.dataset.usedSkill === "true") {
+      showBattleMessage(
+        `${character.name} já usou sua habilidade neste turno!`,
+        "team"
+      );
+      return;
+    }
+
     // Inicia a animação de habilidade
     characterElement.classList.add("using-skill");
 
@@ -1022,6 +1031,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const skillExecuted = executeActiveAbility(character);
 
     if (skillExecuted) {
+      // Marca a habilidade como usada neste turno
+      characterElement.dataset.usedSkill = "true";
+
       // Remove a classe de animação após um tempo
       setTimeout(() => {
         characterElement.classList.remove("using-skill");
@@ -1422,11 +1434,12 @@ document.addEventListener("DOMContentLoaded", () => {
     teamActionsCompleted = false;
     currentTurn++;
 
-    // Reseta o estado de ação para todos os personagens
+    // Reseta o estado de ação e habilidades usadas para todos os personagens
     document
       .querySelectorAll(".player-team .battle-character")
       .forEach((char) => {
         char.dataset.acted = "false";
+        char.dataset.usedSkill = "false"; // Reset do controle de habilidade
       });
 
     // Atualiza o estado dos botões no início do novo turno
