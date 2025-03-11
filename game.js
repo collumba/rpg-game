@@ -1412,8 +1412,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           target.stats.hp = Math.floor(target.stats.maxHp * 0.5);
           character.stats.mana -= manaCost;
-          updateCharacterHP(target);
-          updateCharacterVisuals(target);
+          updateCharacterHP(target); // Atualiza o HP do alvo
+          updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
           showBattleMessage(
             `${character.name} reviveu ${target.name} com Milagre da Luz!`,
             "team"
@@ -1515,8 +1515,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           target.stats.hp = Math.floor(target.stats.maxHp * 0.25);
           character.stats.mana -= manaCost;
-          updateCharacterHP(target);
-          updateCharacterVisuals(target);
+          updateCharacterHP(target); // Atualiza o HP do alvo
+          updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
           showBattleMessage(
             `${character.name} reviveu ${target.name} com Chamado dos Mortos!`,
             "team"
