@@ -1,7 +1,82 @@
+:root {
+  --primary-color: #4a90e2;
+  --primary-hover: #357abd;
+  --primary-dark: #1a1a2e;
+  --primary-medium: #16213e;
+  --primary-darker: #0f172a;
+  --text-primary: #ffffff;
+  --text-gold: #ffd700;
+  --bg-darker: #0a0a1a;
+  --bg-primary: #1a1a2e;
+  --bg-highlight: #2a2a4e;
+  --border-gold: #ffd700;
+  --glow-gold: rgba(255, 215, 0, 0.3);
+  --shadow-normal: rgba(0, 0, 0, 0.2);
+  --shadow-hover: rgba(0, 0, 0, 0.3);
+  --shadow-active: rgba(0, 0, 0, 0.1);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Scene Management System */
+.scene-manager {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.scene {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+}
+
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scene.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scene.fade-in {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Title Scene */
+.title-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+}
+
+.game-title {
+  font-size: 4em;
+  margin-bottom: 0.5em;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.game-subtitle {
+  font-size: 1.5em;
+  margin-bottom: 2em;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 body {
@@ -14,34 +89,11 @@ body {
 .game-container {
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    180deg,
-    var(--primary-dark) 0%,
-    var(--primary-medium) 40%,
-    var(--primary-darker) 100%
-  );
+  background: var(--bg-darker);
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* Adiciona elementos decorativos da floresta usando pseudo-elementos */
-.game-container::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: repeating-linear-gradient(
-    80deg,
-    var(--primary-darker) 0px,
-    var(--primary-darker) 20px,
-    transparent 20px,
-    transparent 40px
-  );
-  opacity: 0.3;
 }
 
 .start-button {
@@ -1589,4 +1641,127 @@ body {
 
 .battle-character.boss .character-profile-image::before {
   border-top-color: var(--border-danger);
+}
+
+/* Sistema de Cenas */
+.scene-manager {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  z-index: 10;
+}
+
+.scene.active {
+  display: block;
+  opacity: 1;
+  z-index: 20;
+}
+
+.scene.fade-in {
+  animation: fadeIn 0.6s ease-in-out forwards;
+}
+
+.scene.fade-out {
+  animation: fadeOut 0.6s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Cena de Título */
+.title-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),
+    /* url("https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80") */
+      url(./assets/scenery/battleground.jpg) no-repeat center center;
+  background-size: cover;
+  width: 100%;
+}
+
+.game-title {
+  font-size: 4rem;
+  color: var(--text-gold);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px var(--glow-gold);
+  animation: pulse 2s infinite;
+}
+
+.game-subtitle {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 3rem;
+}
+
+/* Ajustes para a tela de seleção de personagens */
+#characterSelectionScene .character-selection {
+  display: block;
+}
+
+/* Ajustes para a tela de batalha */
+#battleScene .game-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Cena de Game Over */
+.game-over {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
+}
+
+.restart-button {
+  background: var(--bg-primary);
+  color: var(--text-gold);
+  border: 2px solid var(--border-gold);
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: all 0.3s;
+  border-radius: 5px;
+  box-shadow: 0 0 10px var(--glow-gold);
+}
+
+.restart-button:hover {
+  background: var(--bg-highlight);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--glow-gold);
 }

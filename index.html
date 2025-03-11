@@ -3,66 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RPG Game - Seleção de Personagens</title>
+    <title>RPG Game - Aventura Épica</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="game-container">
-      <button id="startButton" class="start-button">Iniciar Jogo</button>
-
-      <!-- Tela de Seleção de Personagens -->
-      <div id="characterSelection" class="character-selection">
-        <h1 class="selection-title">Escolha Seus Heróis</h1>
-
-        <div id="allCharacters" class="characters-grid">
-          <!-- Cards serão adicionados dinamicamente -->
-        </div>
-
-        <div class="team-selection">
-          <div id="selectedTeam" class="selected-team">
-            <!-- Slots serão criados dinamicamente -->
-          </div>
-          <button id="confirmTeam" class="confirm-team" disabled>
-            Confirmar Time
-          </button>
-        </div>
-      </div>
-
-      <!-- Tela do Jogo -->
-      <div id="gameScreen" class="game-screen">
-        <div class="game-header">
-          <h2>Batalha RPG</h2>
-          <div class="turn-info">Turno: <span id="turnCounter">1</span></div>
-        </div>
-
-        <div class="battle-area">
-          <div class="team-area player-team">
-            <!-- Personagens do jogador serão adicionados aqui -->
-          </div>
-
-          <div class="battle-divider">
-            <div class="versus-text">VS</div>
-          </div>
-
-          <div class="team-area enemy-team">
-            <!-- Inimigos serão adicionados aqui -->
+      <!-- Sistema de Cenas -->
+      <div id="sceneManager" class="scene-manager">
+        <!-- Cena Inicial -->
+        <div id="titleScene" class="scene active" data-scene="title">
+          <div class="title-content">
+            <h1 class="game-title">RPG Épico</h1>
+            <p class="game-subtitle">Uma jornada de heróis contra o mal</p>
+            <button id="startButton" class="start-button">Iniciar Jogo</button>
           </div>
         </div>
 
-        <div class="action-area">
-          <div class="character-info">
-            <!-- Informações do personagem selecionado -->
+        <!-- Cena de Seleção de Personagens -->
+        <div
+          id="characterSelectionScene"
+          class="scene"
+          data-scene="characterSelection"
+        >
+          <div class="character-selection">
+            <h1 class="selection-title">Escolha Seus Heróis</h1>
+
+            <div id="allCharacters" class="characters-grid">
+              <!-- Cards serão adicionados dinamicamente -->
+            </div>
+
+            <div class="team-selection">
+              <div id="selectedTeam" class="selected-team">
+                <!-- Slots serão criados dinamicamente -->
+              </div>
+              <button id="confirmTeam" class="confirm-team" disabled>
+                Confirmar Time
+              </button>
+            </div>
           </div>
-          <div class="action-buttons">
-            <button id="attackButton" class="action-button">Atacar</button>
-            <button id="skillButton" class="action-button">
-              Usar Habilidade
+        </div>
+
+        <!-- Cena de Batalha -->
+        <div id="battleScene" class="scene" data-scene="battle">
+          <div class="game-screen">
+            <div class="game-header">
+              <h2>Batalha RPG</h2>
+              <div class="turn-info">
+                Turno: <span id="turnCounter">1</span>
+              </div>
+            </div>
+
+            <div class="battle-area">
+              <div class="team-area player-team">
+                <!-- Personagens do jogador serão adicionados aqui -->
+              </div>
+
+              <div class="battle-divider">
+                <div class="versus-text">VS</div>
+              </div>
+
+              <div class="team-area enemy-team">
+                <!-- Inimigos serão adicionados aqui -->
+              </div>
+            </div>
+
+            <div class="action-area">
+              <div class="character-info">
+                <!-- Informações do personagem selecionado -->
+              </div>
+              <div class="action-buttons">
+                <button id="attackButton" class="action-button">Atacar</button>
+                <button id="skillButton" class="action-button">
+                  Usar Habilidade
+                </button>
+                <button id="passButton" class="action-button">Passar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cena de Fim de Jogo -->
+        <div id="gameOverScene" class="scene" data-scene="gameOver">
+          <div class="game-over">
+            <h2 id="gameResultMessage">Resultado do Jogo</h2>
+            <button id="restartButton" class="restart-button">
+              Jogar Novamente
             </button>
-            <button id="passButton" class="action-button">Passar</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="scenes.js"></script>
+    <script src="debug.js"></script>
     <script src="game.js"></script>
   </body>
 </html>

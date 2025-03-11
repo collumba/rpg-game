@@ -15,79 +15,37 @@ let battleLog = [];
 let targetSelectionActive = false;
 let targetSelectionCallback = null;
 
-// Função para configurar os botões principais
+document.addEventListener("DOMContentLoaded", function() {
+  // Inicializa o jogo
+  initializeTeamSlots();
+  initializeCharacterCards();
+  setupActionButtons();
+  setupMainButtons();
+});
+
+// Configura os botões principais
 function setupMainButtons() {
-  console.log("Configurando botões principais...");
-
-  // Verifica se o SceneManager está disponível
-  if (!window.sceneManager) {
-    console.error(
-      "SceneManager não está disponível! Tentando novamente em 500ms..."
-    );
-    setTimeout(setupMainButtons, 500);
-    return;
-  }
-
   // Botão de iniciar jogo (tela inicial -> seleção de personagens)
-  const startButton = document.getElementById("startButton");
-  if (startButton) {
-    console.log("Adicionando evento de clique ao botão de iniciar jogo");
-
-    // Remove listeners anteriores para evitar duplicação
-    startButton.replaceWith(startButton.cloneNode(true));
-    const newStartButton = document.getElementById("startButton");
-
-    newStartButton.addEventListener("click", () => {
-      console.log("Botão de iniciar jogo clicado");
-      window.sceneManager.transitionTo("characterSelection");
-    });
-  } else {
-    console.error("Botão de iniciar jogo não encontrado!");
-  }
-
+  document.getElementById("startButton").addEventListener("click", () => {
+    sceneManager.transitionTo("characterSelection");
+  });
+  
   // Botão de confirmar time (seleção de personagens -> batalha)
-  const confirmTeam = document.getElementById("confirmTeam");
-  if (confirmTeam) {
-    console.log("Adicionando evento de clique ao botão de confirmar time");
-
-    // Remove listeners anteriores para evitar duplicação
-    confirmTeam.replaceWith(confirmTeam.cloneNode(true));
-    const newConfirmTeam = document.getElementById("confirmTeam");
-
-    newConfirmTeam.addEventListener("click", () => {
-      console.log("Botão de confirmar time clicado");
-      if (selectedCharacters.length > 0) {
-        window.sceneManager.transitionTo("battle", initializeBattle);
-      } else {
-        alert("Selecione pelo menos um personagem para seu time!");
-      }
-    });
-  } else {
-    console.error("Botão de confirmar time não encontrado!");
-  }
-
+  document.getElementById("confirmTeam").addEventListener("click", () => {
+    if (selectedCharacters.length > 0) {
+      sceneManager.transitionTo("battle", initializeBattle);
+    } else {
+      alert("Selecione pelo menos um personagem para seu time!");
+    }
+  });
+  
   // Botão de reiniciar jogo (game over -> tela inicial)
-  const restartButton = document.getElementById("restartButton");
-  if (restartButton) {
-    console.log("Adicionando evento de clique ao botão de reiniciar jogo");
-
-    // Remove listeners anteriores para evitar duplicação
-    restartButton.replaceWith(restartButton.cloneNode(true));
-    const newRestartButton = document.getElementById("restartButton");
-
-    newRestartButton.addEventListener("click", () => {
-      console.log("Botão de reiniciar jogo clicado");
-      resetGame();
-      window.sceneManager.transitionTo("title");
-    });
-  } else {
-    console.error("Botão de reiniciar jogo não encontrado!");
-  }
-
-  console.log("Botões principais configurados com sucesso!");
+  document.getElementById("restartButton").addEventListener("click", () => {
+    resetGame();
+    sceneManager.transitionTo("title");
+  });
 }
 
-// Função para resetar o jogo
 function resetGame() {
   // Reseta o estado do jogo
   selectedCharacters = [];
@@ -95,37 +53,22 @@ function resetGame() {
   currentCharacterIndex = 0;
   teamActionsCompleted = false;
   currentTurn = 1;
-
+  
   // Limpa as áreas de personagens
   document.querySelector(".player-team").innerHTML = "";
   document.querySelector(".enemy-team").innerHTML = "";
-
+  
   // Reseta a seleção de personagens
-  document.querySelectorAll(".character-card").forEach((card) => {
+  document.querySelectorAll(".character-card").forEach(card => {
     card.classList.remove("selected");
   });
-
+  
   // Limpa os slots do time
   updateTeamDisplay();
-
+  
   // Desabilita o botão de confirmar time
   document.getElementById("confirmTeam").disabled = true;
 }
-
-// Event Listeners
-document.addEventListener("DOMContentLoaded", () => {
-  // Inicializa os slots do time
-  initializeTeamSlots();
-
-  // Inicializa os cards de personagens
-  initializeCharacterCards();
-
-  // Configura os botões de ação
-  setupActionButtons();
-
-  // Configura os botões principais
-  setupMainButtons();
-});
 
 const characters = {
   melee: [
@@ -134,7 +77,6 @@ const characters = {
       emoji: "🛡️⚔️",
       description: "Equilibrado, com alta defesa e bom ataque físico.",
       stats: { hp: 10, mana: 4, attack: 4 },
-      avatar: "warrior.png",
       abilities: {
         passive:
           "Guardião Resoluto: Tem chance de negar o ataque do chefe (20%).",
@@ -148,7 +90,6 @@ const characters = {
       description:
         "Ataque brutal, baixa defesa, sacrifica vida por dano extra.",
       stats: { hp: 9, mana: 3, attack: 5 },
-      avatar: "berserker.png",
       abilities: {
         passive:
           "Fúria Incontrolável: Ganha pontos de ataque ao ser atacado (10% de chance).",
@@ -161,7 +102,6 @@ const characters = {
       emoji: "🏇⚔️",
       description: "Tanque com armadura pesada, proteção para aliados.",
       stats: { hp: 11, mana: 5, attack: 3 },
-      avatar: "knight.png",
       abilities: {
         passive:
           "Sacrifício Honrado: Tem chance de tomar o ataque do chefe no lugar de um aliado (25%).",
@@ -174,7 +114,6 @@ const characters = {
       emoji: "✨⚔️",
       description: "Guerreiro sagrado, combina dano com cura e buffs.",
       stats: { hp: 8, mana: 6, attack: 3 },
-      avatar: "paladin.png",
       abilities: {
         passive:
           "Bênção Divina: Tem chance de curar um aliado ao receber dano (15% de chance, +2 HP).",
@@ -185,9 +124,9 @@ const characters = {
     {
       name: "Ladino",
       emoji: "🏹🗡️",
-      description: "Rápido, furtivo, especialista em golpes críticos e evasão.",
+      description:
+        "Rápido, furtivo, especialista em golpes críticos e evasão.",
       stats: { hp: 7, mana: 4, attack: 4 },
-      avatar: "rogue.png",
       abilities: {
         passive:
           "Golpe Sorrateiro: Tem chance de atacar em conjunto com um aliado (20%).",
@@ -200,7 +139,6 @@ const characters = {
       emoji: "🥋✊",
       description: "Lutador sem armas ou com bastões, resistência elevada.",
       stats: { hp: 8, mana: 5, attack: 4 },
-      avatar: "monk.png",
       abilities: {
         passive:
           "Mente Tranquila: Tem chance de negar um ataque do chefe (15%).",
@@ -215,7 +153,6 @@ const characters = {
       emoji: "🏹",
       description: "Especialista em combate à distância com alta precisão.",
       stats: { hp: 6, mana: 4, attack: 5 },
-      avatar: "archer.png",
       abilities: {
         passive:
           "Disparo Sincronizado: Tem chance de atacar em conjunto com um aliado (15%).",
@@ -228,7 +165,6 @@ const characters = {
       emoji: "🐺🏹",
       description: "Domina bestas e armadilhas, bom em combate na natureza.",
       stats: { hp: 7, mana: 5, attack: 4 },
-      avatar: "hunter.png",
       abilities: {
         passive:
           "Instinto Selvagem: Tem chance de ganhar pontos de ataque ao ser atacado (10%).",
@@ -242,7 +178,6 @@ const characters = {
       description:
         "Mistura de arqueiro e guerreiro com armas de fogo rudimentares.",
       stats: { hp: 6, mana: 4, attack: 5 },
-      avatar: "marksman.png",
       abilities: {
         passive:
           "Tática Estratégica: Tem chance de aumentar o ataque de um aliado quando atacado (15%).",
@@ -258,7 +193,6 @@ const characters = {
       description:
         "Mestre dos elementos, ataques devastadores de longo alcance.",
       stats: { hp: 6, mana: 10, attack: 6 },
-      avatar: "wizard.png",
       abilities: {
         passive:
           "Potencial Arcano: Tem chance de aumentar o ataque de um aliado quando atacado (15%).",
@@ -271,7 +205,6 @@ const characters = {
       emoji: "☠️🖤",
       description: "Controla mortos-vivos e magias sombrias.",
       stats: { hp: 7, mana: 9, attack: 4 },
-      avatar: "necromancer.png",
       abilities: {
         passive:
           "Ritual Sombrio: Tem chance de curar um aliado quando recebe dano (10%).",
@@ -286,7 +219,6 @@ const characters = {
       emoji: "⛪⚕️",
       description: "Cura e protege aliados com magia sagrada.",
       stats: { hp: 7, mana: 9, attack: 2 },
-      avatar: "priest.png",
       abilities: {
         passive:
           "Mãos Abençoadas: Tem chance de curar um aliado ao ser atacado (20%).",
@@ -299,7 +231,6 @@ const characters = {
       emoji: "🌪️🌀",
       description: "Usa espíritos e magia ancestral para fortalecer aliados.",
       stats: { hp: 8, mana: 8, attack: 3 },
-      avatar: "shaman.png",
       abilities: {
         passive:
           "Espírito Guerreiro: Tem chance de aumentar o ataque de um aliado ao ser atacado (15%).",
@@ -358,7 +289,8 @@ function createCharacterCard(character) {
 
   // Adiciona maxStats ao personagem se não existir
   if (!character.stats.maxHp) character.stats.maxHp = character.stats.hp;
-  if (!character.stats.maxMana) character.stats.maxMana = character.stats.mana;
+  if (!character.stats.maxMana)
+    character.stats.maxMana = character.stats.mana;
   if (!character.stats.maxAttack)
     character.stats.maxAttack = character.stats.attack;
 
@@ -369,7 +301,7 @@ function createCharacterCard(character) {
   };
 
   card.innerHTML = `
-    <img src="assets/characters/${character.avatar}" alt="${character.name}" class="character-profile-image">
+    <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image">
     <div class="character-emoji">${character.emoji}</div>
     <div class="character-name">${character.name}</div>
     <div class="character-description">${character.description}</div>
@@ -443,8 +375,8 @@ function updateTeamDisplay() {
       const char = selectedCharacters[index];
       slot.innerHTML = `
         <img src="assets/characters/${
-          char.avatar
-        }" class="character-profile-image" alt="${char.name}">
+          char.name
+        }.png" class="character-profile-image" alt="${char.name}">
         <button class="remove-character" onclick="event.stopPropagation()">×</button>
         <span class="slot-number">${index + 1}</span>
       `;
@@ -494,7 +426,9 @@ function initializeCharacterCards() {
   allCharacters.forEach((char) => {
     const card = createCharacterCard(char);
     card.dataset.name = char.name;
-    card.addEventListener("click", () => toggleCharacterSelection(card, char));
+    card.addEventListener("click", () =>
+      toggleCharacterSelection(card, char)
+    );
     allCharactersContainer.appendChild(card);
   });
 }
@@ -517,19 +451,9 @@ startButton.addEventListener("click", () => {
 
 // Função para iniciar o jogo após confirmar o time
 function startGame() {
-  console.log("Função startGame chamada");
-
   if (selectedCharacters.length > 0) {
-    console.log("Iniciando jogo com", selectedCharacters.length, "personagens");
-
-    if (window.sceneManager) {
-      window.sceneManager.transitionTo("battle", initializeBattle);
-    } else {
-      console.error("SceneManager não está disponível!");
-      alert("Erro ao iniciar o jogo. Por favor, recarregue a página.");
-    }
+    sceneManager.transitionTo("battle", initializeBattle);
   } else {
-    console.warn("Tentativa de iniciar jogo sem personagens selecionados");
     alert("Selecione pelo menos um personagem para seu time!");
   }
 }
@@ -545,7 +469,8 @@ function createBattleCharacter(character) {
 
   // Garante que os valores máximos existam
   if (!character.stats.maxHp) character.stats.maxHp = character.stats.hp;
-  if (!character.stats.maxMana) character.stats.maxMana = character.stats.mana;
+  if (!character.stats.maxMana)
+    character.stats.maxMana = character.stats.mana;
   if (!character.stats.maxAttack)
     character.stats.maxAttack = character.stats.attack;
 
@@ -567,7 +492,7 @@ function createBattleCharacter(character) {
       <div class="stat-icon">⚔️</div>
       <span>${character.stats.attack}</span>
     </div>
-    <img src="assets/characters/${character.avatar}" alt="${character.name}" class="character-profile-image" data-abilities='${abilitiesText}'>
+    <img src="assets/characters/${character.name}.png" alt="${character.name}" class="character-profile-image" data-abilities='${abilitiesText}'>
     <div class="character-emoji">${character.emoji}</div>
     <div class="character-name">${character.name}</div>
     <div class="character-stats">
@@ -603,7 +528,8 @@ const bosses = [
     name: "Cavaleiro do Fim",
     emoji: "⚔️",
     avatar: "cavaleiro-do-fim.jpg",
-    description: "Um guerreiro espectral que traz o apocalipse em sua lâmina.",
+    description:
+      "Um guerreiro espectral que traz o apocalipse em sua lâmina.",
     stats: {
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
@@ -638,7 +564,8 @@ const bosses = [
     name: "Necromante Eterno Malakar",
     emoji: "☠️",
     avatar: "necromante-eterno-malakar.jpg",
-    description: "Um mestre da magia negra que comanda um exército de mortos.",
+    description:
+      "Um mestre da magia negra que comanda um exército de mortos.",
     stats: {
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
@@ -943,17 +870,7 @@ function setupActionButtons() {
   actionArea.insertBefore(abilitiesDisplay, actionArea.firstChild);
 
   const actionButtons = document.querySelectorAll(".action-button");
-
-  // Remover ouvintes de eventos anteriores para evitar duplicação
   actionButtons.forEach((button) => {
-    const newButton = button.cloneNode(true); // Clona o botão
-    button.parentNode.replaceChild(newButton, button); // Substitui o botão antigo pelo novo
-  });
-
-  // Re-obter os botões após a substituição
-  const updatedActionButtons = document.querySelectorAll(".action-button");
-
-  updatedActionButtons.forEach((button) => {
     const action = button.id.replace("Button", "").toLowerCase();
     button.dataset.action = action;
 
@@ -1453,39 +1370,42 @@ function performSkill(character) {
   }
 
   // Inicia a seleção de alvo
-  const targetingStarted = setupTargetSelection(character, (selectedTarget) => {
-    if (
-      selectedTarget === null &&
-      character.name !== "Berserker" &&
-      character.name !== "Ladino" &&
-      character.name !== "Caçador" &&
-      character.name !== "Cavaleiro"
-    ) {
-      return; // Cancela a habilidade se não houver alvo selecionado
-    }
-
-    // Inicia a animação de habilidade
-    characterElement.classList.add("using-skill");
-
-    // Executa a habilidade com o alvo selecionado
-    const skillExecuted = executeActiveAbility(character, selectedTarget);
-
-    if (skillExecuted) {
-      characterElement.dataset.usedSkill = "true";
-      setTimeout(() => {
-        characterElement.classList.remove("using-skill");
-      }, 500);
-
-      if (currentBoss.stats.hp <= 0) {
-        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
-        setTimeout(() => {
-          transitionToNextPhase();
-        }, 1500);
+  const targetingStarted = setupTargetSelection(
+    character,
+    (selectedTarget) => {
+      if (
+        selectedTarget === null &&
+        character.name !== "Berserker" &&
+        character.name !== "Ladino" &&
+        character.name !== "Caçador" &&
+        character.name !== "Cavaleiro"
+      ) {
+        return; // Cancela a habilidade se não houver alvo selecionado
       }
-    } else {
-      characterElement.classList.remove("using-skill");
+
+      // Inicia a animação de habilidade
+      characterElement.classList.add("using-skill");
+
+      // Executa a habilidade com o alvo selecionado
+      const skillExecuted = executeActiveAbility(character, selectedTarget);
+
+      if (skillExecuted) {
+        characterElement.dataset.usedSkill = "true";
+        setTimeout(() => {
+          characterElement.classList.remove("using-skill");
+        }, 500);
+
+        if (currentBoss.stats.hp <= 0) {
+          showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
+          setTimeout(() => {
+            transitionToNextPhase();
+          }, 1500);
+        }
+      } else {
+        characterElement.classList.remove("using-skill");
+      }
     }
-  });
+  );
 
   // Se não foi possível iniciar a seleção de alvo (não há alvos válidos)
   if (targetingStarted === false) {
@@ -1543,612 +1463,639 @@ function executeActiveAbility(character, target) {
       break;
 
     case "Paladino":
-      if (character.stats.mana >= manaCost && target && target.stats.hp <= 0) {
-        target.stats.hp = Math.floor(target.stats.maxHp * 0.5);
-        character.stats.mana -= manaCost;
-        updateCharacterHP(target); // Atualiza o HP do alvo
-        updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
-        showBattleMessage(
-          `${character.name} reviveu ${target.name} com Milagre da Luz!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Ladino":
-      if (character.stats.mana >= manaCost) {
-        character.stats.mana -= manaCost;
-        currentBoss.activeEffects = currentBoss.activeEffects || {};
-        currentBoss.activeEffects.weakened = 1;
-        showBattleMessage(
-          `${character.name} enfraqueceu ${currentBoss.name} com Veneno Debilitante!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Monge":
-      if (character.stats.mana >= manaCost && target) {
-        const tempHP = character.stats.hp;
-        character.stats.hp = target.stats.hp;
-        target.stats.hp = tempHP;
-        character.stats.mana -= manaCost;
-        updateCharacterHP(character);
-        updateCharacterHP(target);
-        showBattleMessage(
-          `${character.name} trocou HP com ${target.name} usando Equilíbrio Vital!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Arqueiro":
-      if (character.stats.mana >= manaCost && target) {
-        target.activeEffects = target.activeEffects || {};
-        target.activeEffects.doubleDamage = 1;
-        character.stats.mana -= manaCost;
-        showBattleMessage(
-          `${character.name} dobrou o dano de ${target.name} com Tiro Preciso!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Caçador":
-      if (character.stats.mana >= manaCost) {
-        character.stats.mana -= manaCost;
-        currentBoss.activeEffects = currentBoss.activeEffects || {};
-        currentBoss.activeEffects.stunned = 1;
-        showBattleMessage(
-          `${character.name} impediu ${currentBoss.name} de atacar com Armadilha Espiritual!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Mosqueteiro":
-      if (character.stats.mana >= manaCost && target) {
-        const combinedDamage = character.stats.attack + target.stats.attack;
-        currentBoss.stats.hp = Math.max(
-          0,
-          currentBoss.stats.hp - combinedDamage
-        );
-        character.stats.mana -= manaCost;
-        updateBossHP();
-        showBattleMessage(
-          `${character.name} e ${target.name} causaram ${combinedDamage} de dano com Disparo Coordenado!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Mago":
-      if (character.stats.mana >= manaCost && target) {
-        target.activeEffects = target.activeEffects || {};
-        target.activeEffects.doubleDamage = 1;
-        character.stats.mana -= manaCost;
-        showBattleMessage(
-          `${character.name} dobrou o dano de ${target.name} com Explosão Mágica!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Necromante":
-      if (character.stats.mana >= manaCost && target && target.stats.hp <= 0) {
-        target.stats.hp = Math.floor(target.stats.maxHp * 0.25);
-        character.stats.mana -= manaCost;
-        updateCharacterHP(target); // Atualiza o HP do alvo
-        updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
-        showBattleMessage(
-          `${character.name} reviveu ${target.name} com Chamado dos Mortos!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Clérigo":
       if (
         character.stats.mana >= manaCost &&
         target &&
-        target.stats.hp < target.stats.maxHp
+        target.stats.hp <= 0
       ) {
-        target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
-        character.stats.mana -= manaCost;
-        updateCharacterHP(target);
-        showBattleMessage(
-          `${character.name} curou ${target.name} com Luz Restauradora!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-
-    case "Xamã":
-      if (character.stats.mana >= manaCost && target) {
-        target.activeEffects = target.activeEffects || {};
-        target.activeEffects.shield = 1;
-        character.stats.mana -= manaCost;
-        showBattleMessage(
-          `${character.name} protegeu ${target.name} com Proteção Ancestral!`,
-          "team"
-        );
-        executed = true;
-      }
-      break;
-  }
-
-  if (executed) {
-    updateCharacterMana(character);
-    updateEffectsDisplay(character);
-    if (target) {
-      updateEffectsDisplay(target);
-    }
-    if (
-      currentBoss.activeEffects &&
-      Object.keys(currentBoss.activeEffects).length > 0
-    ) {
-      updateBossEffectsDisplay();
-    }
-  }
-
-  return executed;
-}
-
-// Função para atualizar a exibição dos efeitos do chefe
-function updateBossEffectsDisplay() {
-  const bossElement = document.querySelector(".enemy-team .battle-character");
-  if (!bossElement || !currentBoss.activeEffects) return;
-
-  // Remove a exibição anterior de efeitos
-  const oldEffectsDisplay = bossElement.querySelector(".active-effects");
-  if (oldEffectsDisplay) {
-    oldEffectsDisplay.remove();
-  }
-
-  // Se não houver efeitos ativos, retorna
-  if (Object.keys(currentBoss.activeEffects).length === 0) {
-    return;
-  }
-
-  // Cria o container de efeitos
-  const effectsDisplay = document.createElement("div");
-  effectsDisplay.className = "active-effects boss-effects";
-
-  // Adiciona cada efeito ativo
-  for (const [effect, value] of Object.entries(currentBoss.activeEffects)) {
-    if (value) {
-      const effectIcon = document.createElement("div");
-      effectIcon.className = "effect-icon tooltip";
-      effectIcon.innerHTML = `
-        ${EFFECT_ICONS[effect]}
-        <span class="tooltip-text">${EFFECT_DESCRIPTIONS[effect]}</span>
-      `;
-      effectsDisplay.appendChild(effectIcon);
-    }
-  }
-
-  // Insere o display de efeitos após o emoji do chefe
-  const emojiElement = bossElement.querySelector(".boss-emoji");
-  emojiElement.insertAdjacentElement("afterend", effectsDisplay);
-}
-
-function findNextLiveCharacter(startIndex) {
-  for (let i = startIndex; i < selectedCharacters.length; i++) {
-    if (selectedCharacters[i].stats.hp > 0) {
-      return i;
-    }
-  }
-  return -1; // Retorna -1 se não encontrar nenhum personagem vivo
-}
-
-function nextCharacterTurn() {
-  // Marca o personagem atual como tendo agido
-  const currentCharElement = document.querySelector(
-    `.battle-character[data-name="${selectedCharacters[currentCharacterIndex].name}"]`
-  );
-  if (currentCharElement) {
-    currentCharElement.dataset.acted = "true";
-  }
-
-  let nextIndex = currentCharacterIndex + 1;
-  let foundNextCharacter = false;
-
-  // Procura o próximo personagem vivo que ainda não agiu
-  while (nextIndex < selectedCharacters.length) {
-    if (selectedCharacters[nextIndex].stats.hp > 0) {
-      const nextCharElement = document.querySelector(
-        `.battle-character[data-name="${selectedCharacters[nextIndex].name}"]`
-      );
-      if (nextCharElement && nextCharElement.dataset.acted !== "true") {
-        foundNextCharacter = true;
+      case "Paladino":
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp <= 0
+        ) {
+          target.stats.hp = Math.floor(target.stats.maxHp * 0.5);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target); // Atualiza o HP do alvo
+          updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
+          showBattleMessage(
+            `${character.name} reviveu ${target.name} com Milagre da Luz!`,
+            "team"
+          );
+          executed = true;
+        }
         break;
+
+      case "Ladino":
+        if (character.stats.mana >= manaCost) {
+          character.stats.mana -= manaCost;
+          currentBoss.activeEffects = currentBoss.activeEffects || {};
+          currentBoss.activeEffects.weakened = 1;
+          showBattleMessage(
+            `${character.name} enfraqueceu ${currentBoss.name} com Veneno Debilitante!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Monge":
+        if (character.stats.mana >= manaCost && target) {
+          const tempHP = character.stats.hp;
+          character.stats.hp = target.stats.hp;
+          target.stats.hp = tempHP;
+          character.stats.mana -= manaCost;
+          updateCharacterHP(character);
+          updateCharacterHP(target);
+          showBattleMessage(
+            `${character.name} trocou HP com ${target.name} usando Equilíbrio Vital!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Arqueiro":
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.doubleDamage = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} dobrou o dano de ${target.name} com Tiro Preciso!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Caçador":
+        if (character.stats.mana >= manaCost) {
+          character.stats.mana -= manaCost;
+          currentBoss.activeEffects = currentBoss.activeEffects || {};
+          currentBoss.activeEffects.stunned = 1;
+          showBattleMessage(
+            `${character.name} impediu ${currentBoss.name} de atacar com Armadilha Espiritual!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Mosqueteiro":
+        if (character.stats.mana >= manaCost && target) {
+          const combinedDamage = character.stats.attack + target.stats.attack;
+          currentBoss.stats.hp = Math.max(
+            0,
+            currentBoss.stats.hp - combinedDamage
+          );
+          character.stats.mana -= manaCost;
+          updateBossHP();
+          showBattleMessage(
+            `${character.name} e ${target.name} causaram ${combinedDamage} de dano com Disparo Coordenado!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Mago":
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.doubleDamage = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} dobrou o dano de ${target.name} com Explosão Mágica!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Necromante":
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp <= 0
+        ) {
+          target.stats.hp = Math.floor(target.stats.maxHp * 0.25);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target); // Atualiza o HP do alvo
+          updateCharacterVisuals(target); // Atualiza a exibição visual do alvo
+          showBattleMessage(
+            `${character.name} reviveu ${target.name} com Chamado dos Mortos!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Clérigo":
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp < target.stats.maxHp
+        ) {
+          target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
+          character.stats.mana -= manaCost;
+          updateCharacterHP(target);
+          showBattleMessage(
+            `${character.name} curou ${target.name} com Luz Restauradora!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+
+      case "Xamã":
+        if (character.stats.mana >= manaCost && target) {
+          target.activeEffects = target.activeEffects || {};
+          target.activeEffects.shield = 1;
+          character.stats.mana -= manaCost;
+          showBattleMessage(
+            `${character.name} protegeu ${target.name} com Proteção Ancestral!`,
+            "team"
+          );
+          executed = true;
+        }
+        break;
+    }
+
+    if (executed) {
+      updateCharacterMana(character);
+      updateEffectsDisplay(character);
+      if (target) {
+        updateEffectsDisplay(target);
+      }
+      if (
+        currentBoss.activeEffects &&
+        Object.keys(currentBoss.activeEffects).length > 0
+      ) {
+        updateBossEffectsDisplay();
       }
     }
-    nextIndex++;
+
+    return executed;
   }
 
-  if (!foundNextCharacter) {
-    // Se não encontrou próximo personagem vivo que não agiu, inicia turno do chefe
-    teamActionsCompleted = true;
-    updateActionButtonsState();
-    updateAbilitiesDisplay();
-    setTimeout(executeBossTurn, 1000);
-  } else {
-    currentCharacterIndex = nextIndex;
-    updateTurnInfo();
-    highlightCurrentCharacter();
-    updateAbilitiesDisplay();
-  }
-}
+  // Função para atualizar a exibição dos efeitos do chefe
+  function updateBossEffectsDisplay() {
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    if (!bossElement || !currentBoss.activeEffects) return;
 
-function startNewTurn() {
-  // Procura o primeiro personagem vivo para começar o turno
-  const firstLiveIndex = findNextLiveCharacter(0);
-
-  if (firstLiveIndex === -1) {
-    // Se não houver personagens vivos, fim de jogo
-    endGame(false);
-    return;
-  }
-
-  // Reset do estado do turno
-  currentCharacterIndex = firstLiveIndex;
-  teamActionsCompleted = false;
-  currentTurn++;
-
-  // Reseta o estado de ação e habilidades usadas para todos os personagens
-  document
-    .querySelectorAll(".player-team .battle-character")
-    .forEach((char) => {
-      char.dataset.acted = "false";
-      char.dataset.usedSkill = "false"; // Reset do controle de habilidade
-    });
-
-  // Atualiza o estado dos botões no início do novo turno
-  updateActionButtonsState();
-  updateAbilitiesDisplay();
-
-  // Atualiza visualmente todos os personagens
-  selectedCharacters.forEach((char) => {
-    if (char.stats.hp <= 0) {
-      updateCharacterVisuals(char);
+    // Remove a exibição anterior de efeitos
+    const oldEffectsDisplay = bossElement.querySelector(".active-effects");
+    if (oldEffectsDisplay) {
+      oldEffectsDisplay.remove();
     }
-  });
 
-  // Limpa efeitos expirados e atualiza a exibição
-  selectedCharacters.forEach((char) => {
-    if (char.activeEffects) {
-      const hasEffects = Object.keys(char.activeEffects).length > 0;
-      if (hasEffects) {
-        updateEffectsDisplay(char);
-      }
-    }
-  });
-
-  if (currentBoss.activeEffects) {
-    const hasEffects = Object.keys(currentBoss.activeEffects).length > 0;
-    if (hasEffects) {
-      updateBossEffectsDisplay();
-    }
-  }
-
-  showBattleMessage(`Turno ${currentTurn} começou!`, "system");
-  updateTurnInfo();
-  highlightCurrentCharacter();
-}
-
-function showBattleMessage(message, type = "system") {
-  const messageArea =
-    document.querySelector(".battle-messages") || createBattleMessageArea();
-  const messageElement = document.createElement("div");
-  messageElement.className = `battle-message ${type}`;
-
-  // Adiciona ícone baseado no tipo de mensagem
-  let icon = "";
-  switch (type) {
-    case "team":
-      icon = "👥";
-      break;
-    case "boss":
-      icon = "👿";
-      break;
-    case "system":
-      icon = "🔔";
-      break;
-  }
-
-  messageElement.innerHTML = `<span class="message-icon">${icon}</span> ${message}`;
-  messageArea.appendChild(messageElement);
-
-  // Mantém apenas as últimas 50 mensagens para evitar sobrecarga de memória
-  while (messageArea.children.length > 50) {
-    messageArea.removeChild(messageArea.firstChild);
-  }
-
-  // Rola para a última mensagem com animação suave
-  messageArea.scrollTo({
-    top: messageArea.scrollHeight,
-    behavior: "smooth",
-  });
-}
-
-function createBattleMessageArea() {
-  const messageArea = document.createElement("div");
-  messageArea.className = "battle-messages";
-  document.querySelector(".game-screen").appendChild(messageArea);
-  return messageArea;
-}
-
-function updateBossHP() {
-  const bossElement = document.querySelector(".enemy-team .battle-character");
-  const hpBar = bossElement.querySelector(".hp-bar");
-  const hpValue = bossElement.querySelector(".stat-value");
-
-  // Usa maxHp para calcular a porcentagem correta
-  const percentage = (currentBoss.stats.hp / currentBoss.stats.maxHp) * 100;
-  hpBar.style.width = `${Math.max(0, percentage)}%`;
-  hpValue.textContent = `${Math.max(0, currentBoss.stats.hp)}/${
-    currentBoss.stats.maxHp
-  }`;
-}
-
-function updateCharacterHP(character) {
-  const charElement = document.querySelector(
-    `.battle-character[data-name="${character.name}"]`
-  );
-  const hpBar = charElement.querySelector(".hp-bar");
-  const hpValue = charElement.querySelector(".stat-value");
-  const percentage = (character.stats.hp / character.stats.maxHp) * 100;
-  hpBar.style.width = `${Math.max(0, percentage)}%`;
-  hpValue.textContent = `${character.stats.hp}/${character.stats.maxHp}`;
-}
-
-function updateCharacterMana(character) {
-  const charElement = document.querySelector(
-    `.battle-character[data-name="${character.name}"]`
-  );
-  const manaBar = charElement.querySelector(".mana-bar");
-  const manaValue = manaBar.parentElement.querySelector(".stat-value");
-  const percentage = (character.stats.mana / character.stats.maxMana) * 100;
-  manaBar.style.width = `${Math.max(0, percentage)}%`;
-  manaValue.textContent = `${character.stats.mana}/${character.stats.maxMana}`;
-}
-
-function handleCharacterDefeat(character, showMessage = true) {
-  if (showMessage) {
-    showBattleMessage(`${character.name} foi derrotado!`);
-  }
-
-  // Marca o personagem como derrotado visualmente
-  const charElement = document.querySelector(
-    `.battle-character[data-name="${character.name}"]`
-  );
-  charElement.classList.add("defeated");
-  charElement.style.filter = "grayscale(100%) brightness(50%)";
-  charElement.style.opacity = "0.7";
-
-  // Adiciona um ícone de morte sobre o personagem
-  const deathMark = document.createElement("div");
-  deathMark.className = "death-mark";
-  deathMark.innerHTML = "☠️";
-  deathMark.style.position = "absolute";
-  deathMark.style.top = "50%";
-  deathMark.style.left = "50%";
-  deathMark.style.transform = "translate(-50%, -50%)";
-  deathMark.style.fontSize = "2em";
-  deathMark.style.zIndex = "10";
-  charElement.style.position = "relative";
-  charElement.appendChild(deathMark);
-
-  // Verifica se ainda há personagens vivos
-  const livingCharacters = selectedCharacters.filter(
-    (char) => char.stats.hp > 0
-  );
-
-  if (livingCharacters.length === 0) {
-    setTimeout(() => endGame(false), 1500);
-  }
-}
-
-function updateCharacterVisuals(character) {
-  const charElement = document.querySelector(
-    `.battle-character[data-name="${character.name}"]`
-  );
-
-  if (character.stats.hp <= 0 && !charElement.classList.contains("defeated")) {
-    handleCharacterDefeat(character, false);
-  }
-}
-
-// Função para transição entre fases
-function transitionToNextPhase() {
-  currentBossIndex++;
-  if (currentBossIndex < bosses.length) {
-    // Limpa a área do chefe anterior
-    const enemyTeamArea = document.querySelector(".enemy-team");
-    enemyTeamArea.innerHTML = "";
-
-    // Inicializa o novo chefe
-    initializeNewBoss();
-
-    // Reseta o estado do turno
-    currentCharacterIndex = 0;
-    teamActionsCompleted = false;
-    currentTurn = 1;
-
-    // Reseta o estado de ação dos personagens
-    document
-      .querySelectorAll(".player-team .battle-character")
-      .forEach((char) => {
-        char.dataset.acted = "false";
-      });
-
-    // Atualiza a interface
-    updateTurnInfo();
-    highlightCurrentCharacter();
-    updateActionButtonsState();
-
-    showBattleMessage(
-      `Fase ${currentBoss.phase} começou! ${currentBoss.name} apareceu!`,
-      "system"
-    );
-  } else {
-    endGame(true);
-  }
-}
-
-// Função para finalizar o jogo
-function endGame(victory) {
-  const resultMessage = victory
-    ? "Parabéns! Você derrotou todos os chefes!"
-    : "Game Over! Seu time foi derrotado!";
-
-  // Atualiza a mensagem de resultado
-  document.getElementById("gameResultMessage").textContent = resultMessage;
-
-  // Transição para a cena de fim de jogo
-  sceneManager.transitionTo("gameOver");
-}
-
-// Função para executar o turno do chefe
-function executeBossTurn() {
-  if (!currentBoss || currentBoss.stats.hp <= 0) return;
-
-  const bossElement = document.querySelector(".enemy-team .battle-character");
-  bossElement.classList.add("attacking");
-
-  setTimeout(() => {
-    // Verifica se o chefe está atordoado
-    if (currentBoss.activeEffects && currentBoss.activeEffects.stunned) {
-      delete currentBoss.activeEffects.stunned;
-      updateBossEffectsDisplay();
-      showBattleMessage(
-        `${currentBoss.name} está atordoado e não pode atacar!`,
-        "boss"
-      );
-      startNewTurn();
+    // Se não houver efeitos ativos, retorna
+    if (Object.keys(currentBoss.activeEffects).length === 0) {
       return;
     }
 
-    // Seleciona um alvo aleatório vivo
-    const possibleTargets = selectedCharacters.filter(
-      (char) => char.stats.hp > 0
+    // Cria o container de efeitos
+    const effectsDisplay = document.createElement("div");
+    effectsDisplay.className = "active-effects boss-effects";
+
+    // Adiciona cada efeito ativo
+    for (const [effect, value] of Object.entries(currentBoss.activeEffects)) {
+      if (value) {
+        const effectIcon = document.createElement("div");
+        effectIcon.className = "effect-icon tooltip";
+        effectIcon.innerHTML = `
+          ${EFFECT_ICONS[effect]}
+          <span class="tooltip-text">${EFFECT_DESCRIPTIONS[effect]}</span>
+        `;
+        effectsDisplay.appendChild(effectIcon);
+      }
+    }
+
+    // Insere o display de efeitos após o emoji do chefe
+    const emojiElement = bossElement.querySelector(".boss-emoji");
+    emojiElement.insertAdjacentElement("afterend", effectsDisplay);
+  }
+
+  function findNextLiveCharacter(startIndex) {
+    for (let i = startIndex; i < selectedCharacters.length; i++) {
+      if (selectedCharacters[i].stats.hp > 0) {
+        return i;
+      }
+    }
+    return -1; // Retorna -1 se não encontrar nenhum personagem vivo
+  }
+
+  function nextCharacterTurn() {
+    // Marca o personagem atual como tendo agido
+    const currentCharElement = document.querySelector(
+      `.battle-character[data-name="${selectedCharacters[currentCharacterIndex].name}"]`
     );
-    if (possibleTargets.length === 0) {
+    if (currentCharElement) {
+      currentCharElement.dataset.acted = "true";
+    }
+
+    let nextIndex = currentCharacterIndex + 1;
+    let foundNextCharacter = false;
+
+    // Procura o próximo personagem vivo que ainda não agiu
+    while (nextIndex < selectedCharacters.length) {
+      if (selectedCharacters[nextIndex].stats.hp > 0) {
+        const nextCharElement = document.querySelector(
+          `.battle-character[data-name="${selectedCharacters[nextIndex].name}"]`
+        );
+        if (nextCharElement && nextCharElement.dataset.acted !== "true") {
+          foundNextCharacter = true;
+          break;
+        }
+      }
+      nextIndex++;
+    }
+
+    if (!foundNextCharacter) {
+      // Se não encontrou próximo personagem vivo que não agiu, inicia turno do chefe
+      teamActionsCompleted = true;
+      updateActionButtonsState();
+      updateAbilitiesDisplay();
+      setTimeout(executeBossTurn, 1000);
+    } else {
+      currentCharacterIndex = nextIndex;
+      updateTurnInfo();
+      highlightCurrentCharacter();
+      updateAbilitiesDisplay();
+    }
+  }
+
+  function startNewTurn() {
+    // Procura o primeiro personagem vivo para começar o turno
+    const firstLiveIndex = findNextLiveCharacter(0);
+
+    if (firstLiveIndex === -1) {
+      // Se não houver personagens vivos, fim de jogo
       endGame(false);
       return;
     }
 
-    const target =
-      possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
-    let damage = currentBoss.stats.attack;
+    // Reset do estado do turno
+    currentCharacterIndex = firstLiveIndex;
+    teamActionsCompleted = false;
+    currentTurn++;
 
-    // Aplica redução de dano se o chefe estiver enfraquecido
-    if (currentBoss.activeEffects && currentBoss.activeEffects.weakened) {
-      damage = Math.floor(damage * 0.7); // Reduz o dano em 30%
-      delete currentBoss.activeEffects.weakened;
-      updateBossEffectsDisplay();
-    }
+    // Reseta o estado de ação e habilidades usadas para todos os personagens
+    document
+      .querySelectorAll(".player-team .battle-character")
+      .forEach((char) => {
+        char.dataset.acted = "false";
+        char.dataset.usedSkill = "false"; // Reset do controle de habilidade
+      });
 
-    // Verifica se algum personagem vai proteger o alvo
-    let protector = null;
-    for (const char of selectedCharacters) {
-      if (char !== target && char.stats.hp > 0) {
-        const result = executePassiveAbility(char, "onAllyTargeted");
-        if (result === true) {
-          // Para outros personagens que retornam true
-          protector = char;
-          break;
-        } else if (result && typeof result === "object") {
-          // Para o Cavaleiro que retorna a si mesmo como protetor
-          protector = result;
-          break;
+    // Atualiza o estado dos botões no início do novo turno
+    updateActionButtonsState();
+    updateAbilitiesDisplay();
+
+    // Atualiza visualmente todos os personagens
+    selectedCharacters.forEach((char) => {
+      if (char.stats.hp <= 0) {
+        updateCharacterVisuals(char);
+      }
+    });
+
+    // Limpa efeitos expirados e atualiza a exibição
+    selectedCharacters.forEach((char) => {
+      if (char.activeEffects) {
+        const hasEffects = Object.keys(char.activeEffects).length > 0;
+        if (hasEffects) {
+          updateEffectsDisplay(char);
         }
+      }
+    });
+
+    if (currentBoss.activeEffects) {
+      const hasEffects = Object.keys(currentBoss.activeEffects).length > 0;
+      if (hasEffects) {
+        updateBossEffectsDisplay();
       }
     }
 
-    // Determina quem vai receber o dano
-    const finalTarget = protector || target;
-    const targetElement = document.querySelector(
-      `.battle-character[data-name="${finalTarget.name}"]`
+    showBattleMessage(`Turno ${currentTurn} começou!`, "system");
+    updateTurnInfo();
+    highlightCurrentCharacter();
+  }
+
+  function showBattleMessage(message, type = "system") {
+    const messageArea =
+      document.querySelector(".battle-messages") || createBattleMessageArea();
+    const messageElement = document.createElement("div");
+    messageElement.className = `battle-message ${type}`;
+
+    // Adiciona ícone baseado no tipo de mensagem
+    let icon = "";
+    switch (type) {
+      case "team":
+        icon = "👥";
+        break;
+      case "boss":
+        icon = "👿";
+        break;
+      case "system":
+        icon = "🔔";
+        break;
+    }
+
+    messageElement.innerHTML = `<span class="message-icon">${icon}</span> ${message}`;
+    messageArea.appendChild(messageElement);
+
+    // Mantém apenas as últimas 50 mensagens para evitar sobrecarga de memória
+    while (messageArea.children.length > 50) {
+      messageArea.removeChild(messageArea.firstChild);
+    }
+
+    // Rola para a última mensagem com animação suave
+    messageArea.scrollTo({
+      top: messageArea.scrollHeight,
+      behavior: "smooth",
+    });
+  }
+
+  function createBattleMessageArea() {
+    const messageArea = document.createElement("div");
+    messageArea.className = "battle-messages";
+    document.querySelector(".game-screen").appendChild(messageArea);
+    return messageArea;
+  }
+
+  function updateBossHP() {
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    const hpBar = bossElement.querySelector(".hp-bar");
+    const hpValue = bossElement.querySelector(".stat-value");
+
+    // Usa maxHp para calcular a porcentagem correta
+    const percentage = (currentBoss.stats.hp / currentBoss.stats.maxHp) * 100;
+    hpBar.style.width = `${Math.max(0, percentage)}%`;
+    hpValue.textContent = `${Math.max(0, currentBoss.stats.hp)}/${
+      currentBoss.stats.maxHp
+    }`;
+  }
+
+  function updateCharacterHP(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const hpBar = charElement.querySelector(".hp-bar");
+    const hpValue = charElement.querySelector(".stat-value");
+    const percentage = (character.stats.hp / character.stats.maxHp) * 100;
+    hpBar.style.width = `${Math.max(0, percentage)}%`;
+    hpValue.textContent = `${character.stats.hp}/${character.stats.maxHp}`;
+  }
+
+  function updateCharacterMana(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const manaBar = charElement.querySelector(".mana-bar");
+    const manaValue = manaBar.parentElement.querySelector(".stat-value");
+    const percentage = (character.stats.mana / character.stats.maxMana) * 100;
+    manaBar.style.width = `${Math.max(0, percentage)}%`;
+    manaValue.textContent = `${character.stats.mana}/${character.stats.maxMana}`;
+  }
+
+  function handleCharacterDefeat(character, showMessage = true) {
+    if (showMessage) {
+      showBattleMessage(`${character.name} foi derrotado!`);
+    }
+
+    // Marca o personagem como derrotado visualmente
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    charElement.classList.add("defeated");
+    charElement.style.filter = "grayscale(100%) brightness(50%)";
+    charElement.style.opacity = "0.7";
+
+    // Adiciona um ícone de morte sobre o personagem
+    const deathMark = document.createElement("div");
+    deathMark.className = "death-mark";
+    deathMark.innerHTML = "☠️";
+    deathMark.style.position = "absolute";
+    deathMark.style.top = "50%";
+    deathMark.style.left = "50%";
+    deathMark.style.transform = "translate(-50%, -50%)";
+    deathMark.style.fontSize = "2em";
+    deathMark.style.zIndex = "10";
+    charElement.style.position = "relative";
+    charElement.appendChild(deathMark);
+
+    // Verifica se ainda há personagens vivos
+    const livingCharacters = selectedCharacters.filter(
+      (char) => char.stats.hp > 0
     );
 
-    // Verifica se o alvo tem escudo
-    if (finalTarget.activeEffects && finalTarget.activeEffects.shield) {
-      delete finalTarget.activeEffects.shield;
-      updateEffectsDisplay(finalTarget);
+    if (livingCharacters.length === 0) {
+      setTimeout(() => endGame(false), 1500);
+    }
+  }
+
+  function updateCharacterVisuals(character) {
+    const charElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+
+    if (
+      character.stats.hp <= 0 &&
+      !charElement.classList.contains("defeated")
+    ) {
+      handleCharacterDefeat(character, false);
+    }
+  }
+
+  // Função para transição entre fases
+  function transitionToNextPhase() {
+    currentBossIndex++;
+    if (currentBossIndex < bosses.length) {
+      // Limpa a área do chefe anterior
+      const enemyTeamArea = document.querySelector(".enemy-team");
+      enemyTeamArea.innerHTML = "";
+
+      // Inicializa o novo chefe
+      initializeNewBoss();
+
+      // Reseta o estado do turno
+      currentCharacterIndex = 0;
+      teamActionsCompleted = false;
+      currentTurn = 1;
+
+      // Reseta o estado de ação dos personagens
+      document
+        .querySelectorAll(".player-team .battle-character")
+        .forEach((char) => {
+          char.dataset.acted = "false";
+        });
+
+      // Atualiza a interface
+      updateTurnInfo();
+      highlightCurrentCharacter();
+      updateActionButtonsState();
+
       showBattleMessage(
-        `${finalTarget.name} bloqueou o ataque com um escudo!`,
-        "team"
+        `Fase ${currentBoss.phase} começou! ${currentBoss.name} apareceu!`,
+        "system"
       );
     } else {
-      // Verifica se algum personagem vai negar o ataque
-      let attackNegated = false;
+      endGame(true);
+    }
+  }
+
+  // Função para finalizar o jogo
+  function endGame(victory) {
+    const resultMessage = victory
+      ? "Parabéns! Você derrotou todos os chefes!"
+      : "Game Over! Seu time foi derrotado!";
+
+    // Atualiza a mensagem de resultado
+    document.getElementById("gameResultMessage").textContent = resultMessage;
+
+    // Transição para a cena de fim de jogo
+    sceneManager.transitionTo("gameOver");
+  }
+
+  // Função para executar o turno do chefe
+  function executeBossTurn() {
+    if (!currentBoss || currentBoss.stats.hp <= 0) return;
+
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+    bossElement.classList.add("attacking");
+
+    setTimeout(() => {
+      // Verifica se o chefe está atordoado
+      if (currentBoss.activeEffects && currentBoss.activeEffects.stunned) {
+        delete currentBoss.activeEffects.stunned;
+        updateBossEffectsDisplay();
+        showBattleMessage(
+          `${currentBoss.name} está atordoado e não pode atacar!`,
+          "boss"
+        );
+        startNewTurn();
+        return;
+      }
+
+      // Seleciona um alvo aleatório vivo
+      const possibleTargets = selectedCharacters.filter(
+        (char) => char.stats.hp > 0
+      );
+      if (possibleTargets.length === 0) {
+        endGame(false);
+        return;
+      }
+
+      const target =
+        possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+      let damage = currentBoss.stats.attack;
+
+      // Aplica redução de dano se o chefe estiver enfraquecido
+      if (currentBoss.activeEffects && currentBoss.activeEffects.weakened) {
+        damage = Math.floor(damage * 0.7); // Reduz o dano em 30%
+        delete currentBoss.activeEffects.weakened;
+        updateBossEffectsDisplay();
+      }
+
+      // Verifica se algum personagem vai proteger o alvo
+      let protector = null;
       for (const char of selectedCharacters) {
-        if (char.stats.hp > 0) {
-          if (executePassiveAbility(char, "onBossAttack")) {
-            attackNegated = true;
+        if (char !== target && char.stats.hp > 0) {
+          const result = executePassiveAbility(char, "onAllyTargeted");
+          if (result === true) {
+            // Para outros personagens que retornam true
+            protector = char;
+            break;
+          } else if (result && typeof result === "object") {
+            // Para o Cavaleiro que retorna a si mesmo como protetor
+            protector = result;
             break;
           }
         }
       }
 
-      if (!attackNegated) {
-        // Aplica o dano
-        targetElement.classList.add("taking-damage");
+      // Determina quem vai receber o dano
+      const finalTarget = protector || target;
+      const targetElement = document.querySelector(
+        `.battle-character[data-name="${finalTarget.name}"]`
+      );
 
-        // Verifica se o alvo tem o efeito damageSplit
-        if (
-          finalTarget.activeEffects &&
-          finalTarget.activeEffects.damageSplit
-        ) {
-          // Encontra outro personagem vivo para dividir o dano
-          const otherTargets = selectedCharacters.filter(
-            (char) => char !== finalTarget && char.stats.hp > 0
-          );
-          if (otherTargets.length > 0) {
-            const splitTarget =
-              otherTargets[Math.floor(Math.random() * otherTargets.length)];
-            const splitDamage = Math.floor(damage / 2);
+      // Verifica se o alvo tem escudo
+      if (finalTarget.activeEffects && finalTarget.activeEffects.shield) {
+        delete finalTarget.activeEffects.shield;
+        updateEffectsDisplay(finalTarget);
+        showBattleMessage(
+          `${finalTarget.name} bloqueou o ataque com um escudo!`,
+          "team"
+        );
+      } else {
+        // Verifica se algum personagem vai negar o ataque
+        let attackNegated = false;
+        for (const char of selectedCharacters) {
+          if (char.stats.hp > 0) {
+            if (executePassiveAbility(char, "onBossAttack")) {
+              attackNegated = true;
+              break;
+            }
+          }
+        }
 
-            // Aplica metade do dano em cada personagem
-            finalTarget.stats.hp = Math.max(
-              0,
-              finalTarget.stats.hp - splitDamage
+        if (!attackNegated) {
+          // Aplica o dano
+          targetElement.classList.add("taking-damage");
+
+          // Verifica se o alvo tem o efeito damageSplit
+          if (
+            finalTarget.activeEffects &&
+            finalTarget.activeEffects.damageSplit
+          ) {
+            // Encontra outro personagem vivo para dividir o dano
+            const otherTargets = selectedCharacters.filter(
+              (char) => char !== finalTarget && char.stats.hp > 0
             );
-            splitTarget.stats.hp = Math.max(
-              0,
-              splitTarget.stats.hp - splitDamage
-            );
+            if (otherTargets.length > 0) {
+              const splitTarget =
+                otherTargets[Math.floor(Math.random() * otherTargets.length)];
+              const splitDamage = Math.floor(damage / 2);
 
-            // Mostra o dano dividido
-            showDamageNumber(finalTarget, splitDamage, "boss");
-            showDamageNumber(splitTarget, splitDamage, "boss");
+              // Aplica metade do dano em cada personagem
+              finalTarget.stats.hp = Math.max(
+                0,
+                finalTarget.stats.hp - splitDamage
+              );
+              splitTarget.stats.hp = Math.max(
+                0,
+                splitTarget.stats.hp - splitDamage
+              );
 
-            // Atualiza o HP dos dois personagens
-            updateCharacterHP(finalTarget);
-            updateCharacterHP(splitTarget);
+              // Mostra o dano dividido
+              showDamageNumber(finalTarget, splitDamage, "boss");
+              showDamageNumber(splitTarget, splitDamage, "boss");
 
-            // Remove o efeito após usar
-            delete finalTarget.activeEffects.damageSplit;
-            updateEffectsDisplay(finalTarget);
+              // Atualiza o HP dos dois personagens
+              updateCharacterHP(finalTarget);
+              updateCharacterHP(splitTarget);
 
-            // Exibe mensagem de dano dividido
-            showBattleMessage(
-              `${currentBoss.name} atacou ${finalTarget.name} e ${splitTarget.name}, causando ${splitDamage} de dano em cada um!`,
-              "boss"
-            );
+              // Remove o efeito após usar
+              delete finalTarget.activeEffects.damageSplit;
+              updateEffectsDisplay(finalTarget);
+
+              // Exibe mensagem de dano dividido
+              showBattleMessage(
+                `${currentBoss.name} atacou ${finalTarget.name} e ${splitTarget.name}, causando ${splitDamage} de dano em cada um!`,
+                "boss"
+              );
+            } else {
+              // Se não houver outro alvo vivo, aplica o dano normal
+              finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
+              showDamageNumber(finalTarget, damage, "boss");
+              updateCharacterHP(finalTarget);
+              showBattleMessage(
+                `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
+                "boss"
+              );
+            }
           } else {
-            // Se não houver outro alvo vivo, aplica o dano normal
+            // Aplica o dano normal se não tiver damageSplit
             finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
             showDamageNumber(finalTarget, damage, "boss");
             updateCharacterHP(finalTarget);
@@ -2157,115 +2104,110 @@ function executeBossTurn() {
               "boss"
             );
           }
-        } else {
-          // Aplica o dano normal se não tiver damageSplit
-          finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
-          showDamageNumber(finalTarget, damage, "boss");
-          updateCharacterHP(finalTarget);
-          showBattleMessage(
-            `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
-            "boss"
-          );
-        }
 
-        // Ativa habilidades passivas que respondem a dano
-        for (const char of selectedCharacters) {
-          if (char.stats.hp > 0) {
-            executePassiveAbility(char, "onTakeDamage");
+          // Ativa habilidades passivas que respondem a dano
+          for (const char of selectedCharacters) {
+            if (char.stats.hp > 0) {
+              executePassiveAbility(char, "onTakeDamage");
+            }
+          }
+
+          // Verifica se o personagem foi derrotado
+          if (finalTarget.stats.hp <= 0) {
+            handleCharacterDefeat(finalTarget);
           }
         }
+      }
 
-        // Verifica se o personagem foi derrotado
-        if (finalTarget.stats.hp <= 0) {
-          handleCharacterDefeat(finalTarget);
+      // Remove as classes de animação
+      setTimeout(() => {
+        bossElement.classList.remove("attacking");
+        targetElement?.classList.remove("taking-damage");
+      }, 500);
+
+      // Inicia um novo turno
+      setTimeout(() => {
+        startNewTurn();
+      }, 1000);
+    }, 500);
+  }
+
+  // Função para executar ataque do personagem
+  function performAttack(character) {
+    if (character.stats.hp <= 0 || teamActionsCompleted) return;
+
+    const characterElement = document.querySelector(
+      `.battle-character[data-name="${character.name}"]`
+    );
+    const bossElement = document.querySelector(".enemy-team .battle-character");
+
+    // Inicia a animação de ataque
+    characterElement.classList.add("attacking");
+
+    setTimeout(() => {
+      let damage = character.stats.attack;
+
+      // Aplica bônus de dano se houver
+      if (character.activeEffects && character.activeEffects.damageBoost) {
+        damage = Math.floor(damage * character.activeEffects.damageBoost);
+        delete character.activeEffects.damageBoost;
+        updateEffectsDisplay(character);
+      }
+
+      if (character.activeEffects && character.activeEffects.doubleDamage) {
+        damage *= 2;
+        delete character.activeEffects.doubleDamage;
+        updateEffectsDisplay(character);
+      }
+
+      // Aplica o dano ao chefe
+      currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
+
+      // Mostra o efeito visual
+      bossElement.classList.add("taking-damage");
+      showDamageNumber(currentBoss, damage, "normal");
+
+      // Atualiza a barra de HP
+      updateBossHP();
+
+      // Remove as classes de animação
+      setTimeout(() => {
+        characterElement.classList.remove("attacking");
+        bossElement.classList.remove("taking-damage");
+      }, 500);
+
+      // Exibe mensagem de ataque
+      showBattleMessage(
+        `${character.name} atacou ${currentBoss.name} causando ${damage} de dano!`,
+        "team"
+      );
+
+      // Ativa habilidades passivas que respondem a ataques
+      for (const ally of selectedCharacters) {
+        if (ally !== character && ally.stats.hp > 0) {
+          executePassiveAbility(ally, "onAllyAttack");
         }
       }
-    }
 
-    // Remove as classes de animação
-    setTimeout(() => {
-      bossElement.classList.remove("attacking");
-      targetElement?.classList.remove("taking-damage");
-    }, 500);
-
-    // Inicia um novo turno
-    setTimeout(() => {
-      startNewTurn();
-    }, 1000);
-  }, 500);
-}
-
-// Função para executar ataque do personagem
-function performAttack(character) {
-  if (character.stats.hp <= 0 || teamActionsCompleted) return;
-
-  const characterElement = document.querySelector(
-    `.battle-character[data-name="${character.name}"]`
-  );
-  const bossElement = document.querySelector(".enemy-team .battle-character");
-
-  // Inicia a animação de ataque
-  characterElement.classList.add("attacking");
-
-  setTimeout(() => {
-    let damage = character.stats.attack;
-
-    // Aplica bônus de dano se houver
-    if (character.activeEffects && character.activeEffects.damageBoost) {
-      damage = Math.floor(damage * character.activeEffects.damageBoost);
-      delete character.activeEffects.damageBoost;
-      updateEffectsDisplay(character);
-    }
-
-    if (character.activeEffects && character.activeEffects.doubleDamage) {
-      damage *= 2;
-      delete character.activeEffects.doubleDamage;
-      updateEffectsDisplay(character);
-    }
-
-    // Aplica o dano ao chefe
-    currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
-
-    // Mostra o efeito visual
-    bossElement.classList.add("taking-damage");
-    showDamageNumber(currentBoss, damage, "normal");
-
-    // Atualiza a barra de HP
-    updateBossHP();
-
-    // Remove as classes de animação
-    setTimeout(() => {
-      characterElement.classList.remove("attacking");
-      bossElement.classList.remove("taking-damage");
-    }, 500);
-
-    // Exibe mensagem de ataque
-    showBattleMessage(
-      `${character.name} atacou ${currentBoss.name} causando ${damage} de dano!`,
-      "team"
-    );
-
-    // Ativa habilidades passivas que respondem a ataques
-    for (const ally of selectedCharacters) {
-      if (ally !== character && ally.stats.hp > 0) {
-        executePassiveAbility(ally, "onAllyAttack");
+      // Verifica se o chefe foi derrotado
+      if (currentBoss.stats.hp <= 0) {
+        showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
+        setTimeout(() => {
+          transitionToNextPhase();
+        }, 1500);
+        return;
       }
-    }
 
-    // Verifica se o chefe foi derrotado
-    if (currentBoss.stats.hp <= 0) {
-      showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
-      setTimeout(() => {
-        transitionToNextPhase();
-      }, 1500);
-      return;
-    }
+      // Passa para o próximo personagem
+      nextCharacterTurn();
+    }, 250);
+  }
 
-    // Passa para o próximo personagem
-    nextCharacterTurn();
-  }, 250);
-}
+  // Inicializar a tela de seleção
+  initializeTeamSlots();
+  initializeCharacterCards();
 
-function getRandomHP(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  function getRandomHP(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+});
