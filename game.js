@@ -474,8 +474,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Um guerreiro espectral que traz o apocalipse em sua lâmina.",
       stats: {
-        hp: 18,
-        attack: 6,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 1,
     },
@@ -486,8 +486,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Uma entidade cósmica que consome almas para aumentar seu poder.",
       stats: {
-        hp: 22,
-        attack: 7,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 2,
     },
@@ -498,8 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Um mago imortal que se alimenta de vida para manter sua existência.",
       stats: {
-        hp: 16,
-        attack: 5,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 4,
       },
       phase: 3,
     },
@@ -510,8 +510,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Um mestre da magia negra que comanda um exército de mortos.",
       stats: {
-        hp: 20,
-        attack: 6,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 4,
     },
@@ -522,8 +522,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "O rei de um reino esquecido, agora uma sombra de seu antigo eu.",
       stats: {
-        hp: 19,
-        attack: 6,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 4,
       },
       phase: 5,
     },
@@ -534,8 +534,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Uma criatura colossal que habita os mares profundos e sombrios.",
       stats: {
-        hp: 24,
-        attack: 7,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 6,
     },
@@ -546,8 +546,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Uma máquina de guerra ancestral criada por uma civilização perdida.",
       stats: {
-        hp: 25,
-        attack: 6,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 7,
     },
@@ -557,8 +557,8 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "dragao-anciao.jpg",
       description: "Um dragão milenar que domina os elementos.",
       stats: {
-        hp: 20,
-        attack: 5,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 4,
       },
       phase: 8,
     },
@@ -568,8 +568,8 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "matriarca-da-perdicao.jpg",
       description: "Uma aranha colossal que espalha terror e destruição.",
       stats: {
-        hp: 21,
-        attack: 6,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 9,
     },
@@ -579,8 +579,8 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "rei_demonio.jpg",
       description: "O senhor supremo do inferno, governante dos demônios.",
       stats: {
-        hp: 30,
-        attack: 8,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 10,
     },
@@ -591,8 +591,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description:
         "Uma entidade caótica que comanda as tempestades mais devastadoras.",
       stats: {
-        hp: 22,
-        attack: 7,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 11,
     },
@@ -602,8 +602,8 @@ document.addEventListener("DOMContentLoaded", () => {
       avatar: "tita-abissal.jpg",
       description: "Uma criatura colossal que dorme nas profundezas do oceano.",
       stats: {
-        hp: 35,
-        attack: 9,
+        hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
+        attack: 5,
       },
       phase: 12,
     },
@@ -722,7 +722,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Define o HP máximo do chefe
     currentBoss.stats.maxHp = Math.floor(
-      baseHP * (1 + (livingTeamSize - 1) * 0.75)
+      baseHP * (1 + (livingTeamSize - 1) * 0.5)
     );
     currentBoss.stats.hp = currentBoss.stats.maxHp; // Define o HP atual igual ao máximo
 
@@ -2144,4 +2144,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicializar a tela de seleção
   initializeTeamSlots();
   initializeCharacterCards();
+
+  function getRandomHP(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 });
