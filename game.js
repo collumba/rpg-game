@@ -609,6 +609,18 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  // Função para embaralhar um array
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  // Inicializa a lista de chefes embaralhada
+  let shuffledBosses = [...bosses];
+  shuffleArray(shuffledBosses);
+
   let currentBossIndex = 0;
   let currentBoss = null;
   let currentTurn = 1;
@@ -695,12 +707,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Nova função para inicializar o chefe
+  // Modifica a função initializeNewBoss para usar a lista embaralhada
   function initializeNewBoss() {
     const enemyTeamArea = document.querySelector(".enemy-team");
 
     // Cria uma cópia profunda do chefe atual
-    currentBoss = JSON.parse(JSON.stringify(bosses[currentBossIndex]));
+    currentBoss = JSON.parse(JSON.stringify(shuffledBosses[currentBossIndex]));
 
     // Calcula o HP base do chefe
     const livingTeamSize = selectedCharacters.filter(
