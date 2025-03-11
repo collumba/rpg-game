@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Guerreiro",
         emoji: "🛡️⚔️",
         description: "Equilibrado, com alta defesa e bom ataque físico.",
-        stats: { hp: 8, mana: 4, attack: 4 },
+        stats: { hp: 10, mana: 4, attack: 4 },
         abilities: {
           passive:
             "Guardião Resoluto: Tem chance de negar o ataque do chefe (20%).",
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🔥🪓",
         description:
           "Ataque brutal, baixa defesa, sacrifica vida por dano extra.",
-        stats: { hp: 7, mana: 3, attack: 5 },
+        stats: { hp: 9, mana: 3, attack: 5 },
         abilities: {
           passive:
             "Fúria Incontrolável: Ganha pontos de ataque ao ser atacado (10% de chance).",
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Cavaleiro",
         emoji: "🏇⚔️",
         description: "Tanque com armadura pesada, proteção para aliados.",
-        stats: { hp: 10, mana: 5, attack: 3 },
+        stats: { hp: 11, mana: 5, attack: 3 },
         abilities: {
           passive:
             "Sacrifício Honrado: Tem chance de tomar o ataque do chefe no lugar de um aliado (25%).",
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🏹🗡️",
         description:
           "Rápido, furtivo, especialista em golpes críticos e evasão.",
-        stats: { hp: 6, mana: 4, attack: 4 },
+        stats: { hp: 7, mana: 4, attack: 4 },
         abilities: {
           passive:
             "Golpe Sorrateiro: Tem chance de atacar em conjunto com um aliado (20%).",
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Monge",
         emoji: "🥋✊",
         description: "Lutador sem armas ou com bastões, resistência elevada.",
-        stats: { hp: 7, mana: 5, attack: 4 },
+        stats: { hp: 8, mana: 5, attack: 4 },
         abilities: {
           passive:
             "Mente Tranquila: Tem chance de negar um ataque do chefe (15%).",
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Arqueiro",
         emoji: "🏹",
         description: "Especialista em combate à distância com alta precisão.",
-        stats: { hp: 5, mana: 4, attack: 5 },
+        stats: { hp: 6, mana: 4, attack: 5 },
         abilities: {
           passive:
             "Disparo Sincronizado: Tem chance de atacar em conjunto com um aliado (15%).",
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Caçador",
         emoji: "🐺🏹",
         description: "Domina bestas e armadilhas, bom em combate na natureza.",
-        stats: { hp: 6, mana: 5, attack: 4 },
+        stats: { hp: 7, mana: 5, attack: 4 },
         abilities: {
           passive:
             "Instinto Selvagem: Tem chance de ganhar pontos de ataque ao ser atacado (10%).",
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: "🔥❄️ ",
         description:
           "Mestre dos elementos, ataques devastadores de longo alcance.",
-        stats: { hp: 5, mana: 10, attack: 6 },
+        stats: { hp: 6, mana: 10, attack: 6 },
         abilities: {
           passive:
             "Potencial Arcano: Tem chance de aumentar o ataque de um aliado quando atacado (15%).",
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Necromante",
         emoji: "☠️🖤",
         description: "Controla mortos-vivos e magias sombrias.",
-        stats: { hp: 5, mana: 9, attack: 4 },
+        stats: { hp: 7, mana: 9, attack: 4 },
         abilities: {
           passive:
             "Ritual Sombrio: Tem chance de curar um aliado quando recebe dano (10%).",
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Clérigo",
         emoji: "⛪⚕️",
         description: "Cura e protege aliados com magia sagrada.",
-        stats: { hp: 6, mana: 9, attack: 2 },
+        stats: { hp: 7, mana: 9, attack: 2 },
         abilities: {
           passive:
             "Mãos Abençoadas: Tem chance de curar um aliado ao ser atacado (20%).",
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: "Xamã",
         emoji: "🌪️🌀",
         description: "Usa espíritos e magia ancestral para fortalecer aliados.",
-        stats: { hp: 6, mana: 8, attack: 3 },
+        stats: { hp: 8, mana: 8, attack: 3 },
         abilities: {
           passive:
             "Espírito Guerreiro: Tem chance de aumentar o ataque de um aliado ao ser atacado (15%).",
