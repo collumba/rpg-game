@@ -1147,7 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const clickHandler = () => {
         clearTargetSelection();
-        callback(target);
+        callback(target); // Chama o callback apenas quando um alvo é selecionado
       };
 
       targetElement.addEventListener("click", clickHandler);
@@ -1423,7 +1423,11 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "Clérigo":
-        if (character.stats.mana >= manaCost && target) {
+        if (
+          character.stats.mana >= manaCost &&
+          target &&
+          target.stats.hp < target.stats.maxHp
+        ) {
           target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
           character.stats.mana -= manaCost;
           updateCharacterHP(target);
