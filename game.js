@@ -753,7 +753,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return 3;
       case "Paladino":
         return 5;
-      case "Ladrão":
+      case "Ladino":
         return 2;
       case "Monge":
         return 3;
@@ -898,7 +898,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         break;
 
-      case "Ladrão":
+      case "Ladino":
         if (trigger === "onAllyAttack" && chance <= 20) {
           const damage = Math.floor(character.stats.attack * 0.5);
           currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
@@ -1215,7 +1215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (
           selectedTarget === null &&
           character.name !== "Berserker" &&
-          character.name !== "Ladrão" &&
+          character.name !== "Ladino" &&
           character.name !== "Caçador"
         ) {
           return; // Cancela a habilidade se não houver alvo selecionado
@@ -1318,7 +1318,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         break;
 
-      case "Ladrão":
+      case "Ladino":
         if (character.stats.mana >= manaCost) {
           character.stats.mana -= manaCost;
           currentBoss.activeEffects = currentBoss.activeEffects || {};
@@ -1866,15 +1866,68 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!attackNegated) {
           // Aplica o dano
           targetElement.classList.add("taking-damage");
-          finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
-          showDamageNumber(finalTarget, damage, "boss");
-          updateCharacterHP(finalTarget);
 
-          // Exibe mensagem de ataque
-          showBattleMessage(
-            `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
-            "boss"
-          );
+          // Verifica se o alvo tem o efeito damageSplit
+          if (
+            finalTarget.activeEffects &&
+            finalTarget.activeEffects.damageSplit
+          ) {
+            // Encontra outro personagem vivo para dividir o dano
+            const otherTargets = selectedCharacters.filter(
+              (char) => char !== finalTarget && char.stats.hp > 0
+            );
+            if (otherTargets.length > 0) {
+              const splitTarget =
+                otherTargets[Math.floor(Math.random() * otherTargets.length)];
+              const splitDamage = Math.floor(damage / 2);
+
+              // Aplica metade do dano em cada personagem
+              finalTarget.stats.hp = Math.max(
+                0,
+                finalTarget.stats.hp - splitDamage
+              );
+              splitTarget.stats.hp = Math.max(
+                0,
+                splitTarget.stats.hp - splitDamage
+              );
+
+              // Mostra o dano dividido
+              showDamageNumber(finalTarget, splitDamage, "boss");
+              showDamageNumber(splitTarget, splitDamage, "boss");
+
+              // Atualiza o HP dos dois personagens
+              updateCharacterHP(finalTarget);
+              updateCharacterHP(splitTarget);
+
+              // Remove o efeito após usar
+              delete finalTarget.activeEffects.damageSplit;
+              updateEffectsDisplay(finalTarget);
+
+              // Exibe mensagem de dano dividido
+              showBattleMessage(
+                `${currentBoss.name} atacou ${finalTarget.name} e ${splitTarget.name}, causando ${splitDamage} de dano em cada um!`,
+                "boss"
+              );
+            } else {
+              // Se não houver outro alvo vivo, aplica o dano normal
+              finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
+              showDamageNumber(finalTarget, damage, "boss");
+              updateCharacterHP(finalTarget);
+              showBattleMessage(
+                `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
+                "boss"
+              );
+            }
+          } else {
+            // Aplica o dano normal se não tiver damageSplit
+            finalTarget.stats.hp = Math.max(0, finalTarget.stats.hp - damage);
+            showDamageNumber(finalTarget, damage, "boss");
+            updateCharacterHP(finalTarget);
+            showBattleMessage(
+              `${currentBoss.name} atacou ${finalTarget.name} causando ${damage} de dano!`,
+              "boss"
+            );
+          }
 
           // Ativa habilidades passivas que respondem a dano
           for (const char of selectedCharacters) {
