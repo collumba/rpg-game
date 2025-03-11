@@ -876,7 +876,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `${character.name} protegeu o aliado com Sacrifício Honrado!`,
             "team"
           );
-          activated = true;
+          return character; // Retorna o cavaleiro como protetor
         }
         break;
 
@@ -1216,7 +1216,8 @@ document.addEventListener("DOMContentLoaded", () => {
           selectedTarget === null &&
           character.name !== "Berserker" &&
           character.name !== "Ladino" &&
-          character.name !== "Caçador"
+          character.name !== "Caçador" &&
+          character.name !== "Cavaleiro"
         ) {
           return; // Cancela a habilidade se não houver alvo selecionado
         }
@@ -1291,7 +1292,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (character.stats.mana >= manaCost) {
           character.stats.mana -= manaCost;
           character.activeEffects = character.activeEffects || {};
-          character.activeEffects.damageSplit = true;
+          character.activeEffects.damageSplit = true; // Ativa o efeito de divisão de dano
           showBattleMessage(
             `${character.name} ativou Defesa Compartilhada!`,
             "team"
@@ -1830,8 +1831,14 @@ document.addEventListener("DOMContentLoaded", () => {
       let protector = null;
       for (const char of selectedCharacters) {
         if (char !== target && char.stats.hp > 0) {
-          if (executePassiveAbility(char, "onAllyTargeted")) {
+          const result = executePassiveAbility(char, "onAllyTargeted");
+          if (result === true) {
+            // Para outros personagens que retornam true
             protector = char;
+            break;
+          } else if (result && typeof result === "object") {
+            // Para o Cavaleiro que retorna a si mesmo como protetor
+            protector = result;
             break;
           }
         }
