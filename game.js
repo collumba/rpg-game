@@ -468,56 +468,144 @@ document.addEventListener("DOMContentLoaded", () => {
   // Definição dos chefes
   const bosses = [
     {
+      name: "Cavaleiro do Fim",
+      emoji: "⚔️",
+      avatar: "cavaleiro-do-fim.jpg",
+      description:
+        "Um guerreiro espectral que traz o apocalipse em sua lâmina.",
+      stats: {
+        hp: 18,
+        attack: 6,
+      },
+      phase: 1,
+    },
+    {
+      name: "Devorador de Almas Xynzhul",
+      emoji: "👁️",
+      avatar: "devorador-de-almas-xynzhul.jpg",
+      description:
+        "Uma entidade cósmica que consome almas para aumentar seu poder.",
+      stats: {
+        hp: 22,
+        attack: 7,
+      },
+      phase: 2,
+    },
+    {
+      name: "Lich",
+      emoji: "💀",
+      avatar: "lich.jpg",
+      description:
+        "Um mago imortal que se alimenta de vida para manter sua existência.",
+      stats: {
+        hp: 16,
+        attack: 5,
+      },
+      phase: 3,
+    },
+    {
+      name: "Necromante Eterno Malakar",
+      emoji: "☠️",
+      avatar: "necromante-eterno-malakar.jpg",
+      description:
+        "Um mestre da magia negra que comanda um exército de mortos.",
+      stats: {
+        hp: 20,
+        attack: 6,
+      },
+      phase: 4,
+    },
+    {
+      name: "Rei Espectral Vaelith",
+      emoji: "👑",
+      avatar: "rei-espectral-vaelith.jpg",
+      description:
+        "O rei de um reino esquecido, agora uma sombra de seu antigo eu.",
+      stats: {
+        hp: 19,
+        attack: 6,
+      },
+      phase: 5,
+    },
+    {
+      name: "Serpente do Abismo",
+      emoji: "🐍",
+      avatar: "serpente-do-abismo.jpg",
+      description:
+        "Uma criatura colossal que habita os mares profundos e sombrios.",
+      stats: {
+        hp: 24,
+        attack: 7,
+      },
+      phase: 6,
+    },
+    {
+      name: "Constructo Titânico Zorn",
+      emoji: "🛡️",
+      avatar: "constructo-titanico-zorn.jpg",
+      description:
+        "Uma máquina de guerra ancestral criada por uma civilização perdida.",
+      stats: {
+        hp: 25,
+        attack: 6,
+      },
+      phase: 7,
+    },
+    {
       name: "Dragão Ancião",
       emoji: "🐲",
+      avatar: "dragao-anciao.jpg",
       description: "Um dragão milenar que domina os elementos.",
       stats: {
         hp: 20,
         attack: 5,
       },
-      phase: 1,
+      phase: 8,
     },
     {
-      name: "Lich",
-      emoji: "💀",
-      description:
-        "Um poderoso feiticeiro que conquistou a imortalidade através de magia negra.",
+      name: "Matriarca da Perdição",
+      emoji: "🕷️",
+      avatar: "matriarca-da-perdicao.jpg",
+      description: "Uma aranha colossal que espalha terror e destruição.",
       stats: {
-        hp: 15,
+        hp: 21,
         attack: 6,
       },
-      phase: 2,
-    },
-    {
-      name: "Golem Ancestral",
-      emoji: "🗿",
-      description:
-        "Uma construção mágica gigante feita de pedra e cristais místicos.",
-      stats: {
-        hp: 25,
-        attack: 4,
-      },
-      phase: 3,
-    },
-    {
-      name: "Hidra",
-      emoji: "🐉",
-      description: "Uma besta lendária com múltiplas cabeças que se regeneram.",
-      stats: {
-        hp: 18,
-        attack: 7,
-      },
-      phase: 4,
+      phase: 9,
     },
     {
       name: "Rei Demônio",
-      emoji: "👿",
-      description: "O senhor supremo dos demônios, com poder incomparável.",
+      emoji: "😈",
+      avatar: "rei_demonio.jpg",
+      description: "O senhor supremo do inferno, governante dos demônios.",
       stats: {
         hp: 30,
         attack: 8,
       },
-      phase: 5,
+      phase: 10,
+    },
+    {
+      name: "Senhor da Tormenta",
+      emoji: "🌩️",
+      avatar: "senhor-da-tormenta.jpg",
+      description:
+        "Uma entidade caótica que comanda as tempestades mais devastadoras.",
+      stats: {
+        hp: 22,
+        attack: 7,
+      },
+      phase: 11,
+    },
+    {
+      name: "Titã Abissal",
+      emoji: "🌊",
+      avatar: "tita-abissal.jpg",
+      description: "Uma criatura colossal que dorme nas profundezas do oceano.",
+      stats: {
+        hp: 35,
+        attack: 9,
+      },
+      phase: 12,
     },
   ];
 
@@ -678,6 +766,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     bossElement.innerHTML = `
+      <div class="boss-profile-image-container">
+        <img src="assets/bosses/${boss.avatar}" alt="${boss.name}" class="boss-profile-image "> <!-- Adicionando a imagem do avatar -->
+      </div>
       <div class="attack-display boss-attack">
         <div class="stat-icon">⚔️</div>
         <span>${boss.stats.attack}</span>
