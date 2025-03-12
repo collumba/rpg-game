@@ -1,21 +1,54 @@
 @import url("https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap");
 
 :root {
-  --primary-color: #4a90e2;
-  --primary-hover: #357abd;
-  --primary-dark: #1a1a2e;
-  --primary-medium: #16213e;
-  --primary-darker: #0f172a;
+  /* Cores principais */
+  --color-primary: #4a90e2;
+  --color-primary-hover: #357abd;
+  --color-primary-dark: #1a1a2e;
+  --color-primary-medium: #16213e;
+  --color-primary-darker: #0f172a;
+
+  /* Cores de texto */
   --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
   --text-gold: #ffd700;
+
+  /* Cores de fundo */
   --bg-darker: #0a0a1a;
   --bg-primary: #1a1a2e;
   --bg-highlight: #2a2a4e;
+  --bg-card: rgba(26, 26, 46, 0.9);
+
+  /* Cores de borda e efeitos */
   --border-gold: #ffd700;
   --glow-gold: rgba(255, 215, 0, 0.3);
+  --glow-gold-strong: rgba(255, 215, 0, 0.5);
+
+  /* Sombras */
   --shadow-normal: rgba(0, 0, 0, 0.2);
   --shadow-hover: rgba(0, 0, 0, 0.3);
   --shadow-active: rgba(0, 0, 0, 0.1);
+  --shadow-text: rgba(0, 0, 0, 0.4);
+
+  /* Barras de status */
+  --bar-hp: #ff4444;
+  --bar-mana: #4444ff;
+  --bar-attack: #ffaa44;
+  --bar-defense: #44ff44;
+
+  /* Animações */
+  --transition-speed: 0.3s;
+  --transition-timing: ease;
+
+  /* Layout */
+  --border-radius-sm: 5px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 15px;
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 25px;
 }
 
 * {
@@ -39,7 +72,8 @@
   left: 0;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+  transition: opacity var(--transition-speed) var(--transition-timing),
+    visibility var(--transition-speed) var(--transition-timing);
 }
 
 .scene.active {
@@ -53,8 +87,7 @@
 }
 
 .scene.fade-in {
-  opacity: 1;
-  visibility: visible;
+  animation: fadeIn var(--transition-speed) var(--transition-timing);
 }
 
 /* Title Scene */
@@ -64,21 +97,21 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .game-title {
   font-size: 4em;
   margin-bottom: 0.5em;
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  color: var(--text-gold);
+  text-shadow: 0 0 10px var(--glow-gold);
 }
 
 .game-subtitle {
   font-size: 1.5em;
   margin-bottom: 2em;
-  color: #fff;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
+  text-shadow: 0 0 5px var(--shadow-text);
 }
 
 body {
@@ -99,17 +132,18 @@ body {
 }
 
 .start-button {
-  padding: 20px 40px;
+  padding: var(--spacing-lg) var(--spacing-xl);
   font-size: 24px;
   font-weight: bold;
-  color: var(--text-dark);
-  background-color: var(--primary-color);
+  color: var(--text-primary);
+  background-color: var(--color-primary);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--border-radius-md);
   cursor: pointer;
   box-shadow: 0 4px 8px var(--shadow-normal);
-  transition: transform 0.2s ease, box-shadow 0.2s ease,
-    background-color 0.2s ease;
+  transition: transform var(--transition-speed) var(--transition-timing),
+    box-shadow var(--transition-speed) var(--transition-timing),
+    background-color var(--transition-speed) var(--transition-timing);
   z-index: 1;
   font-family: "Uncial Antiqua", cursive;
 }
@@ -117,6 +151,7 @@ body {
 .start-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px var(--shadow-hover);
+  background-color: var(--color-primary-hover);
 }
 
 .start-button:focus {
@@ -176,13 +211,13 @@ body {
 
 .character-card {
   background: var(--bg-card);
-  border-radius: 15px;
-  padding: 20px;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) var(--transition-timing);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-md);
   min-height: 500px;
   height: auto;
   aspect-ratio: auto;
@@ -241,8 +276,8 @@ body {
   color: var(--text-secondary);
   margin: 0;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-  padding-bottom: 10px;
+  border-bottom: 1px solid var(--glow-gold);
+  padding-bottom: var(--spacing-sm);
   flex-shrink: 0;
 }
 
@@ -304,24 +339,24 @@ body {
 }
 
 .hp-bar {
-  background: var(--hp-color);
-  box-shadow: 0 0 5px var(--hp-color);
+  background: var(--bar-hp);
+  box-shadow: 0 0 5px var(--bar-hp);
   font-family: cursive;
 }
 
 .mana-bar {
-  background: var(--mana-color);
-  box-shadow: 0 0 5px var(--mana-color);
+  background: var(--bar-mana);
+  box-shadow: 0 0 5px var(--bar-mana);
   font-family: cursive;
 }
 
 .attack-bar {
-  background: var(--attack-color);
+  background: var(--bar-attack);
   font-family: cursive;
 }
 
 .defense-bar {
-  background: var(--defense-color);
+  background: var(--bar-defense);
   font-family: cursive;
 }
 
@@ -386,20 +421,21 @@ body {
 .team-slot {
   width: 80px;
   height: 80px;
-  border: 2px dashed var(--border-gold);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 2px solid var(--border-gold);
+  border-radius: var(--border-radius-md);
   background: var(--bg-card);
+  margin: var(--spacing-xs);
   position: relative;
-  transition: all 0.3s ease;
-  z-index: 1002;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-speed) var(--transition-timing);
 }
 
-.team-slot.filled {
-  border-style: solid;
-  background: var(--bg-warning);
+.team-slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px var(--glow-gold);
 }
 
 .team-slot .character-emoji {
@@ -488,7 +524,7 @@ button:hover {
   box-shadow: none;
 }
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-darker);
@@ -498,42 +534,26 @@ button:hover {
 .tooltip {
   position: relative;
   display: inline-block;
-  cursor: help;
-  z-index: 10;
 }
 
 .tooltip .tooltip-text {
   visibility: hidden;
-  width: 200px;
   background-color: var(--bg-darker);
   color: var(--text-primary);
   text-align: center;
-  border-radius: 6px;
-  padding: 8px;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
   position: absolute;
-  z-index: 20;
+  z-index: 1;
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
-  transition: opacity 0.3s;
-  font-size: 14px;
-  white-space: normal;
-  box-shadow: 0 2px 5px var(--shadow-normal);
-  pointer-events: none;
-  font-family: cursive;
-}
-
-.tooltip .tooltip-text::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: var(--bg-darker) transparent transparent transparent;
-  pointer-events: none;
+  transition: opacity var(--transition-speed) var(--transition-timing);
+  white-space: nowrap;
+  font-size: 0.9em;
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 0 10px var(--glow-gold);
 }
 
 .tooltip:hover .tooltip-text {
@@ -720,25 +740,13 @@ button:hover {
 
 /* Estilos para os personagens na batalha */
 .battle-character {
-  height: fit-content;
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md);
   position: relative;
-  width: 200px;
-  background: linear-gradient(
-    to bottom,
-    var(--bg-darker) 0%,
-    rgb(61 56 120 / 89%) 100%
-  );
-  border-radius: 15px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 8px var(--shadow-normal);
-  transition: all 0.3s ease;
-  overflow: visible;
-  margin-bottom: 25px;
-  border: 1px solid var(--border-light);
+  width: 300px;
+  transition: all var(--transition-speed) var(--transition-timing);
 }
 
 /* Ajustes específicos para o chefe */
@@ -761,14 +769,8 @@ button:hover {
 /* Estilo para o personagem ativo */
 .battle-character.active {
   border: 2px solid var(--border-gold);
-  box-shadow: 0 0 20px var(--shadow-glow);
+  box-shadow: 0 0 20px var(--glow-gold);
   transform: scale(1.05);
-  z-index: 4;
-  background: linear-gradient(
-    to bottom,
-    var(--bg-darker) 0%,
-    rgba(4, 92, 29, 0.89) 100%
-  );
 }
 
 /* Ajuste para o boss quando ativo */
@@ -863,25 +865,25 @@ button:hover {
 
 /* Barras de status específicas */
 .battle-character .hp-bar {
-  background: var(--hp-color);
-  box-shadow: 0 0 5px var(--hp-color);
+  background: var(--bar-hp);
+  box-shadow: 0 0 5px var(--bar-hp);
   width: 100%;
   height: 14px;
 }
 
 .battle-character .mana-bar {
-  background: var(--mana-color);
-  box-shadow: 0 0 5px var(--mana-color);
+  background: var(--bar-mana);
+  box-shadow: 0 0 5px var(--bar-mana);
   width: 100%;
   height: 14px;
 }
 
 .battle-character .attack-bar {
-  background: var(--attack-color);
+  background: var(--bar-attack);
 }
 
 .battle-character .defense-bar {
-  background: var(--defense-color);
+  background: var(--bar-defense);
 }
 
 .boss-emoji {
@@ -953,22 +955,22 @@ button:hover {
   padding: 10px;
   overflow-y: auto;
   z-index: 999;
-  border: 2px solid var(--border-dark);
   box-shadow: 0 0 10px var(--shadow-normal);
   pointer-events: auto;
   transform: none;
 }
 
 .battle-message {
+  background: var(--bg-card);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-xs) 0;
   color: var(--text-primary);
-  margin: 5px 0;
-  padding: 5px 8px;
-  border-radius: 4px;
   font-size: 0.9em;
-  animation: fadeIn 0.3s ease-in-out;
   display: flex;
   align-items: center;
-  word-break: break-word;
+  gap: var(--spacing-sm);
+  animation: fadeIn var(--transition-speed) var(--transition-timing);
 }
 
 .battle-message .message-icon {
@@ -1132,7 +1134,7 @@ button:hover {
 }
 
 .damage-number.boss {
-  color: var(--hp-color);
+  color: var(--bar-hp);
   font-size: 3em;
 }
 
@@ -1211,23 +1213,23 @@ button:hover {
 }
 
 .battle-character.boss .hp-bar {
-  background: var(--hp-color);
-  box-shadow: 0 0 5px var(--hp-color);
+  background: var(--bar-hp);
+  box-shadow: 0 0 5px var(--bar-hp);
   width: 100%;
 }
 
 .battle-character.boss .mana-bar {
-  background: var(--mana-color);
-  box-shadow: 0 0 5px var(--mana-color);
+  background: var(--bar-mana);
+  box-shadow: 0 0 5px var(--bar-mana);
   width: 100%;
 }
 
 .battle-character.boss .attack-bar {
-  background: var(--attack-color);
+  background: var(--bar-attack);
 }
 
 .battle-character.boss .defense-bar {
-  background: var(--defense-color);
+  background: var(--bar-defense);
 }
 
 .battle-character.boss .stat-bar::after {
@@ -1302,17 +1304,17 @@ button:hover {
   --primary-hover: #a09d06;
   --primary-dark: #47421a;
   --primary-medium: #5a552d;
-  --primary-darker: #231d0d;
+  --primary-darker: #060503;
   --secondary-color: #ffd700;
   --danger-color: #ff4444;
   --info-color: #44aaff;
   --disabled-color: #666666;
 
   /* Cores de status */
-  --hp-color: #ff3333;
-  --mana-color: #3366ff;
-  --attack-color: #ff8c00;
-  --defense-color: #33cc33;
+  --bar-hp: #ff4444;
+  --bar-mana: #4444ff;
+  --bar-attack: #ffaa44;
+  --bar-defense: #44ff44;
 
   /* Cores de fundo */
   --bg-dark: #111111;
@@ -1688,7 +1690,7 @@ button:hover {
   height: 100%;
   display: none;
   opacity: 0;
-  transition: opacity 0.6s ease-in-out;
+  transition: opacity var(--transition-speed) var(--transition-timing);
   z-index: 10;
 }
 
@@ -1699,20 +1701,11 @@ button:hover {
 }
 
 .scene.fade-in {
-  animation: fadeIn 0.6s ease-in-out forwards;
+  animation: fadeIn var(--transition-speed) var(--transition-timing);
 }
 
 .scene.fade-out {
-  animation: fadeOut 0.6s ease-in-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  animation: fadeOut var(--transition-speed) var(--transition-timing);
 }
 
 @keyframes fadeOut {
