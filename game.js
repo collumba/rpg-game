@@ -97,6 +97,7 @@ function resetGame() {
   currentCharacterIndex = 0;
   teamActionsCompleted = false;
   currentTurn = 1;
+  roundCount = 1;
 
   // Limpa as áreas de personagens
   document.querySelector(".player-team").innerHTML = "";
@@ -1988,6 +1989,7 @@ function updateCharacterVisuals(character) {
 // Função para transição entre fases
 function transitionToNextPhase() {
   currentBossIndex++;
+  roundCount++;
   if (currentBossIndex < bosses.length) {
     // Limpa a área do chefe anterior
     const enemyTeamArea = document.querySelector(".enemy-team");
@@ -2273,9 +2275,9 @@ function performAttack(character) {
     if (currentBoss.stats.hp <= 0) {
       showBattleMessage(`${currentBoss.name} foi derrotado!`, "system");
       setTimeout(() => {
-        transitionToNextPhase();
+        transitionToNextPhase(); // Chama a função para transitar para a próxima fase
       }, 1500);
-      return;
+      return; // Adiciona um retorno para evitar continuar a execução
     }
 
     // Passa para o próximo personagem
