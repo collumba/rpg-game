@@ -2072,6 +2072,16 @@ function updateCharacterVisuals(character) {
   if (character.stats.hp <= 0 && !charElement.classList.contains("defeated")) {
     handleCharacterDefeat(character, false);
   }
+  if (character.stats.hp > 0 && charElement.classList.contains("defeated")) {
+    charElement.classList.remove("defeated");
+    const deathMark = charElement.querySelector(".death-mark");
+    if (deathMark) {
+      deathMark.remove();
+    }
+    charElement.style.filter = "none";
+    charElement.style.opacity = "1";
+    charElement.style.transform = "none";
+  }
 }
 
 // Função para transição entre fases
