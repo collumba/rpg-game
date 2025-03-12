@@ -15,7 +15,7 @@ let battleLog = [];
 let targetSelectionActive = false;
 let targetSelectionCallback = null;
 
-let roundCount = 0; // Adicionando um contador de rodadas
+let roundCount = 1; // Adicionando um contador de rodadas
 
 // Função para configurar os botões principais
 function setupMainButtons() {
@@ -569,7 +569,7 @@ function createBattleCharacter(character) {
       <div class="stat-icon">⚔️</div>
       <span>${character.stats.attack}</span>
     </div>
-    <img src="assets/characters/${character.avatar}" alt="${character.name}" class="character-profile-image" data-abilities='${abilitiesText}'>
+    <img src="assets/characters/${character.avatar}" alt="${character.name}" class="character-profile-image">
     <div class="character-emoji">${character.emoji}</div>
     <div class="character-name">${character.name}</div>
     <div class="character-stats">
@@ -592,9 +592,35 @@ function createBattleCharacter(character) {
           <div class="stat-bar mana-bar" style="width: ${statsPercentage.mana}%"></div>
           <div class="stat-value">${character.stats.mana}/${character.stats.maxMana}</div>
         </div>
-      </div>
+      </div>     
+    </div>
+    <div class="character-abilities">
+      <div><strong>Passiva:</strong> ${character.abilities.passive}</div>
+      <div><strong>Ativa:</strong> ${character.abilities.active}</div>
     </div>
   `;
+
+  // Adiciona o evento de mouseover para mostrar o tooltip
+  battleCharacter.addEventListener("mouseover", () => {
+    const tooltip = document.createElement("div");
+    tooltip.className = "tooltip";
+    tooltip.innerHTML = abilitiesText;
+    document.body.appendChild(tooltip);
+
+    // Posiciona o tooltip
+    const rect = battleCharacter.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+
+    // Remove o tooltip ao sair
+    battleCharacter.addEventListener(
+      "mouseout",
+      () => {
+        tooltip.remove();
+      },
+      { once: true }
+    );
+  });
 
   return battleCharacter;
 }
@@ -610,7 +636,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 1,
   },
   {
     name: "Devorador de Almas Xynzhul",
@@ -622,7 +647,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 2,
   },
   {
     name: "Lich",
@@ -634,7 +658,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 4,
     },
-    phase: 3,
   },
   {
     name: "Necromante Eterno Malakar",
@@ -645,7 +668,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 4,
   },
   {
     name: "Rei Espectral Vaelith",
@@ -657,7 +679,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 4,
     },
-    phase: 5,
   },
   {
     name: "Serpente do Abismo",
@@ -669,7 +690,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 6,
   },
   {
     name: "Constructo Titânico Zorn",
@@ -681,7 +701,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 7,
   },
   {
     name: "Dragão Ancião",
@@ -692,7 +711,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 4,
     },
-    phase: 8,
   },
   {
     name: "Matriarca da Perdição",
@@ -703,7 +721,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 9,
   },
   {
     name: "Rei Demônio",
@@ -714,7 +731,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 10,
   },
   {
     name: "Senhor da Tormenta",
@@ -726,7 +742,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 11,
   },
   {
     name: "Titã Abissal",
@@ -737,7 +752,6 @@ const bosses = [
       hp: getRandomHP(20, 30), // HP aleatório entre 30 e 45
       attack: 5,
     },
-    phase: 12,
   },
 ];
 
@@ -869,7 +883,7 @@ function updateTurnInfo() {
   if (!teamActionsCompleted) {
     const currentCharacter = selectedCharacters[currentCharacterIndex];
     if (currentCharacter && currentCharacter.stats.hp > 0) {
-      turnInfo.textContent = `Fase ${currentBoss.phase} - ${currentBoss.name} - Turno ${currentTurn} - Vez de ${currentCharacter.name}`;
+      turnInfo.textContent = `Fase ${roundCount} - ${currentBoss.name} - Turno ${currentTurn} - Vez de ${currentCharacter.name}`;
     } else {
       // Se por algum motivo não houver personagem válido, avança para o próximo
       nextCharacterTurn();

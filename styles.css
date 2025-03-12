@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel&display=swap");
 
 :root {
   /* Cores principais */
@@ -118,7 +118,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: "Uncial Antiqua", cursive;
+  font-family: "Cinzel", cursive;
 }
 
 .game-container {
@@ -145,7 +145,7 @@ body {
     box-shadow var(--transition-speed) var(--transition-timing),
     background-color var(--transition-speed) var(--transition-timing);
   z-index: 1;
-  font-family: "Uncial Antiqua", cursive;
+  font-family: "Cinzel", cursive;
 }
 
 .start-button:hover {
@@ -508,7 +508,7 @@ body {
 button {
   background: var(--border-gold) !important;
   color: var(--text-dark) !important;
-  font-family: "Uncial Antiqua", cursive;
+  font-family: "Cinzel", cursive;
   font-weight: 400;
 }
 button:hover {
@@ -544,7 +544,7 @@ button:hover {
   padding: var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   position: absolute;
-  z-index: 1;
+  z-index: 1000;
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
@@ -585,6 +585,8 @@ button:hover {
 }
 
 .game-header {
+  width: 100%;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -592,6 +594,8 @@ button:hover {
   padding: 10px 20px;
   background: var(--bg-overlay);
   border-bottom: 2px solid var(--border-gold);
+  top: 0;
+  right: 0;
 }
 
 .game-header h2 {
@@ -613,7 +617,6 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
   border-radius: 20px;
   pointer-events: none;
 }
@@ -655,7 +658,9 @@ button:hover {
   font-size: 3em;
   color: var(--text-gold);
   font-weight: bold;
-  text-shadow: 0 0 10px var(--shadow-glow);
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color),
+    0 0 20px var(--primary-color), 0 0 40px var(--primary-color),
+    0 0 80px var(--primary-color);
   margin: 10px 0;
   position: relative;
   transform: rotate(180deg);
@@ -753,7 +758,7 @@ button:hover {
 
 /* Ajustes específicos para o chefe */
 .battle-character.boss {
-  width: 220px;
+  width: 480px;
   min-height: 280px;
   padding: 12px;
   background: linear-gradient(
@@ -949,11 +954,10 @@ button:hover {
 .battle-messages {
   position: fixed;
   right: 20px;
-  top: 126px;
-  bottom: 154px;
+  top: 107px;
+  bottom: 134px;
   width: 300px;
   background-color: var(--bg-overlay);
-  border-radius: 8px;
   padding: 10px;
   overflow-y: auto;
   z-index: 999;
@@ -1270,6 +1274,7 @@ button:hover {
 }
 
 .battle-area {
+  margin: 100px 0px;
   display: grid;
   grid-template-rows: auto 100px auto;
   gap: 15px;
@@ -1300,7 +1305,14 @@ button:hover {
   background-position: center;
   background-repeat: no-repeat;
 }
-
+.neon {
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--primary-color); /* Cor do texto (ciano) */
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color),
+    0 0 20px var(--primary-color), 0 0 40px var(--primary-color),
+    0 0 80px var(--primary-color);
+}
 /* Definição da paleta de cores global */
 :root {
   /* Cores principais */
@@ -1324,7 +1336,7 @@ button:hover {
   --bg-dark: #111111;
   --bg-darker: rgba(0, 0, 0, 0.95);
   --bg-overlay: rgba(0, 0, 0, 0.8);
-  --bg-card: rgba(255, 255, 255, 0.1);
+  --bg-card: rgb(15 15 15 / 61%);
   --bg-success: rgba(0, 255, 0, 0.05);
   --bg-danger: rgba(255, 0, 0, 0.15);
   --bg-info: rgba(0, 128, 255, 0.2);
@@ -1597,7 +1609,6 @@ button:hover {
   width: 80px;
   height: 80px;
   margin: 5px auto;
-  cursor: help;
   position: relative;
 }
 
@@ -1741,7 +1752,9 @@ button:hover {
   font-size: 4rem;
   color: var(--text-gold);
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px var(--glow-gold);
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color),
+    0 0 20px var(--primary-color), 0 0 40px var(--primary-color),
+    0 0 80px var(--primary-color);
   animation: pulse 2s infinite;
 }
 
