@@ -949,8 +949,8 @@ button:hover {
 .battle-messages {
   position: fixed;
   right: 20px;
-  top: 80px;
-  bottom: 132px;
+  top: 126px;
+  bottom: 154px;
   width: 300px;
   background-color: var(--bg-overlay);
   border-radius: 8px;
@@ -965,7 +965,7 @@ button:hover {
 .battle-message {
   background: var(--bg-card);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-xs);
   margin: var(--spacing-xs) 0;
   color: var(--text-primary);
   font-size: 0.9em;
@@ -978,6 +978,7 @@ button:hover {
 
 .battle-message .message-icon {
   margin-right: 8px;
+  margin-bottom: 2px;
   font-size: 1.1em;
 }
 
@@ -1561,7 +1562,7 @@ button:hover {
 }
 .boss-profile-image-container {
   width: 120px;
-  height: 120px;
+  height: 180px;
   border-radius: 50%;
   border: 3px solid var(--border-danger);
   box-shadow: 0 0 10px var(--shadow-glow);
@@ -1576,6 +1577,7 @@ button:hover {
   width: 100%;
   object-fit: cover;
   margin-left: -4px;
+  transform: scale(1.5);
 }
 
 .character-profile-image {

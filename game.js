@@ -15,6 +15,8 @@ let battleLog = [];
 let targetSelectionActive = false;
 let targetSelectionCallback = null;
 
+let roundCount = 0; // Adicionando um contador de rodadas
+
 // Função para configurar os botões principais
 function setupMainButtons() {
   console.log("Configurando botões principais...");
@@ -1997,8 +1999,9 @@ function transitionToNextPhase() {
     highlightCurrentCharacter();
     updateActionButtonsState();
 
+    roundCount++; // Incrementa o contador de rodadas
     showBattleMessage(
-      `Fase ${currentBoss.phase} começou! ${currentBoss.name} apareceu!`,
+      `Fase ${roundCount} começou! ${currentBoss.name} apareceu!`, // Atualiza a mensagem para usar roundCount
       "system"
     );
   } else {
