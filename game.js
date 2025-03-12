@@ -1102,6 +1102,75 @@ function showDamageNumber(target, damage, type = "normal") {
   }, 1200);
 }
 
+// Função para mostrar efeito visual da habilidade passiva
+function showPassiveSkillEffect(character, type) {
+  const charElement = document.querySelector(
+    `.battle-character[data-name="${character.name}"]`
+  );
+  if (!charElement) return;
+
+  // Cria o elemento de efeito
+  const effectElement = document.createElement("div");
+  effectElement.className = `passive-skill-effect ${type}`;
+
+  // Adiciona o efeito visual baseado no tipo de habilidade
+  switch (type) {
+    case "shield":
+      effectElement.innerHTML = `
+        <div class="shield-effect">
+          <div class="shield-circle"></div>
+          <div class="shield-sparkles">
+            ✨✨✨
+          </div>
+        </div>`;
+      break;
+    case "attack":
+      effectElement.innerHTML = `
+        <div class="attack-effect">
+          <div class="attack-slash">⚔️</div>
+          <div class="attack-sparkles">
+            💥💥💥
+          </div>
+        </div>`;
+      break;
+    case "heal":
+      effectElement.innerHTML = `
+        <div class="heal-effect">
+          <div class="heal-plus">+</div>
+          <div class="heal-sparkles">
+            💚💚💚
+          </div>
+        </div>`;
+      break;
+    case "buff":
+      effectElement.innerHTML = `
+        <div class="buff-effect">
+          <div class="buff-arrow">⬆️</div>
+          <div class="buff-sparkles">
+            ⭐⭐⭐
+          </div>
+        </div>`;
+      break;
+    case "protection":
+      effectElement.innerHTML = `
+        <div class="protection-effect">
+          <div class="protection-circle"></div>
+          <div class="protection-sparkles">
+            🛡️🛡️🛡️
+          </div>
+        </div>`;
+      break;
+  }
+
+  // Adiciona o efeito ao personagem
+  charElement.appendChild(effectElement);
+
+  // Remove o efeito após a animação
+  setTimeout(() => {
+    effectElement.remove();
+  }, 1500);
+}
+
 // Função para executar habilidade passiva
 function executePassiveAbility(character, trigger) {
   if (character.stats.hp <= 0) return false;
@@ -1112,6 +1181,7 @@ function executePassiveAbility(character, trigger) {
   switch (character.name) {
     case "Guerreiro":
       if (trigger === "onBossAttack" && chance <= 20) {
+        showPassiveSkillEffect(character, "shield");
         showBattleMessage(
           `${character.name} negou o ataque do chefe com Guardião Resoluto!`,
           "team"
@@ -1122,6 +1192,7 @@ function executePassiveAbility(character, trigger) {
 
     case "Berserker":
       if (trigger === "onTakeDamage" && chance <= 10) {
+        showPassiveSkillEffect(character, "buff");
         character.stats.attack += 1;
         showBattleMessage(
           `${character.name} ganhou +1 de ataque com Fúria Incontrolável!`,
@@ -1133,11 +1204,12 @@ function executePassiveAbility(character, trigger) {
 
     case "Cavaleiro":
       if (trigger === "onAllyTargeted" && chance <= 25) {
+        showPassiveSkillEffect(character, "protection");
         showBattleMessage(
           `${character.name} protegeu o aliado com Sacrifício Honrado!`,
           "team"
         );
-        return character; // Retorna o cavaleiro como protetor
+        return character;
       }
       break;
 
@@ -1148,6 +1220,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "heal");
+          showPassiveSkillEffect(target, "heal");
           target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 2);
           updateCharacterHP(target);
           showBattleMessage(
@@ -1161,6 +1235,7 @@ function executePassiveAbility(character, trigger) {
 
     case "Ladino":
       if (trigger === "onAllyAttack" && chance <= 20) {
+        showPassiveSkillEffect(character, "attack");
         const damage = Math.floor(character.stats.attack * 0.5);
         currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
         updateBossHP();
@@ -1174,6 +1249,7 @@ function executePassiveAbility(character, trigger) {
 
     case "Monge":
       if (trigger === "onBossAttack" && chance <= 15) {
+        showPassiveSkillEffect(character, "shield");
         showBattleMessage(
           `${character.name} negou o ataque do chefe com Mente Tranquila!`,
           "team"
@@ -1184,6 +1260,7 @@ function executePassiveAbility(character, trigger) {
 
     case "Arqueiro":
       if (trigger === "onAllyAttack" && chance <= 15) {
+        showPassiveSkillEffect(character, "attack");
         const damage = Math.floor(character.stats.attack * 0.5);
         currentBoss.stats.hp = Math.max(0, currentBoss.stats.hp - damage);
         updateBossHP();
@@ -1197,6 +1274,7 @@ function executePassiveAbility(character, trigger) {
 
     case "Caçador":
       if (trigger === "onTakeDamage" && chance <= 10) {
+        showPassiveSkillEffect(character, "buff");
         character.stats.attack += 1;
         showBattleMessage(
           `${character.name} ganhou +1 de ataque com Instinto Selvagem!`,
@@ -1213,6 +1291,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "buff");
+          showPassiveSkillEffect(target, "buff");
           target.stats.attack += 1;
           showBattleMessage(
             `${character.name} aumentou o ataque de ${target.name} com Tática Estratégica!`,
@@ -1230,6 +1310,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "buff");
+          showPassiveSkillEffect(target, "buff");
           target.stats.attack += 1;
           showBattleMessage(
             `${character.name} aumentou o ataque de ${target.name} com Potencial Arcano!`,
@@ -1247,6 +1329,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "heal");
+          showPassiveSkillEffect(target, "heal");
           target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 2);
           updateCharacterHP(target);
           showBattleMessage(
@@ -1265,6 +1349,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "heal");
+          showPassiveSkillEffect(target, "heal");
           target.stats.hp = Math.min(target.stats.maxHp, target.stats.hp + 5);
           character.stats.mana -= 3;
           updateCharacterHP(target);
@@ -1284,6 +1370,8 @@ function executePassiveAbility(character, trigger) {
         );
         if (allies.length > 0) {
           const target = allies[Math.floor(Math.random() * allies.length)];
+          showPassiveSkillEffect(character, "buff");
+          showPassiveSkillEffect(target, "buff");
           target.stats.attack += 1;
           showBattleMessage(
             `${character.name} aumentou o ataque de ${target.name} com Espírito Guerreiro!`,
