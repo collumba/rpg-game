@@ -177,7 +177,7 @@ body {
   padding: 20px;
   padding-bottom: 200px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 200;
 }
 
 .character-selection.active {
@@ -415,7 +415,7 @@ body {
   flex-wrap: wrap;
   max-width: 800px;
   position: relative;
-  z-index: 1001;
+  z-index: 201;
 }
 
 .team-slot {
@@ -554,6 +554,7 @@ button:hover {
   font-size: 0.9em;
   border: 1px solid var(--border-gold);
   box-shadow: 0 0 10px var(--glow-gold);
+  font-family: cursive;
 }
 
 .tooltip:hover .tooltip-text {
@@ -587,6 +588,7 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
   padding: 10px 20px;
   background: var(--bg-overlay);
   border-bottom: 2px solid var(--border-gold);
@@ -745,7 +747,7 @@ button:hover {
   padding: var(--spacing-lg);
   margin: var(--spacing-md);
   position: relative;
-  width: 300px;
+  width: 220px;
   transition: all var(--transition-speed) var(--transition-timing);
 }
 
@@ -971,6 +973,7 @@ button:hover {
   align-items: center;
   gap: var(--spacing-sm);
   animation: fadeIn var(--transition-speed) var(--transition-timing);
+  font-family: cursive;
 }
 
 .battle-message .message-icon {
@@ -1024,11 +1027,11 @@ button:hover {
 }
 
 .turn-info {
-  position: fixed;
+  /* position: fixed; */
   top: 20px;
   left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-overlay);
+  /* transform: translateX(-50%); */
+  /* background: var(--bg-overlay); */
   color: var(--text-primary);
   padding: 10px 20px;
   border-radius: 5px;
@@ -1274,8 +1277,8 @@ button:hover {
   margin-bottom: 100px;
   height: calc(100vh - 180px);
   overflow-y: auto;
-  margin-right: 340px;
-  width: calc(100% - 360px);
+  /* margin-right: 340px;
+  width: calc(100% - 360px); */
   margin-left: 20px;
 }
 
