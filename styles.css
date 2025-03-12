@@ -953,9 +953,9 @@ button:hover {
 
 .battle-messages {
   position: fixed;
-  right: 20px;
+  left: 0px;
   top: 107px;
-  bottom: 134px;
+  bottom: 116px;
   width: 300px;
   background-color: var(--bg-overlay);
   padding: 10px;
