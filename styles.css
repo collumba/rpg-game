@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap");
+
 :root {
   --primary-color: #4a90e2;
   --primary-hover: #357abd;
@@ -83,7 +85,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: "Arial", sans-serif;
+  font-family: "Uncial Antiqua", cursive;
 }
 
 .game-container {
@@ -100,20 +102,26 @@ body {
   padding: 20px 40px;
   font-size: 24px;
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--text-dark);
   background-color: var(--primary-color);
   border: none;
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 4px 8px var(--shadow-normal);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
   z-index: 1;
+  font-family: "Uncial Antiqua", cursive;
 }
 
 .start-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px var(--shadow-hover);
-  background-color: var(--primary-hover);
+}
+
+.start-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
 }
 
 .start-button:active {
@@ -292,24 +300,29 @@ body {
   font-size: 0.8em;
   color: var(--text-primary);
   text-shadow: 1px 1px 1px var(--shadow-text);
+  font-family: cursive;
 }
 
 .hp-bar {
   background: var(--hp-color);
   box-shadow: 0 0 5px var(--hp-color);
+  font-family: cursive;
 }
 
 .mana-bar {
   background: var(--mana-color);
   box-shadow: 0 0 5px var(--mana-color);
+  font-family: cursive;
 }
 
 .attack-bar {
   background: var(--attack-color);
+  font-family: cursive;
 }
 
 .defense-bar {
   background: var(--defense-color);
+  font-family: cursive;
 }
 
 .stat-bar::after {
@@ -324,6 +337,7 @@ body {
   border-radius: 10px;
   margin-top: auto;
   flex-shrink: 0;
+  font-family: cursive;
 }
 
 .character-abilities strong {
@@ -442,8 +456,6 @@ body {
 
 .confirm-team {
   padding: 12px 30px;
-  background: var(--primary-color);
-  color: var(--text-primary);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -457,10 +469,16 @@ body {
   z-index: 1001;
 }
 
-.confirm-team:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px var(--shadow-hover);
+button {
+  background: var(--border-gold) !important;
+  color: var(--text-dark) !important;
+  font-family: "Uncial Antiqua", cursive;
+  font-weight: 400;
+}
+button:hover {
+  background: var(--primary-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px var(--shadow-hover) !important;
 }
 
 .confirm-team:disabled {
@@ -468,6 +486,12 @@ body {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
 }
 
 /* Estilos para o tooltip */
@@ -497,6 +521,7 @@ body {
   white-space: normal;
   box-shadow: 0 2px 5px var(--shadow-normal);
   pointer-events: none;
+  font-family: cursive;
 }
 
 .tooltip .tooltip-text::after {
@@ -635,6 +660,7 @@ body {
   display: flex;
   gap: 15px;
   padding: 10px;
+  font-family: cursive;
 }
 
 .abilities-display {
@@ -653,6 +679,7 @@ body {
   padding: 8px 12px;
   border-radius: 6px;
   border-left: 3px solid;
+  font-family: cursive;
 }
 
 .ability-item.passive {
@@ -831,6 +858,7 @@ body {
   text-shadow: 1px 1px 2px var(--shadow-text);
   z-index: 2;
   font-weight: bold;
+  font-family: cursive;
 }
 
 /* Barras de status específicas */
@@ -1270,11 +1298,11 @@ body {
 /* Definição da paleta de cores global */
 :root {
   /* Cores principais */
-  --primary-color: #4a8505;
-  --primary-hover: #5aa006;
-  --primary-dark: #1a472a;
-  --primary-medium: #2d5a3f;
-  --primary-darker: #0d2318;
+  --primary-color: var(--secondary-color);
+  --primary-hover: #a09d06;
+  --primary-dark: #47421a;
+  --primary-medium: #5a552d;
+  --primary-darker: #231d0d;
   --secondary-color: #ffd700;
   --danger-color: #ff4444;
   --info-color: #44aaff;
@@ -1309,6 +1337,7 @@ body {
   --text-success: #98fb98;
   --text-info: #87ceeb;
   --text-danger: #ffcccc;
+  --text-dark: #0f0e0e;
 
   /* Sombras */
   --shadow-normal: rgba(0, 0, 0, 0.3);
@@ -1516,7 +1545,7 @@ body {
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    box-shadow: 0 0 0 0 rgba(175, 157, 76, 0.4);
   }
   70% {
     box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
